@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rbenv | 割り箸ポテチ]]></title>
+  <link href="http://blog.chopschips.net/blog/categories/rbenv/atom.xml" rel="self"/>
+  <link href="http://blog.chopschips.net/"/>
+  <updated>2014-06-15T18:52:02+09:00</updated>
+  <id>http://blog.chopschips.net/</id>
+  <author>
+    <name><![CDATA[Kawahara Taisuke / 河原 太介]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ruby 実行環境の構築 - rbenvの使い方とその仕組み]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/15/rbenv/"/>
+    <updated>2014-06-15T18:00:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/15/rbenv</id>
+    <content type="html"><![CDATA[<p><ul>
+ <li><a href="#section_0">rbenvとruby-buildのインストール方法</a></li>
+ <li><ul>
+  <li><a href="#section_1">インストール可能なrubyバージョンの一覧表示</a></li>
+  <li><a href="#section_2">指定したバージョンのrubyをインストール</a></li>
+  <li><a href="#section_3">使用するrubyのバージョンを指定する</a></li>
+  <li><a href="#section_4">インストール済みrubyバージョンの一覧表示</a></li>
+ </ul></li>
+ <li><a href="#section_5">rbenvとは</a></li>
+ <li><a href="#section_6">rbenvの仕組み</a></li>
+ <li><ul>
+  <li><a href="#section_7">バージョン決定の仕組み</a></li>
+  <li><a href="#section_8">各バージョンの実体</a></li>
+  <li><a href="#section_9">rbenv install(ruby-build)の動作</a></li>
+ </ul></li>
+</ul>
+
+</p>
+
+<a name="section_0"></a>
+<h1>rbenvとruby-buildのインストール方法</h1>
+
+<p><code>bash
+$ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+$ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+$ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' &gt;&gt; ~/.bash_profile
+$ echo 'eval "$(rbenv init -)"' &gt;&gt; ~/.bash_profile
+$ source ~/.bash_profile
+</code></p>
+
+<p><code>.bash_profile</code>は自分の使っているシェルに応じて<code>.zshrc</code>などに読み替えてください。</p>
+
+<!-- more -->
+
+
+<a name="section_1"></a>
+<h2>インストール可能なrubyバージョンの一覧表示</h2>
+
+<p><code>bash
+$ rbenv install -l
+</code></p>
+
+<pre><code>Available versions:
+  1.8.6-p383
+  1.8.6-p420
+  1.8.7-p249
+  1.8.7-p302
+  1.8.7-p334
+  (省略)
+</code></pre>
+
+<a name="section_2"></a>
+<h2>指定したバージョンのrubyをインストール</h2>
+
+<p>下記はバージョン2.1.2をインストールする例です。</p>
+
+<p><code>bash
+$ rbenv install 2.1.2
+</code></p>
+
+<a name="section_3"></a>
+<h2>使用するrubyのバージョンを指定する</h2>
+
+<p>rbenvでは、ディレクトリ階層ごとに使用するrubyのバージョンを指定できます。
+下記はカレントディレクトリ以下で2.1.2を使用する例です。</p>
+
+<p><code>bash
+$ rbenv local 2.1.2
+</code></p>
+
+<p>rbenvによる指定が意図したように行われているかどうかは以下のように確認できます。</p>
+
+<p><code>bash
+$ ruby --version
+ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-darwin13.0]
+</code></p>
+
+<a name="section_4"></a>
+<h2>インストール済みrubyバージョンの一覧表示</h2>
+
+<p><code>bash
+$ rbenv versions
+</code></p>
+
+<pre><code>  system
+  2.0.0-p353
+  2.1.0
+* 2.1.2 (set by ~/projects/xxx/.ruby-version)
+</code></pre>
+
+<p>systemは、<code>/usr/bin/ruby</code>のようにrbenv以外の方法でシステムへインストールされたrubyです。
+どのパスのコマンドが実行されるかは<code>PATH</code>環境変数によって決まります。</p>
+
+<p>アスタリスクの付いているバージョンが選択されたバージョンです。
+カッコの内容はrbenvがそのバージョンを選択した理由です(後述)。</p>
+
+<a name="section_5"></a>
+<h1>rbenvとは</h1>
+
+<p>rbenvは複数のバージョンのruby実行環境を切り替えるための仕組みです。</p>
+
+<p><a href="https://github.com/sstephenson/rbenv">https://github.com/sstephenson/rbenv</a></p>
+
+<p>rbenvには、同一の作者による ruby-build というプラグインがあります。
+これは指定したrubyのソースをダウンロードして、ローカルでビルドするための仕組みです。</p>
+
+<p><a href="https://github.com/sstephenson/ruby-build">https://github.com/sstephenson/ruby-build</a></p>
+
+<p>rbnevの類似のものとして rvm があります。</p>
+
+<p><a href="https://rvm.io/">https://rvm.io/</a></p>
+
+<a name="section_6"></a>
+<h1>rbenvの仕組み</h1>
+
+<p>rbenvでは<code>PATH</code>環境変数とシンボリックリンクを用いて、
+rubyやirbのようなコマンドの呼出経路に割り込むことでバージョンの切り替えを行っています。</p>
+
+<p>ruby、irb、gem、およびrspecやrakeなどgemによってインストールされるコマンド群は、
+以下のパスにシンボリックリンクが作られます。</p>
+
+<p><code>~/.rbenv/shims/</code></p>
+
+<p>これらのシンボリックリンクは、<code>rbenv rehash</code>が実行されるたびに更新されます。</p>
+
+<p>また、インストールの際にシェルのrcスクリプトに追加した<code>eval "$(rbenv init -)"</code>というコマンドでは、下記が行われています。</p>
+
+<ul>
+<li>
+<code>PATH</code> 環境変数の更新(<code>export PATH="~/.rbenv/shims:${PATH}"</code>)</li>
+<li>rbenv rehashの実行</li>
+</ul>
+
+
+<p>これにより、ruby、irbなどのruby関連コマンドはrbenvの影響下にある~/.rbenv/shims/以下のシンボリックリンクに置き換えられています。</p>
+
+<p><code>bash
+$ which irb
+~/.rbenv/shims/irb
+</code></p>
+
+<a name="section_7"></a>
+<h2>バージョン決定の仕組み</h2>
+
+<p>shims以下のコマンドでは以下のように起動するrubyインタプリタのバージョンを決定します。</p>
+
+<ol>
+<li>
+<code>RBENV_VERSION</code>環境変数の中身。</li>
+<li>スクリプトの置いてあるディレクトリから上位にさかのぼって最初に見つかった<code>.ruby-version</code>ファイルの中身。</li>
+<li>カレントディレクトリから上位にさかのぼって最初に見つかった<code>.ruby-version</code>ファイルの中身。
+このファイルは<code>rbenv local</code>コマンドで作成することができます。</li>
+<li>
+<code>~/.rbenv/version</code> ファイルの中身。
+このファイルは<code>rbenv global</code>コマンドで作成することができます。</li>
+</ol>
+
+
+<p>つまり、シェルのカレントディレクトリとスクリプト自体が置いてあるディレクトリが異なり、
+それぞれ.ruby-versionファイルが存在するような場合、後者が優先されます。
+また、<code>RBENV_VERSION</code>環境変数は常に優先されます。</p>
+
+<p>例えば製品環境でgodとrbenvを使ってデーモンプロセスのrubyバージョンを指定するような場合にはこの点に注意する必要があります。</p>
+
+<a name="section_8"></a>
+<h2>各バージョンの実体</h2>
+
+<p><code>rbenv install</code>でインストールしたruby実行環境は<code>~/.rbenv/versions</code>ディレクトリの下に保存されます。</p>
+
+<pre><code>~/.rbenv/versions/
+├── 2.0.0-p353
+│   ├── bin
+│   ├── include
+│   ├── lib
+│   └── share
+├── 2.1.0
+│   ├── bin
+│   ├── include
+│   ├── lib
+│   └── share
+└── 2.1.2
+    ├── bin
+    ├── include
+    ├── lib
+    └── share
+</code></pre>
+
+<p>gemもこのディレクトリ以下に保存され、例えば2.1.2にインストールした<code>nokogiri</code>1.6.1の中身を見たければ以下のディレクトリにあります。</p>
+
+<pre><code>~/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/nokogiri-1.6.1/
+</code></pre>
+
+<a name="section_9"></a>
+<h2>rbenv install(ruby-build)の動作</h2>
+
+<p><code>rbenv install</code>は概ね以下の様な動作をします。</p>
+
+<ol>
+<li>CDNで配布されているrubyのソースコードをダウンロード</li>
+<li>ダウンロードしたソースコードを展開してビルド</li>
+</ol>
+
+
+<p>このCDNは本稿執筆時点ではAmazon CloudFrontが使用されており、そのスポンサーはBasecampです。(<a href="https://github.com/sstephenson/ruby-build#package-download-mirrors">参考</a>)</p>
+
+<p>BasecampはRailsを開発した<a href="http://david.heinemeierhansson.com/">DHH</a>がCTOをやっている会社です。ありがとうBasecampのみなさん。</p>
+
+<p>なおBasecampは去年まで37signalsという名前でした。こちらの方が馴染みが深い人が多いかもしれません。</p>
+
+<p>ソースコードの配布URLは<code>ruby-build</code>に記述されています。</p>
+
+<p>具体的には以下のパスに1ファイル1バージョンで書かれています。</p>
+
+<p><code>bash
+$ ls -1 ~/.rbenv/plugins/ruby-build/share/ruby-build/
+1.8.6-p383
+1.8.6-p420
+1.8.7-p249
+1.8.7-p302
+1.8.7-p334
+1.8.7-p352
+1.8.7-p357
+1.8.7-p358
+1.8.7-p370
+1.8.7-p371
+(省略)
+</code></p>
+
+<p><code>openssl</code>など依存パッケージが同時に配布されている場合もあり、ビルド環境に応じてそれらもDLされます。
+またコードのURLにはSHA2のチェックサムが含まれており、<code>shasum</code>などのツールが利用できる環境であれば自動的に改ざん検知が行われます。</p>
+
+<p><code>bash
+$ cat ~/.rbenv/plugins/ruby-build/share/ruby-build/2.1.2
+install_package "openssl-1.0.1h" "https://www.openssl.org/source/openssl-1.0.1h.tar.gz#9d1c8a9836aa63e2c6adb684186cbd4371c9e9dcc01d6e3bb447abf2d4d3d093" mac_openssl --if has_broken_mac_openssl
+install_package "ruby-2.1.2" "http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz#f22a6447811a81f3c808d1c2a5ce3b5f5f0955c68c9a749182feb425589e6635" ldflags_dirs standard verify_openssl
+</code></p>
+
+<p>新しいバージョンのrubyがリリースされたら下記のように更新すれば反映されます。</p>
+
+<p><code>bash
+$ cd ~/.rbenv/plugins/ruby-build
+$ git pull
+</code></p>
+
+<p>環境変数<code>RUBY_BUILD_CACHE_PATH</code>でキャッシュディレクトリが指定されている場合、
+<code>rbenv install</code>はコードをダウンロードする代わりにそのパスに置いてあるファイルを使用します。
+キャッシュディレクトリに該当するファイルがない場合にはCDNからダウンロードしたファイルをキャッシュディレクトリに保存します。</p>
+
+<p>あらかじめ取得しておいたソースを使用することで、
+インターネットへの接続が制限されている環境でもrbenvを使用することができます。</p>
+
+<p>また、製品環境でrbenvを利用する場合にもキャッシュを用いることで外的要因に依存せずプロビジョニングを行うことができるようになります。</p>
+]]></content>
+  </entry>
+  
+</feed>

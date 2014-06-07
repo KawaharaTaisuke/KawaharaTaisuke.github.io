@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>割り箸ポテチ</title>
+  <title>Blog Archive - 割り箸ポテチ</title>
   <meta name="author" content="Kawahara Taisuke / 河原 太介">
 
   
-  <meta name="description" content="rbenvとruby-buildのインストール方法 インストール可能なrubyバージョンの一覧表示 指定したバージョンのrubyをインストール 使用するrubyのバージョンを指定する インストール済みrubyバージョンの一覧表示 rbenvとは rbenvの仕組み バージョン決定の仕組み &hellip;">
+  <meta name="description" content="Blog Archive 2014 ruby 実行環境の構築 - rbenvの使い方とその仕組み
+Jun 15 2014 posted in rbenv, ruby About Me Kawahara Taisuke / 河原 太介 (@KawaharaTaisuke) &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.chopschips.net/">
+  <link rel="canonical" href="http://blog.chopschips.net/blog/archives/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -74,122 +75,40 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article role="article">
   
-  
-  
-    <article>
-      
   <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/15/rbenv/">ruby 実行環境の構築 - rbenvの使い方とその仕組み</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-15T18:00:00+09:00" pubdate data-updated="true">Jun 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-    
-      <div class="sharing">
-    <ul class="social">
-        <li class="hatena">
-          <!-- hatebu-start -->
-          
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/15/rbenv/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-          
-          <!-- hatebu-end -->
-        </li>
-        
-        <li class="twitter">
-          
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/15/rbenv/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/15/rbenv/" >Tweet</a>
-          
-        </li>
-        
-        
-        <li class="facebook">
-          
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/15/rbenv/"></div>
-          
-        </li>
-        
-    </ul>
-</div>
-
+    <h1 class="entry-title">Blog Archive</h1>
     
   </header>
+  
+  <div id="blog-archives">
 
 
-  <div class="entry-content"><p><ul>
- <li><a href="#section_0">rbenvとruby-buildのインストール方法</a></li>
- <li><ul>
-  <li><a href="#section_1">インストール可能なrubyバージョンの一覧表示</a></li>
-  <li><a href="#section_2">指定したバージョンのrubyをインストール</a></li>
-  <li><a href="#section_3">使用するrubyのバージョンを指定する</a></li>
-  <li><a href="#section_4">インストール済みrubyバージョンの一覧表示</a></li>
- </ul></li>
- <li><a href="#section_5">rbenvとは</a></li>
- <li><a href="#section_6">rbenvの仕組み</a></li>
- <li><ul>
-  <li><a href="#section_7">バージョン決定の仕組み</a></li>
-  <li><a href="#section_8">各バージョンの実体</a></li>
-  <li><a href="#section_9">rbenv install(ruby-build)の動作</a></li>
- </ul></li>
-</ul>
 
-</p>
+  
+  <h2>2014</h2>
 
-<a name="section_0"></a>
-<h1>rbenvとruby-buildのインストール方法</h1>
+<article>
+  
+<h1><a href="/blog/2014/06/15/rbenv/">ruby 実行環境の構築 - rbenvの使い方とその仕組み</a></h1>
+<time datetime="2014-06-15T18:00:00+09:00" pubdate><span class='month'>Jun</span> <span class='day'>15</span> <span class='year'>2014</span></time>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
-<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td>
-<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-</span><span class="line"><span class="nv">$ </span>git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-</span><span class="line"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile
-</span><span class="line"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> &gt;&gt; ~/.bash_profile
-</span><span class="line"><span class="nv">$ </span><span class="nb">source</span> ~/.bash_profile
-</span></code></pre></td>
-</tr></table></div></figure></notextile></div>
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/rbenv/'>rbenv</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
+</footer>
 
 
-<p><code>.bash_profile</code>は自分の使っているシェルに応じて<code>.zshrc</code>などに読み替えてください。</p>
+</article>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/15/rbenv/">続きを読む &rarr;</a>
-    </footer>
-  
 
-
-    </article>
   
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+</article>
+
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -220,6 +139,7 @@
 
   
 </aside>
+
 
     </div>
   </div>
