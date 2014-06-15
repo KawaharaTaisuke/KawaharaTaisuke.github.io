@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-15T21:28:28+09:00</updated>
+  <updated>2014-06-15T21:48:14+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -246,7 +246,7 @@ $ ls -1 ~/.rbenv/plugins/ruby-build/share/ruby-build/
 (省略)
 </code></p>
 
-<p><code>openssl</code>など依存パッケージが同時に配布されている場合もあり、ビルド環境に応じてそれらもDLされます。
+<p><code>openssl</code>など依存パッケージが同時に配布されている場合もあり、ビルド環境に応じてそれらもダウンロードされます。
 またコードのURLにはSHA2のチェックサムが含まれており、<code>shasum</code>などのツールが利用できる環境であれば自動的に改ざん検知が行われます。</p>
 
 <p><code>bash
