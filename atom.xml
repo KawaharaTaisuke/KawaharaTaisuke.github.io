@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-15T23:01:20+09:00</updated>
+  <updated>2014-06-15T23:43:31+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -18,7 +18,8 @@
     <link href="http://blog.chopschips.net/blog/2014/06/15/rbenv/"/>
     <updated>2014-06-15T18:00:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/15/rbenv</id>
-    <content type="html"><![CDATA[<p></p><ul>
+    <content type="html"><![CDATA[
+      <p></p><ul>
  <li><a href="http://blog.chopschips.net/blog/2014/06/15/rbenv/#section_0">rbenvとruby-buildのインストール方法</a></li>
  <li><ul>
   <li><a href="http://blog.chopschips.net/blog/2014/06/15/rbenv/#section_1">インストール可能なrubyバージョンの一覧表示</a></li>
@@ -58,7 +59,12 @@
 
 <p><code>.bash_profile</code>は自分の使っているシェルに応じて<code>.zshrc</code>などに読み替えてください。</p>
 
-]]></content>
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2014/06/15/rbenv/">続きを読む &rarr;</a>
+      
+    ]]></content>
   </entry>
   
 </feed>
