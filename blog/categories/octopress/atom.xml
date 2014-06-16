@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-16T22:25:07+09:00</updated>
+  <updated>2014-06-16T23:33:13+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Octopressで見出しの目次を作る方法]]></title>
     <link href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"/>
-    <updated>2014-06-16T22:00:00+09:00</updated>
+    <updated>2014-06-16T22:00:01+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/16/octopress-toc</id>
     <content type="html"><![CDATA[<p><ul>
  <li><a href="#section_0">前提条件</a></li>
@@ -49,7 +49,7 @@
 
 <p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
 
-<p>最終的には、この記事に出ているような見出しの目次を作ることができました。特徴は下記の通り。</p>
+<p>最終的には、この記事に出ているような見出しの目次を作ることができました。この方法の特徴は下記の通りです。</p>
 
 <ol>
 <li>日本語の見出しでもエラーにならず出力される。</li>
@@ -59,7 +59,7 @@
 </ol>
 
 
-<p>お急ぎの場合は解決案からどうぞ。</p>
+<p>前半はアプローチのメモです。実現方法は解決案以降に書いています。</p>
 
 <!-- more -->
 
@@ -599,8 +599,8 @@ end
 
 <p>ついでに出力されるフィードにも手を入れておきます。</p>
 
-<p><code>&lt;!-- more --&gt;</code>で省略している箇所はフィードに含めず、
-それよりも前に見出し目次がある場合はフィード含めて、
+<p><code>&lt;!-- more --&gt;</code>で省略している箇所はフィードに含めず、<br>
+それよりも前に見出し目次がある場合はフィードに含めて、<br>
 見出し目次のリンク先は投稿本文になるようにします。</p>
 
 <p>``` diff
