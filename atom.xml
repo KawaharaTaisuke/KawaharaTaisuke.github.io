@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-15T23:43:31+09:00</updated>
+  <updated>2014-06-16T22:25:07+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopressで見出しの目次を作る方法]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"/>
+    <updated>2014-06-16T22:00:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/16/octopress-toc</id>
+    <content type="html"><![CDATA[
+      <p></p><ul>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_0">前提条件</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_1">目次のサンプルと見出しの生成に失敗するまで</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_2">既知のパッチ</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_3">次の一手</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_4">問題点は何か</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_5">解決案</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_6">フィード</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_7">課題</a></li>
+</ul>
+
+
+
+<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
+
+<p>最終的には、この記事に出ているような見出しの目次を作ることができました。特徴は下記の通り。</p>
+
+<ol>
+<li>日本語の見出しでもエラーにならず出力される。</li>
+<li>OctopressデフォルトのMarkdownパーサであるrdiscountを使用している。</li>
+<li>リンクが絶対パスになる(記事一覧画面のような「続きを読む(Read On)」で目次のリンク先が省略されるような状況でも有効なリンクになる)</li>
+<li>リンクが重複しない(後述)</li>
+</ol>
+
+
+<p>お急ぎの場合は解決案からどうぞ。</p>
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ruby 実行環境の構築 - rbenvの使い方とその仕組み]]></title>

@@ -1,0 +1,1104 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopressで見出しの目次を作る方法 - 割り箸ポテチ</title>
+  <meta name="author" content="Kawahara Taisuke / 河原太介">
+
+  
+  <meta name="description" content="前提条件 目次のサンプルと見出しの生成に失敗するまで 既知のパッチ 次の一手 問題点は何か 解決案 フィード 課題 調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。 最終的には、この記事に出ているような見出しの目次を作ることができました。 &hellip;">
+  <meta name="keywords" content="octopress,目次,見出し">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="割り箸ポテチ" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-51728803-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">割り箸ポテチ</a></h1>
+  
+    <h2>ソフトウェアエンジニアリング一般についてのメモです。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.chopschips.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopressで見出しの目次を作る方法</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-16T22:00:00+09:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+<div class="entry-content"><p></p><ul>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_0">前提条件</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_1">目次のサンプルと見出しの生成に失敗するまで</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_2">既知のパッチ</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_3">次の一手</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_4">問題点は何か</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_5">解決案</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_6">フィード</a></li>
+ <li><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/#section_7">課題</a></li>
+</ul>
+
+
+
+<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
+
+<p>最終的には、この記事に出ているような見出しの目次を作ることができました。特徴は下記の通り。</p>
+
+<ol>
+<li>日本語の見出しでもエラーにならず出力される。</li>
+<li>OctopressデフォルトのMarkdownパーサであるrdiscountを使用している。</li>
+<li>リンクが絶対パスになる(記事一覧画面のような「続きを読む(Read On)」で目次のリンク先が省略されるような状況でも有効なリンクになる)</li>
+<li>リンクが重複しない(後述)</li>
+</ol>
+
+
+<p>お急ぎの場合は解決案からどうぞ。</p>
+
+<!-- more -->
+
+
+<a name="section_0"></a>
+<h1>前提条件</h1>
+
+<ol>
+<li>
+<a href="https://github.com/imathis/octopress/commit/9bc4bb02ee3318d07b6b1ecd838a09461eff627b">2014-05-22のコミット</a> 以降のoctopressをcloneしていること。</li>
+<li>Markdownパーサとして<a href="https://github.com/davidfstr/rdiscount">rdiscount</a>を使用していること。</li>
+</ol>
+
+
+<a name="section_1"></a>
+<h1>目次のサンプルと見出しの生成に失敗するまで</h1>
+
+<p>gemはvendor/bundle以下にインストールしてあると仮定します。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>git clone git://github.com/imathis/octopress.git octopress
+</span><span class="line"><span class="nv">$ </span>bundle install --path<span class="o">=</span>vendor/bundle
+</span><span class="line"><span class="nv">$ </span>bundle <span class="nb">exec </span>rake install
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>見出し機能を有効にします。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td>
+<td class="code"><pre><code class="diff"><span class="line"><span class="gh">diff --git _config.yml _config.yml</span>
+</span><span class="line"><span class="gh">index e51e7c3..0969488 100644</span>
+</span><span class="line"><span class="gd">--- _config.yml</span>
+</span><span class="line"><span class="gi">+++ _config.yml</span>
+</span><span class="line"><span class="gu">@@ -39,6 +39,8 @@ rdiscount:</span>
+</span><span class="line">     - autolink
+</span><span class="line">     - footnotes
+</span><span class="line">     - smart
+</span><span class="line"><span class="gi">+    - generate_toc</span>
+</span><span class="line"><span class="gi">+  toc_token: "{!TOC}"</span>
+</span><span class="line"> pygments: false # default python pygments have been replaced by pygments.rb
+</span><span class="line">
+</span><span class="line"> paginate: 10          # Posts per page on the blog index
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>以下、投稿例です。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>bundle <span class="nb">exec </span>rake <span class="s1">'new_post[octopress_toc]'</span>
+</span><span class="line"><span class="nv">$ </span>cat <span class="s">&lt;&lt;'EOF' &gt; source/_posts/2014-06-16-octopress-toc.markdown</span>
+</span><span class="line"><span class="s">layout: post</span>
+</span><span class="line"><span class="s">title: "octopress_toc"</span>
+</span><span class="line"><span class="s">date: 2014-06-16 09:54:31 +0900</span>
+</span><span class="line"><span class="s">comments: true</span>
+</span><span class="line"><span class="s">categories:</span>
+</span><span class="line"><span class="s">---</span>
+</span><span class="line">
+</span><span class="line"><span class="s">{!TOC}</span>
+</span><span class="line">
+</span><span class="line"><span class="s">見出し目次のテストです。</span>
+</span><span class="line">
+</span><span class="line"><span class="s">&lt;!-- more --&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="s"># 見出し１</span>
+</span><span class="line">
+</span><span class="line"><span class="s">本文</span>
+</span><span class="line">
+</span><span class="line"><span class="s">## 見出し２</span>
+</span><span class="line">
+</span><span class="line"><span class="s">本文</span>
+</span><span class="line">
+</span><span class="line"><span class="s">## 見出し３</span>
+</span><span class="line">
+</span><span class="line"><span class="s">本文</span>
+</span><span class="line"><span class="s">EOF</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>このままgenerateしようとするとエラーになります。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>bundle <span class="nb">exec </span>rake generate
+</span><span class="line"><span class="c">## Generating Site with Jekyll</span>
+</span><span class="line">identical <span class="nb">source</span>/stylesheets/screen.css
+</span><span class="line">Configuration from octopress/_config.yml
+</span><span class="line">Building site: <span class="nb">source</span> -&gt; public
+</span><span class="line">octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/markdown.rb:140:in <span class="sb">`</span>gsub!<span class="s1">': incompatible character encodings: ASCII-8BIT and UTF-8 (Encoding::CompatibilityError)</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/markdown.rb:140:in `convert'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/convertible.rb:46:in <span class="sb">`</span>transform<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/post_filters.rb:150:in `transform'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/convertible.rb:88:in <span class="sb">`</span>do_layout<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/post_filters.rb:167:in `do_layout'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/post.rb:195:in <span class="sb">`</span>render<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/site.rb:200:in `block in render'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/site.rb:199:in <span class="sb">`</span>each<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/site.rb:199:in `render'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/site.rb:41:in <span class="sb">`</span>process<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/bin/jekyll:264:in `&lt;top (required)&gt;'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/bin/jekyll:23:in <span class="sb">`</span>load<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/bin/jekyll:23:in `&lt;main&gt;'</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<a name="section_2"></a>
+<h1>既知のパッチ</h1>
+
+<p>前述のエラーについてはパッチがあります。</p>
+
+<p>参考：<a href="http://tokkonopapa.github.io/blog/2013/02/23/octopress-toc/">octopressで見出しの目次を記事に埋め込む方法 – T.I.D.</a></p>
+
+<p>jekyll本体に手を入れることになるので、ローカルにチェックアウトします。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>mkdir vendor/github
+</span><span class="line"><span class="nv">$ </span>git clone git@github.com:jekyll/jekyll -b v0.12.0 vendor/github/jekyll
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>Gemfileを修正して、<code>bundle install --path=vendor/bundle</code>します。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td>
+<td class="code"><pre><code class="diff"><span class="line"><span class="gh">diff --git Gemfile Gemfile</span>
+</span><span class="line"><span class="gh">index cd8ce57..c87d7ec 100644</span>
+</span><span class="line"><span class="gd">--- Gemfile</span>
+</span><span class="line"><span class="gi">+++ Gemfile</span>
+</span><span class="line"><span class="gu">@@ -2,7 +2,7 @@ source "https://rubygems.org"</span>
+</span><span class="line">
+</span><span class="line"> group :development do
+</span><span class="line">   gem 'rake', '~&gt; 0.9'
+</span><span class="line"><span class="gd">-  gem 'jekyll', '~&gt; 0.12'</span>
+</span><span class="line"><span class="gi">+  gem 'jekyll', :path =&gt; "vendor/github/jekyll"</span>
+</span><span class="line">   gem 'rdiscount', '~&gt; 2.0.7'
+</span><span class="line">   gem 'pygments.rb', '~&gt; 0.3.4'
+</span><span class="line">   gem 'RedCloth', '~&gt; 4.2.9'
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>jekyllのコードを修正します。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nb">cd </span>vendor/github/jekyll
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td>
+<td class="code"><pre><code class="diff"><span class="line"><span class="gh">diff --git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gh">index 3c6ba53..b866617 100644</span>
+</span><span class="line"><span class="gd">--- lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gi">+++ lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gu">@@ -137,7 +137,7 @@ module Jekyll</span>
+</span><span class="line">           rd = RDiscount.new(content, *@rdiscount_extensions)
+</span><span class="line">           html = rd.to_html
+</span><span class="line">           if rd.generate_toc and html.include?(@config['rdiscount']['toc_token'])
+</span><span class="line"><span class="gd">-            html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content)</span>
+</span><span class="line"><span class="gi">+            html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content.force_encoding("utf-8"))</span>
+</span><span class="line">           end
+</span><span class="line">           html
+</span><span class="line">         when 'maruku'
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>もう一度generateしてみます。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line">% bundle <span class="nb">exec </span>rake generate
+</span><span class="line"><span class="c">## Generating Site with Jekyll</span>
+</span><span class="line">identical <span class="nb">source</span>/stylesheets/screen.css
+</span><span class="line">Configuration from octopress/_config.yml
+</span><span class="line">Building site: <span class="nb">source</span> -&gt; public
+</span><span class="line">octopress/plugins/raw.rb:11:in <span class="sb">`</span>gsub<span class="s1">': invalid byte sequence in UTF-8 (ArgumentError)</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/raw.rb:11:in `unwrap'</span>
+</span><span class="line">        from octopress/plugins/octopress_filters.rb:18:in <span class="sb">`</span>post_filter<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/octopress_filters.rb:33:in `post_render'</span>
+</span><span class="line">        from octopress/plugins/post_filters.rb:124:in <span class="sb">`</span>block in post_render<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/post_filters.rb:123:in `each'</span>
+</span><span class="line">        from octopress/plugins/post_filters.rb:123:in <span class="sb">`</span>post_render<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/post_filters.rb:151:in `transform'</span>
+</span><span class="line">        from octopress/vendor/github/jekyll/lib/jekyll/convertible.rb:88:in <span class="sb">`</span>do_layout<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/plugins/post_filters.rb:167:in `do_layout'</span>
+</span><span class="line">        from octopress/vendor/github/jekyll/lib/jekyll/post.rb:195:in <span class="sb">`</span>render<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/github/jekyll/lib/jekyll/site.rb:200:in `block in render'</span>
+</span><span class="line">        from octopress/vendor/github/jekyll/lib/jekyll/site.rb:199:in <span class="sb">`</span>each<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/github/jekyll/lib/jekyll/site.rb:199:in `render'</span>
+</span><span class="line">        from octopress/vendor/github/jekyll/lib/jekyll/site.rb:41:in <span class="sb">`</span>process<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/github/jekyll/bin/jekyll:264:in `&lt;top (required)&gt;'</span>
+</span><span class="line">        from octopress/vendor/bundle/ruby/2.1.0/bin/jekyll:23:in <span class="sb">`</span>load<span class="s1">'</span>
+</span><span class="line"><span class="s1">        from octopress/vendor/bundle/ruby/2.1.0/bin/jekyll:23:in `&lt;main&gt;'</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>別のエラーが出ました。</p>
+
+<a name="section_3"></a>
+<h1>次の一手</h1>
+
+<p>いくつかの方法が考えられます。</p>
+
+<ol>
+<li>別のパーサを使う。(redcarpet, kramdown)</li>
+<li>rdiscount, jekyllのバージョンを上げる。</li>
+</ol>
+
+
+<p>redcarpetについては別の問題が発生してうまく行きませんでした。
+<a href="http://octopress.org">octopressのドキュメント</a>自体がredcarpetに移行しているみたいなので本命だったのですが諦めて別の方法を探しました。</p>
+
+<p>kramdownはcodeblockの利用に制限がかかりそうだったので見送りました。</p>
+
+<p>rdiscountとjekyllのバージョンをあげたら解決する可能性があるかと思ったのですが、両方ともmasterのHEADに持っていくだけではダメでした。
+そもそもoctopressが使っているjekyllのバージョンはかなり古いので、互換性の面で不安もありました。</p>
+
+<p>というわけで諦めて強引に修正することにしました。(今回は多少汚い手を使っても困るのは俺だけだし)</p>
+
+<a name="section_4"></a>
+<h1>問題点は何か</h1>
+
+<p>そもそもの問題点は2つあります。</p>
+
+<ol>
+<li>rdiscountの出力するtocをクリーンなutf-8に変換できない。</li>
+<li>rdiscountが出力する見出しのアンカータグのname属性が重複する可能性がある。</li>
+</ol>
+
+
+<p>前者はjekyllのコード修正後に発生したエラーの原因です。<code>force_encoding</code>するだけでは不十分でした。</p>
+
+<p>ただ、後者のほうがより重要で、これがあるかぎり頑張って前者を解決してもダメです。
+わかり易い例を示します。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>toc_test.rb</span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td>
+<td class="code"><pre><code class="ruby"><span class="line"><span class="nb">require</span> <span class="s1">'rdiscount'</span>
+</span><span class="line">
+</span><span class="line"><span class="n">rd</span> <span class="o">=</span> <span class="no">RDiscount</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="p">,</span> <span class="ss">:autolink</span><span class="p">,</span> <span class="ss">:footnotes</span><span class="p">,</span> <span class="ss">:smart</span><span class="p">,</span> <span class="ss">:generate_toc</span><span class="p">)</span>
+</span><span class="line"><span class="sh"># ヘッダ１</span>
+</span><span class="line">
+</span><span class="line"><span class="sh">本文1</span>
+</span><span class="line">
+</span><span class="line"><span class="sh">## ヘッダ２</span>
+</span><span class="line">
+</span><span class="line"><span class="sh">本文2</span>
+</span><span class="line"><span class="no">EOF</span>
+</span><span class="line">
+</span><span class="line"><span class="nb">puts</span> <span class="n">rd</span><span class="o">.</span><span class="n">to_html</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>bundle <span class="nb">exec </span>ruby toc_test.rb
+</span><span class="line">&lt;a <span class="nv">name</span><span class="o">=</span><span class="s2">"L............"</span>&gt;&lt;/a&gt;
+</span><span class="line">&lt;h1&gt;ヘッダ１&lt;/h1&gt;
+</span><span class="line">
+</span><span class="line">&lt;p&gt;本文1&lt;/p&gt;
+</span><span class="line">
+</span><span class="line">&lt;a <span class="nv">name</span><span class="o">=</span><span class="s2">"L............"</span>&gt;&lt;/a&gt;
+</span><span class="line">&lt;h2&gt;ヘッダ２&lt;/h2&gt;
+</span><span class="line">
+</span><span class="line">&lt;p&gt;本文2&lt;/p&gt;
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p></p>
+
+<p>ヘッダ１、ヘッダ２はname属性が同じになるようにあえて全角数字で書いています。</p>
+
+<p>rdiscountに下記のようなコードがあるので、おそらく意図した動作なのでしょう。
+ただ、アルファベット以外の見出しはすべて”.“に”mangle”されてしまうので、
+日本語で見出しを書くとたまたま長さが同じになったときにリンクが重複します。</p>
+
+<pre><code>// vendor/bundle/ruby/2.1.0/gems/rdiscount-2.0.7.3/ext/mkdio.c
+
+/* write out a Cstring, mangled into a form suitable for `&lt;a href=` or `&lt;a id=`
+ */
+void
+mkd_string_to_anchor(char *s, int len, mkd_sta_function_t outchar,
+                                       void *out, int labelformat)
+{
+    unsigned char c;
+
+    int i, size;
+    char *line;
+
+    size = mkd_line(s, len, &amp;line, IS_LABEL);
+
+    if ( labelformat &amp;&amp; size &amp;&amp; !isalpha(line[0]) )
+        (*outchar)('L',out);
+    for ( i=0; i &lt; size ; i++ ) {
+        c = line[i];
+        if ( labelformat ) {
+            if ( isalnum(c) || (c == '_') || (c == ':') || (c == '-') || (c == '.' ) )
+                (*outchar)(c, out);
+            else
+                (*outchar)('.',out);
+        }
+        else
+            (*outchar)(c,out);
+    }
+
+    if (line)
+        free(line);
+}
+</code></pre>
+
+<a name="section_5"></a>
+<h1>解決案</h1>
+
+<p>以下の方法を取りました。</p>
+
+<ul>
+<li>jekyllを修正して、<code>RDiscount#toc_content</code>をブログ本文のドキュメントに挿入する前後でHTMLを書き換える。
+
+<ul>
+<li>本文のアンカータグのname属性を<code>section_#{n}</code>というフォーマットの連番に書き換える。</li>
+<li>
+<code>RDiscount#toc_content</code>のリンクを上記で書き換えたアンカーに置換する。</li>
+</ul>
+</li>
+</ul>
+
+
+<p>差分は下記のとおりです。Nokogiriを使ってます。
+あと<code>RDiscount#toc_content</code>の不正なバイトを綺麗にするために<code>String#scrub</code>を使っているのでruby2.1系じゃないと動きません。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td>
+<td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span><span class="nb">cd </span>vendor/github/jekyll
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+</pre></td>
+<td class="code"><pre><code class="diff"><span class="line"><span class="gh">diff --git jekyll.gemspec jekyll.gemspec</span>
+</span><span class="line"><span class="gh">index f88d073..e9a09b4 100644</span>
+</span><span class="line"><span class="gd">--- jekyll.gemspec</span>
+</span><span class="line"><span class="gi">+++ jekyll.gemspec</span>
+</span><span class="line"><span class="gu">@@ -29,6 +29,7 @@ Gem::Specification.new do |s|</span>
+</span><span class="line">   s.add_runtime_dependency('maruku', "~&gt; 0.5")
+</span><span class="line">   s.add_runtime_dependency('kramdown', "~&gt; 0.13.4")
+</span><span class="line">   s.add_runtime_dependency('pygments.rb', "~&gt; 0.3.2")
+</span><span class="line"><span class="gi">+  s.add_runtime_dependency('nokogiri', "~&gt; 1.6.1")</span>
+</span><span class="line">
+</span><span class="line">   s.add_development_dependency('rake', "~&gt; 0.9")
+</span><span class="line">   s.add_development_dependency('rdoc', "~&gt; 3.11")
+</span><span class="line"><span class="gh">diff --git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gh">index 3c6ba53..31f0e9a 100644</span>
+</span><span class="line"><span class="gd">--- lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gi">+++ lib/jekyll/converters/markdown.rb</span>
+</span><span class="line"><span class="gu">@@ -1,3 +1,5 @@</span>
+</span><span class="line"><span class="gi">+require 'nokogiri'</span>
+</span><span class="line"><span class="gi">+</span>
+</span><span class="line"> module Jekyll
+</span><span class="line">
+</span><span class="line">   class MarkdownConverter &lt; Converter
+</span><span class="line"><span class="gu">@@ -137,7 +139,15 @@ module Jekyll</span>
+</span><span class="line">           rd = RDiscount.new(content, *@rdiscount_extensions)
+</span><span class="line">           html = rd.to_html
+</span><span class="line">           if rd.generate_toc and html.include?(@config['rdiscount']['toc_token'])
+</span><span class="line"><span class="gd">-            html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content)</span>
+</span><span class="line"><span class="gi">+            doc = Nokogiri::HTML::DocumentFragment.parse(rd.to_html)</span>
+</span><span class="line"><span class="gi">+            toc  = Nokogiri::HTML::DocumentFragment.parse(rd.toc_content.force_encoding("utf-8").scrub("."))</span>
+</span><span class="line"><span class="gi">+            doc.css("a[name]").each_with_index{|elem, i| elem['name'] = "section_#{i}" }</span>
+</span><span class="line"><span class="gi">+            anchors = doc.css("a[name]")</span>
+</span><span class="line"><span class="gi">+            toc.css("a[href]").each_with_index{|elem, i|</span>
+</span><span class="line"><span class="gi">+              elem["href"] = "#" + anchors[i]["name"]</span>
+</span><span class="line"><span class="gi">+            }</span>
+</span><span class="line"><span class="gi">+            html = doc.to_html</span>
+</span><span class="line"><span class="gi">+            toc = html.gsub!(@config['rdiscount']['toc_token'], toc.to_html)</span>
+</span><span class="line">           end
+</span><span class="line">           html
+</span><span class="line">         when 'maruku'
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>ここまでで見出し目次は出力されるようになりますが、アンカータグは<code>&lt;a href="#section_0"&gt;見出し１&lt;/a&gt;</code>のような相対パスでのリンクになります。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+</pre></td>
+<td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;ul&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;ul&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#section_0"</span><span class="nt">&gt;</span>categories:<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/ul&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#section_1"</span><span class="nt">&gt;</span>見出し１<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;ul&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#section_2"</span><span class="nt">&gt;</span>見出し２<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#section_3"</span><span class="nt">&gt;</span>見出し３<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/ul&gt;&lt;/li&gt;</span>
+</span><span class="line"><span class="nt">&lt;/ul&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>見出し目次のテストです。<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="c">&lt;!-- more --&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;a</span> <span class="na">name=</span><span class="s">"section_1"</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class="line"><span class="nt">&lt;h1&gt;</span>見出し１<span class="nt">&lt;/h1&gt;</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;a</span> <span class="na">name=</span><span class="s">"section_1"</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class="line"><span class="nt">&lt;h1&gt;</span>見出し１<span class="nt">&lt;/h1&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>本文<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;a</span> <span class="na">name=</span><span class="s">"section_2"</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class="line"><span class="nt">&lt;h2&gt;</span>見出し２<span class="nt">&lt;/h2&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>本文<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;a</span> <span class="na">name=</span><span class="s">"section_3"</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class="line"><span class="nt">&lt;h2&gt;</span>見出し３<span class="nt">&lt;/h2&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>本文<span class="nt">&lt;/p&gt;</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>そのため、投稿の単体ページでは意図したように動作しますが、投稿一覧ページに表示されていて、かつ参照先が<code>&lt;!-- more --&gt;</code>によって省略されているような場合には意図したように動作しません。</p>
+
+<p>これを解決するためにプラグインを書きます。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>plugins/toc_linker.rb</span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td>
+<td class="code"><pre><code class="ruby"><span class="line"><span class="nb">require</span> <span class="s1">'nokogiri'</span>
+</span><span class="line">
+</span><span class="line"><span class="k">module</span> <span class="nn">Jekyll</span>
+</span><span class="line">  <span class="n">require_relative</span> <span class="s1">'post_filters'</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">class</span> <span class="nc">TocLinker</span> <span class="o">&lt;</span> <span class="no">PostFilter</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">post_render</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</span><span class="line">      <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">is_post?</span>
+</span><span class="line">        <span class="n">doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="o">::</span><span class="no">DocumentFragment</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span><span class="line">        <span class="n">doc</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s2">"a[href]"</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">elem</span><span class="o">|</span>
+</span><span class="line">          <span class="k">next</span> <span class="k">if</span> <span class="n">elem</span><span class="o">[</span><span class="s2">"href"</span><span class="o">]</span> <span class="o">!~</span> <span class="sr">/^#/</span>
+</span><span class="line">          <span class="n">elem</span><span class="o">[</span><span class="s2">"href"</span><span class="o">]</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">full_url</span> <span class="o">+</span> <span class="n">elem</span><span class="o">[</span><span class="s2">"href"</span><span class="o">]</span>
+</span><span class="line">        <span class="k">end</span>
+</span><span class="line">        <span class="n">post</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">to_html</span>
+</span><span class="line">      <span class="k">end</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<p>これにより、下記のようにアンカータグのリンク先を絶対パスに書き換えてしまいます。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td>
+<td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;ul&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;ul&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"http://yoursite.com/blog/2014/06/16/octopress-toc/#section_0"</span><span class="nt">&gt;</span>categories:<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/ul&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"http://yoursite.com/blog/2014/06/16/octopress-toc/#section_1"</span><span class="nt">&gt;</span>見出し１<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;li&gt;&lt;ul&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"http://yoursite.com/blog/2014/06/16/octopress-toc/#section_2"</span><span class="nt">&gt;</span>見出し２<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line">  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"http://yoursite.com/blog/2014/06/16/octopress-toc/#section_3"</span><span class="nt">&gt;</span>見出し３<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/ul&gt;&lt;/li&gt;</span>
+</span><span class="line"><span class="nt">&lt;/ul&gt;</span>
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<a name="section_6"></a>
+<h1>フィード</h1>
+
+<p>ついでに出力されるフィードにも手を入れておきます。</p>
+
+<p><code>&lt;!-- more --&gt;</code>で省略している箇所はフィードに含めず、
+それよりも前に見出し目次がある場合はフィード含めて、
+見出し目次のリンク先は投稿本文になるようにします。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td>
+<td class="code"><pre><code class="diff"><span class="line">
+</span><span class="line"><span class="gh">diff --git source/atom.xml source/atom.xml</span>
+</span><span class="line"><span class="gh">index 83af3f8..035a610 100644</span>
+</span><span class="line"><span class="gd">--- source/atom.xml</span>
+</span><span class="line"><span class="gi">+++ source/atom.xml</span>
+</span><span class="line"><span class="gu">@@ -21,7 +21,13 @@ layout: nil</span>
+</span><span class="line">     &lt;link href="{{ site.url }}{{ post.url }}"/&gt;
+</span><span class="line">     &lt;updated&gt;{{ post.date | date_to_xmlschema }}&lt;/updated&gt;
+</span><span class="line">     &lt;id&gt;{{ site.url }}{{ post.id }}&lt;/id&gt;
+</span><span class="line"><span class="gd">-    &lt;content type="html"&gt;&lt;![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]&gt;&lt;/content&gt;</span>
+</span><span class="line"><span class="gi">+    &lt;content type="html"&gt;&lt;![CDATA[</span>
+</span><span class="line"><span class="gi">+      {{ post.content | excerpt | expand_urls: site.url | cdata_escape }}</span>
+</span><span class="line"><span class="gi">+      {% capture excerpted %}{{ post.content | has_excerpt }}{% endcapture %}</span>
+</span><span class="line"><span class="gi">+      {% if excerpted == 'true' %}</span>
+</span><span class="line"><span class="gi">+        &lt;a rel="full-article" href="{{ site.url }}{{ root_url }}{{ post.url }}"&gt;{{ site.excerpt_link | cdata_escape }}&lt;/a&gt;</span>
+</span><span class="line"><span class="gi">+      {% endif %}</span>
+</span><span class="line"><span class="gi">+    ]]&gt;&lt;/content&gt;</span>
+</span><span class="line">   &lt;/entry&gt;
+</span><span class="line">   {% endfor %}
+</span><span class="line"> &lt;/feed&gt;
+</span><span class="line">
+</span></code></pre></td>
+</tr></table></div></figure></notextile></div>
+
+
+<a name="section_7"></a>
+<h1>課題</h1>
+
+<ul>
+<li>見出し目次のリンクに対応する本文中のDOM要素をアンカータグのname属性だけでサーチしているため、それ以外のname属性付きアンカータグを含むような記事では誤動作します。</li>
+<li>見出し目次のリンクが<code>bundle exec rake preview</code>でも絶対パスになります。</li>
+<li>octopressの更新によってjekyllのバージョンが上がってしまった場合には再度対処が必要になる可能性があります。</li>
+</ul>
+
+
+<p>最初に書いたように筋悪な方法だと思ってるのでプルリクとかもしません。</p>
+
+<p>もっとスマートな方法知ってる人いたらtwitterで教えて下さい。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kawahara Taisuke / 河原太介</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-16T22:00:00+09:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/15/rbenv/" title="Previous Post: ruby 実行環境の構築 - rbenvの使い方とその仕組み">&laquo; ruby 実行環境の構築 - rbenvの使い方とその仕組み</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>
+    <strong>Kawahara Taisuke / 河原太介</strong> 
+    (<a href="http://twitter.com/KawaharaTaisuke">@KawaharaTaisuke</a>)
+  </p>
+  <p>
+    京都でソフトウェアエンジニアをしています。興味の対象はインフラ、サーバアプリケーションからフロントエンドまでWebサービスに関わるエンジニアリング全般。最近は特にRails、HBase、Angular周辺。
+  </p>
+  <p>このブログは筆者の所属する企業およびその業務とは一切関係のない個人の活動です。</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/15/rbenv/">ruby 実行環境の構築 - rbenvの使い方とその仕組み</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Kawahara Taisuke / 河原太介 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  - <span class="credit">Theme by <a href="http://www.gehaxelt.in">Gehaxelt</a></span>
+  <span class="credit">and <a href="http://www.it-solutions-neef.de">IT Solutions Neef</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
