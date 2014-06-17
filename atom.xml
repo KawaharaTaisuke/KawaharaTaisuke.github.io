@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-17T09:45:50+09:00</updated>
+  <updated>2014-06-17T10:24:54+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[WOVN.ioによるサイトの他言語化]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/17/wovn/"/>
+    <updated>2014-06-17T09:49:06+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/17/wovn</id>
+    <content type="html"><![CDATA[
+      <pre><code>書きかけです
+</code></pre>
+
+<p><a href="http://jp.techcrunch.com/2014/06/16/wovnio/">JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan</a></p>
+
+<p>さっそく試してみました。スクリーンショットを交えつつ簡単に使用感など紹介してみたいと思います。</p>
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2014/06/17/wovn/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopressで見出しの目次を作る方法]]></title>

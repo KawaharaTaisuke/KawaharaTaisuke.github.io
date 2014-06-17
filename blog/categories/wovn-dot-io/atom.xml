@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: WOVN.io | 割り箸ポテチ]]></title>
+  <link href="http://blog.chopschips.net/blog/categories/wovn-dot-io/atom.xml" rel="self"/>
+  <link href="http://blog.chopschips.net/"/>
+  <updated>2014-06-17T10:24:54+09:00</updated>
+  <id>http://blog.chopschips.net/</id>
+  <author>
+    <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[WOVN.ioによるサイトの他言語化]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/17/wovn/"/>
+    <updated>2014-06-17T09:49:06+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/17/wovn</id>
+    <content type="html"><![CDATA[<pre><code>書きかけです
+</code></pre>
+
+<p><a href="http://jp.techcrunch.com/2014/06/16/wovnio/">JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan</a></p>
+
+<p>さっそく試してみました。スクリーンショットを交えつつ簡単に使用感など紹介してみたいと思います。</p>
+
+<!-- more -->
+
+
+<p>※メールアドレスやアカウントキーと思われる部分は塗りつぶしています。</p>
+
+<ul>
+<li>サイトトップ</li>
+</ul>
+
+
+<p><a href="http://wovn.io/">WOVN.io</a></p>
+
+<p><img src="/images/post_20140617_wovn/ss1.png"></p>
+
+<ul>
+<li>サインアップ</li>
+</ul>
+
+
+<p><img src="/images/post_20140617_wovn/ss2.png"></p>
+
+<ul>
+<li>サイトに追加するコード</li>
+</ul>
+
+
+<p>サイト側に修正が必要なのはこれだけです。
+body終端の直前に追加しました。</p>
+
+<p><img src="/images/post_20140617_wovn/ss3.png"></p>
+
+<ul>
+<li>メイン画面</li>
+</ul>
+
+
+<p>New Pageをクリック。</p>
+
+<p><img src="/images/post_20140617_wovn/ss4.png"></p>
+
+<ul>
+<li>ページ登録</li>
+</ul>
+
+
+<p>翻訳したいページのURLを入力すると、自動的にタイトルと現在の言語が表示されます。</p>
+
+<p><img src="/images/post_20140617_wovn/ss5.png"></p>
+
+<p>Begin!</p>
+
+<ul>
+<li>翻訳画面</li>
+</ul>
+
+
+<p>Machine Translateを実行した画面です。<br/>
+Microsoftの機械翻訳サービスで翻訳された結果が表示されます。<br/>
+これをベースに手動で修正したい部分だけを修正するということも可能です。</p>
+
+<p><img src="/images/post_20140617_wovn/ss6.png"></p>
+
+<p>Publish &amp; Saveをクリックして終了。</p>
+
+<ul>
+<li>サイト側の動作を確認</li>
+</ul>
+
+
+<p>翻訳したページは右下にこのようなツールチップが表示されるようになります。</p>
+
+<p><img src="/images/post_20140617_wovn/ss7.png"></p>
+]]></content>
+  </entry>
+  
+</feed>
