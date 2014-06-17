@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-17T10:24:54+09:00</updated>
+  <updated>2014-06-17T10:31:37+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -19,8 +19,7 @@
     <updated>2014-06-17T09:49:06+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/17/wovn</id>
     <content type="html"><![CDATA[
-      <pre><code>書きかけです
-</code></pre>
+      <p>以下の記事でWOVN.ioというサイトの他言語化(翻訳支援)サービスが紹介されているのを見ました。</p>
 
 <p><a href="http://jp.techcrunch.com/2014/06/16/wovnio/">JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan</a></p>
 
