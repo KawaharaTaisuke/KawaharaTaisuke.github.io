@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WOVN.io | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/wovn-dot-io/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-17T10:31:37+09:00</updated>
+  <updated>2014-06-17T14:53:06+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -14,20 +14,20 @@
 
   
   <entry>
-    <title type="html"><![CDATA[WOVN.ioによるサイトの他言語化]]></title>
+    <title type="html"><![CDATA[JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました]]></title>
     <link href="http://blog.chopschips.net/blog/2014/06/17/wovn/"/>
-    <updated>2014-06-17T09:49:06+09:00</updated>
+    <updated>2014-06-17T14:45:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/17/wovn</id>
-    <content type="html"><![CDATA[<p>以下の記事でWOVN.ioというサイトの他言語化(翻訳支援)サービスが紹介されているのを見ました。</p>
+    <content type="html"><![CDATA[<p>以下の記事でWOVN.ioというサイトの多言語化(翻訳支援)サービスが紹介されているのを見ました。</p>
 
 <p><a href="http://jp.techcrunch.com/2014/06/16/wovnio/">JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan</a></p>
 
-<p>さっそく試してみました。スクリーンショットを交えつつ簡単に使用感など紹介してみたいと思います。</p>
+<p>さっそく試してみました。簡単に使用感など紹介してみたいと思います。</p>
 
 <!-- more -->
 
 
-<p>※メールアドレスやアカウントキーと思われる部分は塗りつぶしています。</p>
+<p>※本文中の画像ではメールアドレスやアカウントキーと思われる部分は塗りつぶしています。</p>
 
 <ul>
 <li>サイトトップ</li>
@@ -93,7 +93,7 @@ Microsoftの機械翻訳サービスで翻訳された結果が表示されま�
 </ul>
 
 
-<p>翻訳したページはこのページのように、右下にツールチップが表示されるようになります。</p>
+<p>翻訳したページはこのページのように、右下にウィジェットが表示されるようになります。</p>
 
 <p><img src="/images/post_20140617_wovn/ss7.png"></p>
 ]]></content>
