@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-19T01:15:10+09:00</updated>
+  <updated>2014-06-19T01:22:32+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -161,9 +161,9 @@ Rails標準の機能の解説に留まっている書籍やトレーニングコ
 
 <ul>
 <li><code>spring</code>ってなんか動作が遅くないですかね。4.1で標準になったので紹介されているんだと思いますが、結局まだ<code>zeus</code>使ってます。</li>
-<li><code>cancan</code>は最近は<code>cancancan</code>とか出てきててややカオス。そもそも認証と認可は安易に外部実装に頼らないほうが良いという意見もあるし。</li>
-<li>デバッガは<code>byebug</code>と<code>ruby-debug</code>周辺はどうなっていくんだろう。</li>
-<li>プロファイリングについても書いて欲しかったかも。</li>
+<li><code>cancan</code>は最近は<code>cancancan</code>とか出てきててややカオス。触れられていないのはそれが理由かな。そもそも認証と認可は安易に外部実装に頼らないほうが良いという意見もあるし。</li>
+<li>デバッガについてはRails本の範疇外かな。<code>byebug</code>と<code>ruby-debug</code>周辺はどうなっていくんだろう。</li>
+<li>プロファイリングについても少し書いて欲しかったかも。</li>
 </ul>
 
 ]]></content>
