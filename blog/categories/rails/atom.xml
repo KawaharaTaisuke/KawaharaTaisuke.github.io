@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-19T01:22:32+09:00</updated>
+  <updated>2014-06-19T01:31:06+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -98,7 +98,7 @@
 </ul>
 </li>
 <li>結構まじめにminitestとRSpecの比較をしている。</li>
-<li>RSpecは3系の使い方に触れている(現時点ではベータ)</li>
+<li>RSpecは3系の使い方に触れている(6/2にリリース)</li>
 <li>fixture replacementの項で<code>factory_girl</code>の使い方を説明</li>
 <li>RSpecのexpect記法とshould記法について軽く説明</li>
 <li>エンドツーエンドテストは<code>capybara</code>と<code>poltergeist</code>を使っている。(Seleniumはあまり使われていないとぶっちゃけている)</li>
