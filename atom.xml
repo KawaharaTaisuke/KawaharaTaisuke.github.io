@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-17T15:21:14+09:00</updated>
+  <updated>2014-06-19T01:15:10+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[書評:パーフェクトRuby on Rails]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/18/perfect-ruby-on-rails/"/>
+    <updated>2014-06-18T23:50:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/18/perfect-ruby-on-rails</id>
+    <content type="html"><![CDATA[
+      <p>これからRailsを覚える友人に書籍を薦める機会があればこの2冊を選びます。</p>
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=chopschips03-22&amp;o=9&amp;p=8&amp;l=as1&amp;asins=4774165166&amp;ref=qf_sp_asin_til&amp;fc1=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=chopschips03-22&amp;o=9&amp;p=8&amp;l=as1&amp;asins=4774164100&amp;ref=tf_til&amp;fc1=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<p>特に1冊目の
+<a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_tf_tl?ie=UTF8&amp;camp=247&amp;creative=1211&amp;creativeASIN=4774165166&amp;linkCode=as2&amp;tag=chopschips03-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=chopschips03-22&amp;l=as2&amp;o=9&amp;a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
+は<strong>「これからRailsを覚える同僚に紹介する」</strong>という用途にも最適な一冊だと思います。</p>
+
+<p>こういう書籍の内容は”Railsの標準機能”の枠に収まっている事が多いのですが、実際の開発現場においてはRails本体の機能ではないものの、
+多くの現場でデファクトスタンダードになっているgemが数多く存在しています。</p>
+
+<p>そのような情報に関してはアンテナを広げてキャッチアップしていくしかないのですが、
+この書籍はRails非標準の内容にまで深く踏み込んでおり、初学者の最初の一歩をブーストしてくれます。
+もちろん非標準の内容については広く普及しているかどうか(かつ長くその地位を保てるか)意見のわかれる点でもあるのですが、
+少なくとも自分の主観で読み進めて違和感のある部分はほとんどありませんでした。</p>
+
+<p>Railsで初めてWebアプリ開発を行うという方には適切では無いかもしれませんが、
+他の言語・フレームワークの経験があるような技術者にはこれくらいの内容のほうが効率が良いです。</p>
+
+<p>具体的にどこがよかったかについては後半で述べます。</p>
+
+<p>2冊目の
+<a href="http://www.amazon.co.jp/gp/product/4774164100/ref=as_li_tf_tl?ie=UTF8&amp;camp=247&amp;creative=1211&amp;creativeASIN=4774164100&amp;linkCode=as2&amp;tag=chopschips03-22">Ruby on Rails 4 アプリケーションプログラミング</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=chopschips03-22&amp;l=as2&amp;o=9&amp;a=4774164100" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
+は、1冊めを補完する目的でおすすめです。
+バリデータやビューのヘルパなどのリファレンス的な情報が豊富です。</p>
+
+<p>今回は、特に”パーフェクトRuby on Rails”について良いと思った点をメモしておこうと思います。</p>
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2014/06/18/perfect-ruby-on-rails/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました]]></title>

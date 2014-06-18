@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-17T15:21:14+09:00</updated>
+  <updated>2014-06-19T01:15:10+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,162 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[書評:パーフェクトRuby on Rails]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/06/18/perfect-ruby-on-rails/"/>
+    <updated>2014-06-18T23:50:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/06/18/perfect-ruby-on-rails</id>
+    <content type="html"><![CDATA[<p>これからRailsを覚える友人に書籍を薦める機会があればこの2冊を選びます。</p>
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=chopschips03-22&o=9&p=8&l=as1&asins=4774165166&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=chopschips03-22&o=9&p=8&l=as1&asins=4774164100&ref=tf_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<p>特に1冊目の
+<a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_tf_tl?ie=UTF8&camp=247&creative=1211&creativeASIN=4774165166&linkCode=as2&tag=chopschips03-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=chopschips03-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+は<strong>「これからRailsを覚える同僚に紹介する」</strong>という用途にも最適な一冊だと思います。</p>
+
+<p>こういう書籍の内容は"Railsの標準機能"の枠に収まっている事が多いのですが、実際の開発現場においてはRails本体の機能ではないものの、
+多くの現場でデファクトスタンダードになっているgemが数多く存在しています。</p>
+
+<p>そのような情報に関してはアンテナを広げてキャッチアップしていくしかないのですが、
+この書籍はRails非標準の内容にまで深く踏み込んでおり、初学者の最初の一歩をブーストしてくれます。
+もちろん非標準の内容については広く普及しているかどうか(かつ長くその地位を保てるか)意見のわかれる点でもあるのですが、
+少なくとも自分の主観で読み進めて違和感のある部分はほとんどありませんでした。</p>
+
+<p>Railsで初めてWebアプリ開発を行うという方には適切では無いかもしれませんが、
+他の言語・フレームワークの経験があるような技術者にはこれくらいの内容のほうが効率が良いです。</p>
+
+<p>具体的にどこがよかったかについては後半で述べます。</p>
+
+<p>2冊目の
+<a href="http://www.amazon.co.jp/gp/product/4774164100/ref=as_li_tf_tl?ie=UTF8&camp=247&creative=1211&creativeASIN=4774164100&linkCode=as2&tag=chopschips03-22">Ruby on Rails 4 アプリケーションプログラミング</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=chopschips03-22&l=as2&o=9&a=4774164100" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+は、1冊めを補完する目的でおすすめです。
+バリデータやビューのヘルパなどのリファレンス的な情報が豊富です。</p>
+
+<p>今回は、特に"パーフェクトRuby on Rails"について良いと思った点をメモしておこうと思います。</p>
+
+<!-- more -->
+
+
+<a name="L...........................................Ruby.on.Rails"></a>
+<h1>ここがおすすめ：パーフェクト Ruby on Rails</h1>
+
+<p>「この本以外では載っているのを見たことがない！」というトピックばかりではありませんが、読んでいて目に止まったおすすめポイントを雑にメモしていきます。</p>
+
+<p><code>foobar</code>みたいになっているのはgemの名前かコード片です。<br/>
+<strong>パッと見て心当たりが無いものが多い</strong>ならこの本を読む価値ありだと思います。</p>
+
+<ul>
+<li>Railsのバージョンが4.1.1とかなり新しい。(2014-06-18時点で最新)</li>
+<li>92ページまででscaffoldingやMVCのような伝統的Rails入門が終わり、残りの約300ページは後述するような実践的な内容。</li>
+<li>HamlとSlimについてコード例を示しつつ紹介している。(実際のところERBで書いてるようなプロジェクトは稀だと思う)</li>
+<li>Asset PipelineについてSprocketsから丁寧に解説がある。</li>
+<li>CoffeeScriptの要点をおさえた解説。Source Mapsに対する言及など。</li>
+<li>Sassの詳細な解説</li>
+<li>Turbolinksの解説
+
+<ul>
+<li>動作条件や発生するイベントなどの一覧</li>
+<li><code>jquery-turbolinks</code> にも言及</li>
+<li>イベントの多重定義などよくある落とし穴の回避方法</li>
+</ul>
+</li>
+<li><strong>WorkerやDecoratorのようなMVC以外の新しいレイヤーの定義方法</strong></li>
+<li><code>sidekiq</code> を用いた非同期処理</li>
+<li>PryとRailsの組み合わせ方</li>
+<li><code>hirb</code>や<code>better_errors</code>のような開発支援gemの紹介</li>
+<li>サンプルアプリケーション
+
+<ul>
+<li>動作保証のため、使用しているgemのPatchレベル以外のバージョンが固定されている</li>
+<li>OAuthを使ったTwitterアカウントによる認証を例示(<code>omniauth</code>)</li>
+<li>BootstrapをRailsアプリで使う方法を例示。モーダルを表示してAjaxでフォーム送信など。</li>
+<li><code>devise</code>を使わずシンプルに認証を実装。(<code>devise</code>については別項で言及)</li>
+<li><code>kaminari-bootstrap</code>や<code>ransack</code>、<code>carrierwave</code>のような定番gemの利用</li>
+</ul>
+</li>
+<li><strong>コントローラ層でのエラーハンドリング</strong>
+
+<ul>
+<li>存在しないアクションをリクエストされた時に500の代わりに404を返す方法</li>
+<li><code>exception_notification</code> を使ったエラーの通知</li>
+</ul>
+</li>
+<li>結構まじめにminitestとRSpecの比較をしている。</li>
+<li>RSpecは3系の使い方に触れている(現時点ではベータ)</li>
+<li>fixture replacementの項で<code>factory_girl</code>の使い方を説明</li>
+<li>RSpecのexpect記法とshould記法について軽く説明</li>
+<li>エンドツーエンドテストは<code>capybara</code>と<code>poltergeist</code>を使っている。(Seleniumはあまり使われていないとぶっちゃけている)</li>
+<li>Vagrantを紹介する際に不正なboxを使ってしまう危険性に触れた上で、Phusion社がソースごと公開しているboxの利用を例示</li>
+<li>Chef-soloを使ったプロビジョニングをそこそこに解説</li>
+<li>Unicornで<code>preload_app</code>を有効にしつつgraceful restartする方法</li>
+<li>Capistranoは3系で解説
+
+<ul>
+<li><code>capistrano3-unicorn</code>を使用</li>
+<li>deploy実行時のフックとフローについて簡単に解説</li>
+</ul>
+</li>
+<li>New Relicの結構詳細な解説</li>
+<li>ログをfluentdで集めてkibanaで可視化する方法についてざっくり紹介</li>
+<li>実践的なモデル設計の解説
+
+<ul>
+<li>モデルクラスの分割方法</li>
+<li>ActiveModel::EachValidatorの使い方</li>
+<li>ActiveModelの使い方</li>
+<li>Concern</li>
+<li>サービスクラスを用いるモデル設計</li>
+</ul>
+</li>
+<li><strong>Basic認証を題材としたRack Middlewareの作り方の本格的な解説</strong></li>
+<li>Railtieとは何か、という説明</li>
+<li><strong>プラグインの作り方(gem化まで丁寧に解説)</strong>
+
+<ul>
+<li>Railtie型</li>
+<li>Engine型</li>
+</ul>
+</li>
+<li>rbenvの使い方が書いてある。</li>
+</ul>
+
+
+<p>最近のRailsはCoffeeScriptやSassなどruby以外に必要な知識が増えましたが、
+Asset Pipelineの依存性管理などややこしい部分からsassのディレクティブに至るまで丁寧にカバーしてあります。</p>
+
+<p>また、capistranoやrspecなどは過去のバージョンと比較して大きく変わっている部分もあり、
+Webだけで勉強しようとすると古い情報を掴んで混乱する可能性があるため、
+書籍という形である程度まとまった情報になっていると人に薦めるときに便利です。</p>
+
+<p>繰り返しになりますが、実質的にデファクトスタンダードになっているgemがたくさんあるにも関わらず、
+Rails標準の機能の解説に留まっている書籍やトレーニングコースも多いです。
+本書は<code>kaminari</code>、<code>omniauth</code>、<code>carrierwave</code>、<code>poltergeist</code>など多数のgemが紹介されており、
+フロントエンドにBootstrapを使ったサンプルアプリの実装を通じて効率よくメジャーな道具を学習することができます。</p>
+
+<p>以上、おすすめポイントのまとめでした。</p>
+
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=chopschips03-22&o=9&p=8&l=as1&asins=4774165166&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<hr />
+
+<a name="L......"></a>
+<h3>蛇足</h3>
+
+<ul>
+<li><code>spring</code>ってなんか動作が遅くないですかね。4.1で標準になったので紹介されているんだと思いますが、結局まだ<code>zeus</code>使ってます。</li>
+<li><code>cancan</code>は最近は<code>cancancan</code>とか出てきててややカオス。そもそも認証と認可は安易に外部実装に頼らないほうが良いという意見もあるし。</li>
+<li>デバッガは<code>byebug</code>と<code>ruby-debug</code>周辺はどうなっていくんだろう。</li>
+<li>プロファイリングについても書いて欲しかったかも。</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ruby 実行環境の構築 - rbenvの使い方とその仕組み]]></title>
