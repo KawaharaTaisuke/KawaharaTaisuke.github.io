@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-19T01:31:06+09:00</updated>
+  <updated>2014-06-19T01:59:59+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -88,6 +88,7 @@
 <li>BootstrapをRailsアプリで使う方法を例示。モーダルを表示してAjaxでフォーム送信など。</li>
 <li><code>devise</code>を使わずシンプルに認証を実装。(<code>devise</code>については別項で言及)</li>
 <li><code>kaminari-bootstrap</code>や<code>ransack</code>、<code>carrierwave</code>のような定番gemの利用</li>
+<li>コードがgithubで公開されています。<a href="http://willnet.in/124">パーフェクト Ruby on Rails のサンプルアプリケーションを Github 上で公開しました &ndash; willnet.in</a></li>
 </ul>
 </li>
 <li><strong>コントローラ層でのエラーハンドリング</strong>
