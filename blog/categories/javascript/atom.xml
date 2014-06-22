@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-19T02:01:42+09:00</updated>
+  <updated>2014-06-22T10:15:55+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -96,6 +96,9 @@ Microsoftの機械翻訳サービスで翻訳された結果が表示されま�
 <p>翻訳したページはこのページのように、右下にウィジェットが表示されるようになります。</p>
 
 <p><img src="/images/post_20140617_wovn/ss7.png"></p>
+
+<p><script src="//j.wovn.io/0" data-wovnio="key=-hlBZ"></script>
+</p>
 ]]></content>
   </entry>
   
