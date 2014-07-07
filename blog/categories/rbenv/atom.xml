@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rbenv | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/rbenv/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-22T10:15:55+09:00</updated>
+  <updated>2014-07-08T02:05:22+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -18,26 +18,7 @@
     <link href="http://blog.chopschips.net/blog/2014/06/15/rbenv/"/>
     <updated>2014-06-15T18:00:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/15/rbenv</id>
-    <content type="html"><![CDATA[<p><ul>
- <li><a href="#section_0">rbenvとruby-buildのインストール方法</a></li>
- <li><ul>
-  <li><a href="#section_1">インストール可能なrubyバージョンの一覧表示</a></li>
-  <li><a href="#section_2">指定したバージョンのrubyをインストール</a></li>
-  <li><a href="#section_3">使用するrubyのバージョンを指定する</a></li>
-  <li><a href="#section_4">インストール済みrubyバージョンの一覧表示</a></li>
- </ul></li>
- <li><a href="#section_5">rbenvとは</a></li>
- <li><a href="#section_6">rbenvの仕組み</a></li>
- <li><ul>
-  <li><a href="#section_7">バージョン決定の仕組み</a></li>
-  <li><a href="#section_8">各バージョンの実体</a></li>
-  <li><a href="#section_9">rbenv install(ruby-build)の動作</a></li>
- </ul></li>
-</ul>
-
-</p>
-
-<a name="section_0"></a>
+    <content type="html"><![CDATA[<a name="rbenv...ruby-build..........................."></a>
 <h1>rbenvとruby-buildのインストール方法</h1>
 
 <p><code>bash
@@ -53,7 +34,7 @@ $ source ~/.bash_profile
 <!-- more -->
 
 
-<a name="section_1"></a>
+<a name="L...........................ruby.............................."></a>
 <h2>インストール可能なrubyバージョンの一覧表示</h2>
 
 <p><code>bash
@@ -69,7 +50,7 @@ $ rbenv install -l
   (省略)
 </code></pre>
 
-<a name="section_2"></a>
+<a name="L..............................ruby....................."></a>
 <h2>指定したバージョンのrubyをインストール</h2>
 
 <p>下記はバージョン2.1.2をインストールする例です。</p>
@@ -78,7 +59,7 @@ $ rbenv install -l
 $ rbenv install 2.1.2
 </code></p>
 
-<a name="section_3"></a>
+<a name="L............ruby................................."></a>
 <h2>使用するrubyのバージョンを指定する</h2>
 
 <p>rbenvでは、ディレクトリ階層ごとに使用するrubyのバージョンを指定できます。
@@ -95,7 +76,7 @@ $ ruby --version
 ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-darwin13.0]
 </code></p>
 
-<a name="section_4"></a>
+<a name="L........................ruby.............................."></a>
 <h2>インストール済みrubyバージョンの一覧表示</h2>
 
 <p><code>bash
@@ -114,7 +95,7 @@ $ rbenv versions
 <p>アスタリスクの付いているバージョンが選択されたバージョンです。
 カッコの内容はrbenvがそのバージョンを選択した理由です(後述)。</p>
 
-<a name="section_5"></a>
+<a name="rbenv......"></a>
 <h1>rbenvとは</h1>
 
 <p>rbenvは複数のバージョンのruby実行環境を切り替えるための仕組みです。</p>
@@ -130,7 +111,7 @@ $ rbenv versions
 
 <p><a href="https://rvm.io/">https://rvm.io/</a></p>
 
-<a name="section_6"></a>
+<a name="rbenv............"></a>
 <h1>rbenvの仕組み</h1>
 
 <p>rbenvでは<code>PATH</code>環境変数とシンボリックリンクを用いて、
@@ -146,8 +127,7 @@ rubyやirbのようなコマンドの呼出経路に割り込むことでバー�
 <p>また、インストールの際にシェルのrcスクリプトに追加した<code>eval "$(rbenv init -)"</code>というコマンドでは、下記が行われています。</p>
 
 <ul>
-<li>
-<code>PATH</code> 環境変数の更新(<code>export PATH="~/.rbenv/shims:${PATH}"</code>)</li>
+<li><code>PATH</code> 環境変数の更新(<code>export PATH="~/.rbenv/shims:${PATH}"</code>)</li>
 <li>rbenv rehashの実行</li>
 </ul>
 
@@ -159,19 +139,17 @@ $ which irb
 ~/.rbenv/shims/irb
 </code></p>
 
-<a name="section_7"></a>
+<a name="L................................."></a>
 <h2>バージョン決定の仕組み</h2>
 
 <p>shims以下のコマンドでは以下のように起動するrubyインタプリタのバージョンを決定します。</p>
 
 <ol>
-<li>
-<code>RBENV_VERSION</code>環境変数の中身。</li>
+<li><code>RBENV_VERSION</code>環境変数の中身。</li>
 <li>スクリプトの置いてあるディレクトリから上位にさかのぼって最初に見つかった<code>.ruby-version</code>ファイルの中身。</li>
 <li>カレントディレクトリから上位にさかのぼって最初に見つかった<code>.ruby-version</code>ファイルの中身。
 このファイルは<code>rbenv local</code>コマンドで作成することができます。</li>
-<li>
-<code>~/.rbenv/version</code> ファイルの中身。
+<li><code>~/.rbenv/version</code> ファイルの中身。
 このファイルは<code>rbenv global</code>コマンドで作成することができます。</li>
 </ol>
 
@@ -182,7 +160,7 @@ $ which irb
 
 <p>例えば製品環境でgodとrbenvを使ってデーモンプロセスのrubyバージョンを指定するような場合にはこの点に注意する必要があります。</p>
 
-<a name="section_8"></a>
+<a name="L..........................."></a>
 <h2>各バージョンの実体</h2>
 
 <p><code>rbenv install</code>でインストールしたruby実行環境は<code>~/.rbenv/versions</code>ディレクトリの下に保存されます。</p>
@@ -210,7 +188,7 @@ $ which irb
 <pre><code>~/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/nokogiri-1.6.1/
 </code></pre>
 
-<a name="section_9"></a>
+<a name="rbenv.install.ruby-build.........."></a>
 <h2>rbenv install(ruby-build)の動作</h2>
 
 <p><code>rbenv install</code>は概ね以下の様な動作をします。</p>

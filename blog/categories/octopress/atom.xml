@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-06-22T10:15:55+09:00</updated>
+  <updated>2014-07-08T02:05:22+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -14,40 +14,78 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Octopressで見出しの目次を作る方法 改]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/"/>
+    <updated>2014-07-08T01:30:43+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved</id>
+    <content type="html"><![CDATA[<p>以前このような記事を書きました。</p>
+
+<p><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法 &ndash; 割り箸ポテチ</a></p>
+
+<p>この記事を読まれた方から、より良い方法を教えて頂きました。</p>
+
+<p><a href="http://qiita.com/syui/items/564d1517fb1511c7069e">Octopressで見出しタグを目次にする方法 &ndash; Qiita</a></p>
+
+<p><a href="https://github.com/dafi/jekyll-toc-generator">jekyll-toc-generator</a>というjekyllのプラグインを修正して使う方法です。
+修正する理由は下記で解説されています。
+<a href="http://syui.github.io/blog/2014/07/07/github-content-plugin/">jekyll-toc-generatorを個別ページで表示する場合の問題点 &ndash; MBA-HACK2</a></p>
+
+<p>rdiscountの見出し作成機能を使わず、フィルタで本文をパースして見出しを構成してしまうというアプローチでした。
+勉強になりました。その手があったか。</p>
+
+<p>で、試してみたところ概ね自分の望むとおりに動いていました。素晴らしいです。</p>
+
+<p>ただ一点だけ、<code>&lt;!-- more --&gt;</code>と<code>excerpt</code>で後半を省略する場合に、
+カレントページへのアンカーのままだとリンク先が省略されて意図した動作をしなくなるので、
+オプションで絶対パスを指定できるようにして使うことにしました。(あとatomに載った場合も困る)</p>
+
+<p>修正した後のコードは下記です。</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a">https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a</a></p>
+
+<p><code>page_url</code>オプションでページの絶対パスを指定できます。
+<code>source/_includes/article.html</code>の修正例は下記の通り。</p>
+
+<p>```</p>
+
+<a name="source._includes.article.html"></a>
+<h1>source/_includes/article.html</h1>
+
+<a name="L.snip."></a>
+<h1>(snip)</h1>
+
+<p>
+{% if index %}
+  <div class="entry-content">{{ content | toc_generate page_url: post.url | excerpt }}</div>
+  {% capture excerpted %}{{ content | has_excerpt }}{% endcapture %}
+  {% if excerpted == &lsquo;true&rsquo; %}</p>
+
+<pre><code>&lt;footer&gt;
+  &lt;a rel="full-article" href="{{ root_url }}{{ post.url }}"&gt;{{ site.excerpt_link }}&lt;/a&gt;
+&lt;/footer&gt;
+</code></pre>
+
+<p>  {% endif %}
+{% else %}</p>
+
+<div class="entry-content">{{ content | toc_generate page_url: post.url }}</div>
+
+
+<p>{% endif %}
+
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Octopressで見出しの目次を作る方法]]></title>
     <link href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"/>
     <updated>2014-06-16T22:00:01+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/06/16/octopress-toc</id>
-    <content type="html"><![CDATA[<p><ul>
- <li><a href="#section_0">前提条件</a></li>
- <li><a href="#section_1">目次のサンプルと見出しの生成に失敗するまで</a></li>
- <li><ul>
-  <li><a href="#section_2">categories:</a></li>
- </ul></li>
- <li><a href="#section_3">見出し１</a></li>
- <li><ul>
-  <li><a href="#section_4">見出し２</a></li>
-  <li><a href="#section_5">見出し３</a></li>
-  <li><a href="#section_6">Generating Site with Jekyll</a></li>
- </ul></li>
- <li><a href="#section_7">既知のパッチ</a></li>
- <li><ul>
-  <li><a href="#section_8">Generating Site with Jekyll</a></li>
- </ul></li>
- <li><a href="#section_9">次の一手</a></li>
- <li><a href="#section_10">問題点は何か</a></li>
- <li><a href="#section_11">ヘッダ１</a></li>
- <li><ul>
-  <li><a href="#section_12">ヘッダ２</a></li>
- </ul></li>
- <li><a href="#section_13">解決案</a></li>
- <li><a href="#section_14">フィード</a></li>
- <li><a href="#section_15">課題</a></li>
-</ul>
-
-</p>
-
-<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
+    <content type="html"><![CDATA[<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
 
 <p>最終的には、この記事に出ているような見出しの目次を作ることができました。この方法の特徴は下記の通りです。</p>
 
@@ -64,17 +102,16 @@
 <!-- more -->
 
 
-<a name="section_0"></a>
+<a name="L............"></a>
 <h1>前提条件</h1>
 
 <ol>
-<li>
-<a href="https://github.com/imathis/octopress/commit/9bc4bb02ee3318d07b6b1ecd838a09461eff627b">2014-05-22のコミット</a> 以降のoctopressをcloneしていること。</li>
+<li><a href="https://github.com/imathis/octopress/commit/9bc4bb02ee3318d07b6b1ecd838a09461eff627b">2014-05-22のコミット</a> 以降のoctopressをcloneしていること。</li>
 <li>Markdownパーサとして<a href="https://github.com/davidfstr/rdiscount">rdiscount</a>を使用していること。</li>
 </ol>
 
 
-<a name="section_1"></a>
+<a name="L..............................................................."></a>
 <h1>目次のサンプルと見出しの生成に失敗するまで</h1>
 
 <p>gemはvendor/bundle以下にインストールしてあると仮定します。</p>
@@ -88,9 +125,9 @@ $ bundle exec rake install
 <p>見出し機能を有効にします。</p>
 
 <p>``` diff
-diff —git <em>config.yml </em>config.yml
+diff &mdash;git <em>config.yml </em>config.yml
 index e51e7c3..0969488 100644
-—– <em>config.yml
+&mdash;&ndash; <em>config.yml
 +++ </em>config.yml
 @@ -39,6 +39,8 @@ rdiscount:</p>
 
@@ -100,12 +137,11 @@ index e51e7c3..0969488 100644
 </code></pre>
 
 <ul>
-<li>
-<ul>
+<li><ul>
 <li>generate_toc</li>
 </ul>
 </li>
-<li>toc_token: “{!TOC}”
+<li>toc_token: &ldquo;{!TOC}&rdquo;
 pygments: false # default python pygments have been replaced by pygments.rb</li>
 </ul>
 
@@ -116,14 +152,14 @@ pygments: false # default python pygments have been replaced by pygments.rb</li>
 <p>以下、投稿例です。</p>
 
 <p>``` bash
-$ bundle exec rake ‘new_post[octopress_toc]’
-$ cat &lt;&lt;‘EOF’ &gt; source/_posts/2014-06-16-octopress-toc.markdown
+$ bundle exec rake &lsquo;new_post[octopress_toc]&rsquo;
+$ cat &lt;&lt;&lsquo;EOF&rsquo; > source/_posts/2014-06-16-octopress-toc.markdown
 layout: post
-title: “octopress_toc”
+title: &ldquo;octopress_toc&rdquo;
 date: 2014-06-16 09:54:31 +0900
 comments: true</p>
 
-<a name="section_2"></a>
+<a name="categories:"></a>
 <h2>categories:</h2>
 
 <p>{!TOC}</p>
@@ -133,17 +169,17 @@ comments: true</p>
 <!-- more -->
 
 
-<a name="section_3"></a>
+<a name="L............"></a>
 <h1>見出し１</h1>
 
 <p>本文</p>
 
-<a name="section_4"></a>
+<a name="L............"></a>
 <h2>見出し２</h2>
 
 <p>本文</p>
 
-<a name="section_5"></a>
+<a name="L............"></a>
 <h2>見出し３</h2>
 
 <p>本文
@@ -155,13 +191,13 @@ EOF
 <p>``` bash
 $ bundle exec rake generate</p>
 
-<a name="section_6"></a>
+<a name="Generating.Site.with.Jekyll"></a>
 <h2>Generating Site with Jekyll</h2>
 
 <p>identical source/stylesheets/screen.css
 Configuration from octopress/_config.yml
-Building site: source –&gt; public
-octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/markdown.rb:140:in `gsub!‘: incompatible character encodings: ASCII-8BIT and UTF-8 (Encoding::CompatibilityError)</p>
+Building site: source &ndash;> public
+octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/markdown.rb:140:in `gsub!&lsquo;: incompatible character encodings: ASCII-8BIT and UTF-8 (Encoding::CompatibilityError)</p>
 
 <pre><code>    from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/markdown.rb:140:in `convert'
     from octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/convertible.rb:46:in `transform'
@@ -180,12 +216,12 @@ octopress/vendor/bundle/ruby/2.1.0/gems/jekyll-0.12.0/lib/jekyll/converters/mark
 
 <p>```</p>
 
-<a name="section_7"></a>
+<a name="L.................."></a>
 <h1>既知のパッチ</h1>
 
 <p>前述のエラーについてはパッチがあります。</p>
 
-<p>参考：<a href="http://tokkonopapa.github.io/blog/2013/02/23/octopress-toc/">octopressで見出しの目次を記事に埋め込む方法 – T.I.D.</a></p>
+<p>参考：<a href="http://tokkonopapa.github.io/blog/2013/02/23/octopress-toc/">octopressで見出しの目次を記事に埋め込む方法 &ndash; T.I.D.</a></p>
 
 <p>jekyll本体に手を入れることになるので、ローカルにチェックアウトします。</p>
 
@@ -197,19 +233,19 @@ $ git clone git@github.com:jekyll/jekyll -b v0.12.0 vendor/github/jekyll
 <p>Gemfileを修正して、<code>bundle install --path=vendor/bundle</code>します。</p>
 
 <p>``` diff
-diff —git Gemfile Gemfile
+diff &mdash;git Gemfile Gemfile
 index cd8ce57..c87d7ec 100644
-—– Gemfile
+&mdash;&ndash; Gemfile
 +++ Gemfile
-@@ -2,7 +2,7 @@ source “<a href="https://rubygems.org">https://rubygems.org</a>”</p>
+@@ -2,7 +2,7 @@ source &ldquo;<a href="https://rubygems.org">https://rubygems.org</a>&rdquo;</p>
 
 <p> group :development do
-   gem ‘rake’, ‘~&gt; 0.9’
-–  gem ‘jekyll’, ‘~&gt; 0.12’
-+  gem ‘jekyll’, :path =&gt; “vendor/github/jekyll”
-   gem ‘rdiscount’, ‘~&gt; 2.0.7’
-   gem ‘pygments.rb’, ‘~&gt; 0.3.4’
-   gem ‘RedCloth’, ‘~&gt; 4.2.9’
+   gem &lsquo;rake&rsquo;, &lsquo;~> 0.9&rsquo;
+&ndash;  gem &lsquo;jekyll&rsquo;, &lsquo;~> 0.12&rsquo;
++  gem &lsquo;jekyll&rsquo;, :path => &ldquo;vendor/github/jekyll&rdquo;
+   gem &lsquo;rdiscount&rsquo;, &lsquo;~> 2.0.7&rsquo;
+   gem &lsquo;pygments.rb&rsquo;, &lsquo;~> 0.3.4&rsquo;
+   gem &lsquo;RedCloth&rsquo;, &lsquo;~> 4.2.9&rsquo;
 ```</p>
 
 <p>jekyllのコードを修正します。</p>
@@ -218,9 +254,9 @@ index cd8ce57..c87d7ec 100644
 cd vendor/github/jekyll
 </code>
 ``` diff
-diff —git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb
+diff &mdash;git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb
 index 3c6ba53..b866617 100644
-—– lib/jekyll/converters/markdown.rb
+&mdash;&ndash; lib/jekyll/converters/markdown.rb
 +++ lib/jekyll/converters/markdown.rb
 @@ -137,7 +137,7 @@ module Jekyll</p>
 
@@ -232,15 +268,13 @@ index 3c6ba53..b866617 100644
 <ul>
 <li><pre><code>     html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content)
 </code></pre></li>
-<li>
-<pre><code>     html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content.force_encoding("utf-8"))
+<li><pre><code>     html.gsub!(@config['rdiscount']['toc_token'], rd.toc_content.force_encoding("utf-8"))
    end
    html
  when 'maruku'
 </code></pre>
 
-<p>```</p>
-</li>
+<p>```</p></li>
 </ul>
 
 
@@ -249,12 +283,12 @@ index 3c6ba53..b866617 100644
 <p>``` bash
 % bundle exec rake generate</p>
 
-<a name="section_8"></a>
+<a name="Generating.Site.with.Jekyll"></a>
 <h2>Generating Site with Jekyll</h2>
 
 <p>identical source/stylesheets/screen.css
 Configuration from octopress/_config.yml
-Building site: source –&gt; public
+Building site: source &ndash;> public
 octopress/plugins/raw.rb:11:in `gsub': invalid byte sequence in UTF-8 (ArgumentError)</p>
 
 <pre><code>    from octopress/plugins/raw.rb:11:in `unwrap'
@@ -280,7 +314,7 @@ octopress/plugins/raw.rb:11:in `gsub': invalid byte sequence in UTF-8 (ArgumentE
 
 <p>別のエラーが出ました。</p>
 
-<a name="section_9"></a>
+<a name="L............"></a>
 <h1>次の一手</h1>
 
 <p>いくつかの方法が考えられます。</p>
@@ -301,7 +335,7 @@ octopress/plugins/raw.rb:11:in `gsub': invalid byte sequence in UTF-8 (ArgumentE
 
 <p>というわけで諦めて強引に修正することにしました。(今回は多少汚い手を使っても困るのは俺だけだし)</p>
 
-<a name="section_10"></a>
+<a name="L.................."></a>
 <h1>問題点は何か</h1>
 
 <p>そもそもの問題点は2つあります。</p>
@@ -318,16 +352,16 @@ octopress/plugins/raw.rb:11:in `gsub': invalid byte sequence in UTF-8 (ArgumentE
 わかり易い例を示します。</p>
 
 <p>``` ruby toc_test.rb
-require ‘rdiscount’</p>
+require &lsquo;rdiscount&rsquo;</p>
 
 <p>rd = RDiscount.new(&lt;&lt;-EOF, :autolink, :footnotes, :smart, :generate_toc)</p>
 
-<a name="section_11"></a>
+<a name="L............"></a>
 <h1>ヘッダ１</h1>
 
 <p>本文1</p>
 
-<a name="section_12"></a>
+<a name="L............"></a>
 <h2>ヘッダ２</h2>
 
 <p>本文2
@@ -338,7 +372,7 @@ EOF</p>
 
 <p>``` bash
 $ bundle exec ruby toc_test.rb
-<a name="section_13"></a></p>
+<a name="L............"></a></p>
 
 <h1>ヘッダ１</h1>
 
@@ -348,7 +382,7 @@ $ bundle exec ruby toc_test.rb
 <p>本文1</p>
 
 
-<p><a name="section_14"></a></p>
+<p><a name="L............"></a></p>
 
 <h2>ヘッダ２</h2>
 
@@ -363,7 +397,7 @@ $ bundle exec ruby toc_test.rb
 <p>ヘッダ１、ヘッダ２はname属性が同じになるようにあえて全角数字で書いています。</p>
 
 <p>rdiscountに下記のようなコードがあるので、おそらく意図した動作なのでしょう。
-ただ、アルファベット以外の見出しはすべて".“に"mangle"されてしまうので、
+ただ、アルファベット以外の見出しはすべて".&ldquo;に"mangle"されてしまうので、
 日本語で見出しを書くとたまたま長さが同じになったときにリンクが重複します。</p>
 
 <pre><code>// vendor/bundle/ruby/2.1.0/gems/rdiscount-2.0.7.3/ext/mkdio.c
@@ -400,7 +434,7 @@ mkd_string_to_anchor(char *s, int len, mkd_sta_function_t outchar,
 }
 </code></pre>
 
-<a name="section_15"></a>
+<a name="L........."></a>
 <h1>解決案</h1>
 
 <p>以下の方法を取りました。</p>
@@ -410,8 +444,7 @@ mkd_string_to_anchor(char *s, int len, mkd_sta_function_t outchar,
 
 <ul>
 <li>本文のアンカータグのname属性を<code>section_#{n}</code>というフォーマットの連番に書き換える。</li>
-<li>
-<code>RDiscount#toc_content</code>のリンクを上記で書き換えたアンカーに置換する。</li>
+<li><code>RDiscount#toc_content</code>のリンクを上記で書き換えたアンカーに置換する。</li>
 </ul>
 </li>
 </ul>
@@ -425,24 +458,24 @@ $ cd vendor/github/jekyll
 </code></p>
 
 <p>``` diff
-diff —git jekyll.gemspec jekyll.gemspec
+diff &mdash;git jekyll.gemspec jekyll.gemspec
 index f88d073..e9a09b4 100644
-—– jekyll.gemspec
+&mdash;&ndash; jekyll.gemspec
 +++ jekyll.gemspec
 @@ -29,6 +29,7 @@ Gem::Specification.new do |s|
-   s.add_runtime_dependency(‘maruku’, “~&gt; 0.5”)
-   s.add_runtime_dependency(‘kramdown’, “~&gt; 0.13.4”)
-   s.add_runtime_dependency(‘pygments.rb’, “~&gt; 0.3.2”)
-+  s.add_runtime_dependency(‘nokogiri’, “~&gt; 1.6.1”)</p>
+   s.add_runtime_dependency(&lsquo;maruku&rsquo;, &ldquo;~> 0.5&rdquo;)
+   s.add_runtime_dependency(&lsquo;kramdown&rsquo;, &ldquo;~> 0.13.4&rdquo;)
+   s.add_runtime_dependency(&lsquo;pygments.rb&rsquo;, &ldquo;~> 0.3.2&rdquo;)
++  s.add_runtime_dependency(&lsquo;nokogiri&rsquo;, &ldquo;~> 1.6.1&rdquo;)</p>
 
-<p>   s.add_development_dependency(‘rake’, “~&gt; 0.9”)
-   s.add_development_dependency(‘rdoc’, “~&gt; 3.11”)
-diff —git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb
+<p>   s.add_development_dependency(&lsquo;rake&rsquo;, &ldquo;~> 0.9&rdquo;)
+   s.add_development_dependency(&lsquo;rdoc&rsquo;, &ldquo;~> 3.11&rdquo;)
+diff &mdash;git lib/jekyll/converters/markdown.rb lib/jekyll/converters/markdown.rb
 index 3c6ba53..31f0e9a 100644
-—– lib/jekyll/converters/markdown.rb
+&mdash;&ndash; lib/jekyll/converters/markdown.rb
 +++ lib/jekyll/converters/markdown.rb
 @@ -1,3 +1,5 @@
-+require ‘nokogiri’
++require &lsquo;nokogiri&rsquo;
 +
  module Jekyll</p>
 
@@ -473,15 +506,13 @@ index 3c6ba53..31f0e9a 100644
 </code></pre></li>
 <li><pre><code>     html = doc.to_html
 </code></pre></li>
-<li>
-<pre><code>     toc = html.gsub!(@config['rdiscount']['toc_token'], toc.to_html)
+<li><pre><code>     toc = html.gsub!(@config['rdiscount']['toc_token'], toc.to_html)
    end
    html
  when 'maruku'
 </code></pre>
 
-<p>```</p>
-</li>
+<p>```</p></li>
 </ul>
 
 
@@ -511,12 +542,12 @@ index 3c6ba53..31f0e9a 100644
 <!-- more -->
 
 
-<p><a name="section_16"></a></p>
+<p><a name="section_1"></a></p>
 
 <h1>見出し１</h1>
 
 
-<p><a name="section_17"></a></p>
+<p><a name="section_1"></a></p>
 
 <h1>見出し１</h1>
 
@@ -526,7 +557,7 @@ index 3c6ba53..31f0e9a 100644
 <p>本文</p>
 
 
-<p><a name="section_18"></a></p>
+<p><a name="section_2"></a></p>
 
 <h2>見出し２</h2>
 
@@ -536,7 +567,7 @@ index 3c6ba53..31f0e9a 100644
 <p>本文</p>
 
 
-<p><a name="section_19"></a></p>
+<p><a name="section_3"></a></p>
 
 <h2>見出し３</h2>
 
@@ -553,10 +584,10 @@ index 3c6ba53..31f0e9a 100644
 <p>これを解決するためにプラグインを書きます。</p>
 
 <p>``` ruby plugins/toc_linker.rb
-require ‘nokogiri’</p>
+require &lsquo;nokogiri&rsquo;</p>
 
 <p>module Jekyll
-  require_relative ‘post_filters’</p>
+  require_relative &lsquo;post_filters&rsquo;</p>
 
 <p>  class TocLinker &lt; PostFilter</p>
 
@@ -594,20 +625,20 @@ end
 
 <p>```</p>
 
-<a name="section_20"></a>
+<a name="L............"></a>
 <h1>フィード</h1>
 
 <p>ついでに出力されるフィードにも手を入れておきます。</p>
 
-<p><code>&lt;!-- more --&gt;</code>で省略している箇所はフィードに含めず、<br>
-それよりも前に見出し目次がある場合はフィードに含めて、<br>
+<p><code>&lt;!-- more --&gt;</code>で省略している箇所はフィードに含めず、<br/>
+それよりも前に見出し目次がある場合はフィードに含めて、<br/>
 見出し目次のリンク先は投稿本文になるようにします。</p>
 
 <p>``` diff
 
-diff —git source/atom.xml source/atom.xml
+diff &mdash;git source/atom.xml source/atom.xml
 index 83af3f8..035a610 100644
-—– source/atom.xml
+&mdash;&ndash; source/atom.xml
 +++ source/atom.xml
 @@ -21,7 +21,13 @@ layout: nil</p>
 
@@ -617,26 +648,24 @@ index 83af3f8..035a610 100644
 </code></pre>
 
 <ul>
-<li> <content type="html">&lt;![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]&gt;</content>
-</li>
-<li> <content type="html">&lt;![CDATA[</content>
-</li>
+<li> <content type="html">&lt;![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]&gt;</content></li>
+<li> <content type="html">&lt;![CDATA[</li>
 <li>   {{ post.content | excerpt | expand_urls: site.url | cdata_escape }}</li>
 <li>   {% capture excerpted %}{{ post.content | has_excerpt }}{% endcapture %}</li>
-<li>   {% if excerpted == ‘true’ %}</li>
+<li>   {% if excerpted == &lsquo;true&rsquo; %}</li>
 <li><pre><code> &lt;a rel="full-article" href="{{ site.url }}{{ root_url }}{{ post.url }}"&gt;{{ site.excerpt_link | cdata_escape }}&lt;/a&gt;
 </code></pre></li>
 <li>   {% endif %}</li>
-<li> ]]&gt;
-
+<li> ]]&gt;</content>
+</entry>
 {% endfor %}
-
+</feed>
 
 ```</li>
 </ul>
 
 
-<a name="section_21"></a>
+<a name="L......"></a>
 <h1>課題</h1>
 
 <ul>

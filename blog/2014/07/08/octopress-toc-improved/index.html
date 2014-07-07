@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopressで見出しの目次を作る方法 改 - 割り箸ポテチ</title>
+  <meta name="author" content="Kawahara Taisuke / 河原太介">
+
+  
+  <meta name="description" content="以前このような記事を書きました。 Octopressで見出しの目次を作る方法 &ndash; 割り箸ポテチ この記事を読まれた方から、より良い方法を教えて頂きました。 Octopressで見出しタグを目次にする方法 &ndash; Qiita jekyll-toc- &hellip;">
+  
+  <meta name="keywords" content="割り箸ポテチ,河原太介,octopress,目次,見出し">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/foundation.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="割り箸ポテチ" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-51728803-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">割り箸ポテチ</a></h1>
+  
+    <h2>ソフトウェアエンジニアリング一般についてのメモです。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.chopschips.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopressで見出しの目次を作る方法 改</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T01:30:43+09:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+<div class="entry-content"><p>以前このような記事を書きました。</p>
+
+<p><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法 &ndash; 割り箸ポテチ</a></p>
+
+<p>この記事を読まれた方から、より良い方法を教えて頂きました。</p>
+
+<p><a href="http://qiita.com/syui/items/564d1517fb1511c7069e">Octopressで見出しタグを目次にする方法 &ndash; Qiita</a></p>
+
+<p><a href="https://github.com/dafi/jekyll-toc-generator">jekyll-toc-generator</a>というjekyllのプラグインを修正して使う方法です。
+修正する理由は下記で解説されています。
+<a href="http://syui.github.io/blog/2014/07/07/github-content-plugin/">jekyll-toc-generatorを個別ページで表示する場合の問題点 &ndash; MBA-HACK2</a></p>
+
+<p>rdiscountの見出し作成機能を使わず、フィルタで本文をパースして見出しを構成してしまうというアプローチでした。
+勉強になりました。その手があったか。</p>
+
+<p>で、試してみたところ概ね自分の望むとおりに動いていました。素晴らしいです。</p>
+
+<p>ただ一点だけ、<code>&lt;!-- more --&gt;</code>と<code>excerpt</code>で後半を省略する場合に、
+カレントページへのアンカーのままだとリンク先が省略されて意図した動作をしなくなるので、
+オプションで絶対パスを指定できるようにして使うことにしました。(あとatomに載った場合も困る)</p>
+
+<p>修正した後のコードは下記です。</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a">https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a</a></p>
+
+<p><code>page_url</code>オプションでページの絶対パスを指定できます。
+<code>source/_includes/article.html</code>の修正例は下記の通り。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># source/_includes/article.html
+</span><span class='line'>
+</span><span class='line'># (snip)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>{% if index %}
+</span><span class='line'>  &lt;div class="entry-content"&gt;{{ content | toc_generate page_url: post.url | excerpt }}&lt;/div&gt;
+</span><span class='line'>  {% capture excerpted %}{{ content | has_excerpt }}{% endcapture %}
+</span><span class='line'>  {% if excerpted == 'true' %}
+</span><span class='line'>    &lt;footer&gt;
+</span><span class='line'>      &lt;a rel="full-article" href="{{ root_url }}{{ post.url }}"&gt;{{ site.excerpt_link }}&lt;/a&gt;
+</span><span class='line'>    &lt;/footer&gt;
+</span><span class='line'>  {% endif %}
+</span><span class='line'>{% else %}
+</span><span class='line'>&lt;div class="entry-content"&gt;{{ content | toc_generate page_url: post.url }}&lt;/div&gt;
+</span><span class='line'>{% endif %}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kawahara Taisuke / 河原太介</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T01:30:43+09:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/18/perfect-ruby-on-rails/" title="Previous Post: 書評:パーフェクトRuby on Rails">&laquo; 書評:パーフェクトRuby on Rails</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>
+    <strong>Kawahara Taisuke / 河原太介</strong> 
+    (<a href="http://twitter.com/KawaharaTaisuke">@KawaharaTaisuke</a>)
+  </p>
+  <p>
+    京都でソフトウェアエンジニアをしています。興味の対象はインフラ、サーバアプリケーションからフロントエンドまでWebサービスに関わるエンジニアリング全般。最近は特にRails、HBase、Angular周辺。
+  </p>
+  <p>このブログは筆者の所属する企業およびその業務とは一切関係のない個人の活動です。</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/08/octopress-toc-improved/">Octopressで見出しの目次を作る方法 改</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/18/perfect-ruby-on-rails/">書評:パーフェクトRuby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/17/wovn/">JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/15/rbenv/">ruby 実行環境の構築 - rbenvの使い方とその仕組み</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Kawahara Taisuke / 河原太介 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  - <span class="credit">Theme by <a href="http://www.gehaxelt.in">Gehaxelt</a></span>
+  <span class="credit">and <a href="http://www.it-solutions-neef.de">IT Solutions Neef</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
