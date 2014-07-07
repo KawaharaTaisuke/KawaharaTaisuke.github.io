@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-07-08T02:05:22+09:00</updated>
+  <updated>2014-07-08T02:17:49+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -678,6 +678,10 @@ index 83af3f8..035a610 100644
 <p>最初に書いたように筋悪な方法だと思ってるのでプルリクとかもしません。</p>
 
 <p>もっとスマートな方法知ってる人いたらtwitterで教えて下さい。</p>
+
+<p>追記：twitterで筋の良い方法を教えて頂きましたので、その紹介の記事を書きました。</p>
+
+<p><a href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/">Octopressで見出しの目次を作る方法 改 &ndash; 割り箸ポテチ</a></p>
 ]]></content>
   </entry>
   
