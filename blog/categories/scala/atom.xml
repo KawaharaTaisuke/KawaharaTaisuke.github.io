@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scala | 割り箸ポテチ]]></title>
+  <link href="http://blog.chopschips.net/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://blog.chopschips.net/"/>
+  <updated>2014-09-07T18:02:03+09:00</updated>
+  <id>http://blog.chopschips.net/</id>
+  <author>
+    <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Scala 2.11 + IntelliJ IDEA 13.1 による開発環境構築]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/09/07/scala-get-started/"/>
+    <updated>2014-09-07T17:50:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/09/07/scala-get-started</id>
+    <content type="html"><![CDATA[<a name="L..............."></a>
+<h1>前提と目標</h1>
+
+<p>下記のような開発環境の構築手順をメモしておきます。</p>
+
+<ul>
+<li>Mac OSX 10.9.4</li>
+<li>Scala 2.11.0</li>
+<li>SBT 0.13 (ビルドツール)</li>
+<li><a href="http://www.jetbrains.com/idea/">IntelliJ IDEA 13.1</a> のCommunity Edition</li>
+<li>IdeaVIMの設定(操作をvimライクに)</li>
+<li>ターミナル用のScala環境の構築</li>
+</ul>
+
+
+<p>IntelliJ IDEA上でHello Worldを動かすところまでの手順を説明します。</p>
+
+<p>ScalaとSBTはIntelliJのプラグインによって自動的にインストールされるため、個別にインストールする必要はありません。</p>
+
+<p>現時点では、デフォルトのScalaのバージョンは2.10.4ですが、
+SBTのビルド定義にバージョンを書けば、プロジェクトごとに異なるバージョンのScalaコンパイラでビルドできます。
+具体例として2.11.0を使う方法を後述します。</p>
+
+<p>また、上記の方法はIntelliJ IDEAのプラグインがScala一式をインストールしてしまうので、
+ターミナル用の実行環境としてscalaenvを少し紹介します。</p>
+
+<p>大半がIDEでの設定なので画像多め。</p>
+
+<!-- more -->
+
+
+<a name="JDK....................."></a>
+<h1>JDKのインストール</h1>
+
+<p>OracleのサイトでMac OS用のJDKのインストーラをダウンロードしてインストールします。</p>
+
+<p>以下、JDK 8 (1.8.0 u20)で動作を確認しています。</p>
+
+<a name="IntelliJ.IDEA.13.1............................................."></a>
+<h1>IntelliJ IDEA 13.1をダウンロードしてインストール</h1>
+
+<ul>
+<li><a href="http://www.jetbrains.com/idea/download/">IntelliJ IDEA :: Download Latest Version of IntelliJ IDEA</a></li>
+</ul>
+
+
+<p>インストールは割愛。初回起動時にプラグインのインストールを行います。</p>
+
+<a name="Scala............IntelliJ.IDEA..............."></a>
+<h1>ScalaのためのIntelliJ IDEAの初期設定</h1>
+
+<p>初回起動時に聞かれる質問にはデフォルトのままOK。</p>
+
+<p><img src="/images/post_20140907_scala/ss_01.png"></p>
+
+<p>まずはScalaとSBTのプラグインをインストールします。</p>
+
+<p><img src="/images/post_20140907_scala/ss_02.png">
+<img src="/images/post_20140907_scala/ss_03.png">
+<img src="/images/post_20140907_scala/ss_04.png"></p>
+
+<p>&ldquo;scala"でフィルタリングして、ScalaプラグインとSBTプラグインをインストールします。
+少し時間がかかるかもしれません。
+待っている間、"Background"というボタンが表示されると思いますが、押さずに終わるまでそのまま待ってください。</p>
+
+<p><img src="/images/post_20140907_scala/ss_05.png">
+<img src="/images/post_20140907_scala/ss_06.png"></p>
+
+<p>Closeボタンをクリックして戻っていくと、IntelliJをリスタートするかどうか聞かれるのでリスタートします。</p>
+
+<p><img src="/images/post_20140907_scala/ss_07.png"></p>
+
+<p>次にJDKの設定をします。
+Quick Startメニューより Configure &ndash;> Project Defaults &ndash;> Project Structureを順に選択。</p>
+
+<p><img src="/images/post_20140907_scala/ss_08.png">
+<img src="/images/post_20140907_scala/ss_09.png">
+<img src="/images/post_20140907_scala/ss_10.png"></p>
+
+<p>Project SDKの項目でNewを選択してください。</p>
+
+<p><img src="/images/post_20140907_scala/ss_11.png"></p>
+
+<p>下記のポップアップでJDKを選択してください。</p>
+
+<p><img src="/images/post_20140907_scala/ss_12.png"></p>
+
+<p>使用するJDKのインストール先を選択するファイルダイアログが開きます。
+私の場合はそのまま最初からJDK 1.8のパスが選択されていましたが、
+そうでない場合はターミナルで <code>/usr/libexec/java_home -v 1.8.0</code> を実行して表示されるディレクトリを選択してください。</p>
+
+<p><code>
+$ /usr/libexec/java_home -v 1.8.0
+/Library/Java/JavaVirtualMachines/jdk1.8.0_20.jdk/Contents/Home
+</code></p>
+
+<p>下記のようになっていれば成功です。</p>
+
+<p><img src="/images/post_20140907_scala/ss_13.png"></p>
+
+<p>HellowWorldプロジェクトを作ってみます。</p>
+
+<p><img src="/images/post_20140907_scala/ss_14.png">
+<img src="/images/post_20140907_scala/ss_15.png">
+<img src="/images/post_20140907_scala/ss_16.png"></p>
+
+<p>TIPSを教えてくれる例のアレはOFFにしておきます。</p>
+
+<p><img src="/images/post_20140907_scala/ss_17.png"></p>
+
+<p>Scalaクラスを追加します。</p>
+
+<p><img src="/images/post_20140907_scala/ss_18.png"></p>
+
+<p>KindをObjectにするのを忘れないで下さい。</p>
+
+<p><img src="/images/post_20140907_scala/ss_19.png"></p>
+
+<p>main()を定義します。object HellowWorldのすぐ下で、mainと入力してTABを押すとmainメソッドのテンプレートが補完入力されます。</p>
+
+<p><img src="/images/post_20140907_scala/ss_20.png"></p>
+
+<p>メニューよりRunを実行します。</p>
+
+<p><img src="/images/post_20140907_scala/ss_21.png"></p>
+
+<p>HellowWorldを選択。</p>
+
+<p><img src="/images/post_20140907_scala/ss_22.png"></p>
+
+<p>画面下部にメッセージが出力されたら成功です。</p>
+
+<p><img src="/images/post_20140907_scala/ss_23.png"></p>
+
+<a name="L........................Scala...................................."></a>
+<h1>別のバージョンのScalaコンパイラを使いたい場合</h1>
+
+<p>例えば2.11.0を使いたい場合、下記のようにbuild.sbtを修正してRefreshします。</p>
+
+<p><img src="/images/post_20140907_scala/ss_24.png"></p>
+
+<p>Scala Consoleを実行してバージョンを確認してみてください。</p>
+
+<p><img src="/images/post_20140907_scala/ss_25.png"></p>
+
+<a name="IdeaVIM.............................."></a>
+<h1>IdeaVIMのインストールと設定</h1>
+
+<p><code>Preferences -&gt; Plugins -&gt; Browse repositories</code> でIdeaVIMを選択してインストールし、IntelliJを再起動します。</p>
+
+<p>次に下記の設定を行います。</p>
+
+<a name="Ctrl.H................................................"></a>
+<h2>Ctrl+Hでバックスペースが効くようにする</h2>
+
+<p><code>Preferences -&gt; VIM Emulation</code> で <code>^H</code> のハンドラをVimに変更</p>
+
+<p><img src="/images/post_20140907_scala/ss_26.png"></p>
+
+<p>Key Mapで <code>^H</code> をバックスペースに変更(現在<code>^H</code>に割り当てられているアクションはすべて解除)</p>
+
+<p><img src="/images/post_20140907_scala/ss_27.png">
+<img src="/images/post_20140907_scala/ss_28.png">
+<img src="/images/post_20140907_scala/ss_29.png"></p>
+
+<a name="JIS.............................code.Ctrl....code.....Esc........................"></a>
+<h2>JIS配列のキーボードで <code>Ctrl+[</code> がEscになるようにする</h2>
+
+<p>Insertモードから抜けるときに <code>Ctrl + [</code> を使えるようにします。</p>
+
+<p>~/.ideavimrcを作成して、以下を記入します。</p>
+
+<p><code>
+imap &lt;c-]&gt; &lt;esc&gt;
+</code></p>
+
+<p>JIS配列のキーボードでもUS配列として認識されるため、 <code>c-[</code> ではなく <code>c-]</code> と書きます。</p>
+
+<a name="L.........................................."></a>
+<h2>行番号が表示されるようにする</h2>
+
+<p><code>Preferences &gt; Editor &gt; Appearance &gt; Show line numbers</code> にチェックを入れます。</p>
+
+<p><img src="/images/post_20140907_scala/ss_30.png"></p>
+
+<a name="L...........................................scalaenv."></a>
+<h1>ターミナルでの実行環境の準備(scalaenv)</h1>
+
+<p>IntelliJとは無関係に、端末上でScalaのREPLやコンパイラを使いたい時があります。
+rbenvとほぼ同じ使用感で使うことができるscalaenvというツールを紹介します。</p>
+
+<ul>
+<li><a href="https://github.com/mazgi/scalaenv">https://github.com/mazgi/scalaenv</a></li>
+<li><a href="http://blog.mazgi.com/2014/02/i-made-scalaenv-sbtenv-and-playenv-based-on-rbenv/">rbenvがすばらしすぎるので #Scala, #sbt, #PlayFramework 版をつくってみた。 | Matsu Kiri Boze</a></li>
+</ul>
+
+
+<p>rbenvと同様、複数のバージョンを切り替えて使うことができます。
+また、基本的にインストール先(~/.scalaenv)のディレクトリ以外を汚さないので、アンインストールが簡単です。
+各バージョンは~/.scalaenv/versions以下のディレクトリにインストールされます。</p>
+
+<p>scalaenv自体のインストールの手順は下記の通り。(gitが必要)</p>
+
+<p><code>
+$ git clone git://github.com/mazgi/scalaenv.git ~/.scalaenv
+$ echo 'export PATH="${HOME}/.scalaenv/bin:${PATH}"' &gt;&gt; ~/.zshrc
+$ echo 'eval "$(scalaenv init -)"' &gt;&gt; ~/.zshrc
+</code></p>
+
+<p>インストール可能なバージョンのリスト</p>
+
+<p><code>
+% scalaenv install -l
+All available versions:
+scala-2.10.1
+scala-2.10.2
+scala-2.10.3
+scala-2.10.4
+scala-2.11.0
+(割愛)
+</code></p>
+
+<p>2.11.0をインストール<br/>
+rbenv同様、ソースをネットより取得して、~/.scalaenv/versions以下に展開します。</p>
+
+<p><code>
+$ scalaenv install scala-2.11.0
+</code></p>
+
+<p>デフォルトのバージョンを2.11.0に指定</p>
+
+<p><code>
+$ scalaenv global scala-2.11.0
+</code></p>
+
+<p>カレントディレクトリ以下でのバージョンを 2.11.0 に指定</p>
+
+<p><code>
+$ scalaenv local scala-2.11.0
+</code></p>
+
+<a name="L......"></a>
+<h1>参考</h1>
+
+<p>下記のリンクを参考にさせていただきました。</p>
+
+<ul>
+<li><a href="http://qiita.com/suin/items/33ba576b3a253d7fa709#1-6">【図解】Scala 2.10 + IntelliJ IDEA 12 で｢Hello World｣する &ndash; Qiita</a></li>
+<li><a href="http://naoty.hatenablog.com/entry/2013/01/04/234112">IntelliJ IDEAをvimっぽくする &ndash; naoty.to_s</a></li>
+<li><a href="http://qiita.com/shiena/items/0b82b242e32f4e4d02c0">mac版のIntelliJ IDEA + IdeaVimで^[が効かない &ndash; Qiita</a></li>
+<li><a href="http://blog.mazgi.com/2014/02/i-made-scalaenv-sbtenv-and-playenv-based-on-rbenv/">rbenvがすばらしすぎるので #Scala, #sbt, #PlayFramework 版をつくってみた。 | Matsu Kiri Boze</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
