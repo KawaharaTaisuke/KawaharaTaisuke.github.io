@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-09-09T00:18:48+09:00</updated>
+  <updated>2014-09-09T00:25:58+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Scala 2.11 + IntelliJ IDEA 13.1 による開発環境構築]]></title>
+    <title type="html"><![CDATA[Scala 開発環境構築(IntelliJ IDEA, SBT, scalaenv)]]></title>
     <link href="http://blog.chopschips.net/blog/2014/09/07/scala-get-started/"/>
     <updated>2014-09-07T17:50:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2014/09/07/scala-get-started</id>
@@ -29,7 +29,7 @@
 <li>SBT 0.13 (ビルドツール)</li>
 <li><a href="http://www.jetbrains.com/idea/">IntelliJ IDEA 13.1</a> のCommunity Edition</li>
 <li>IdeaVIMの設定(操作をvimライクに)</li>
-<li>ターミナル用のScala環境の構築</li>
+<li>ターミナル用のScala環境の構築(scalaenv)</li>
 </ul>
 
 
