@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: VirtualBox | 割り箸ポテチ]]></title>
+  <link href="http://blog.chopschips.net/blog/categories/virtualbox/atom.xml" rel="self"/>
+  <link href="http://blog.chopschips.net/"/>
+  <updated>2014-09-09T00:18:48+09:00</updated>
+  <id>http://blog.chopschips.net/</id>
+  <author>
+    <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Vagrantの上のCentOS 6.5でyum updateした後、vagrant upで発生したエラーの原因と対処]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/09/08/vagrant-problem-with-yum-update/"/>
+    <updated>2014-09-08T23:50:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/09/08/vagrant-problem-with-yum-update</id>
+    <content type="html"><![CDATA[<a name="L......"></a>
+<h1>概要</h1>
+
+<p>Vagrant + VirtualBoxで動かしているCentOS 6.5のVMで<code>yum update</code>したら、
+その後の<code>vagrant up</code>実行時にエラーが出るようになったので原因を調べてみました。</p>
+
+<p>```
+$ vagrant up</p>
+
+<p>(snip)</p>
+
+<p>default: /vagrant => /Users/kawahara_taisuke/Documents/program/ruby/vagrant-test
+Failed to mount folders in Linux guest. This is usually because
+the &ldquo;vboxsf&rdquo; file system is not available. Please verify that
+the guest additions are properly installed in the guest and
+can work properly. The command attempted was:</p>
+
+<p>mount -t vboxsf -o uid=<code>id -u vagrant</code>,gid=<code>getent group vagrant | cut -d: -f3</code> vagrant /vagrant
+mount -t vboxsf -o uid=<code>id -u vagrant</code>,gid=<code>id -g vagrant</code> vagrant /vagrant
+```</p>
+
+<p>忘れた頃にまた踏みそうなのでメモしておきます。</p>
+
+<a name="L..............."></a>
+<h1>環境の詳細</h1>
+
+<p>Vagrantfileは下記の通り。</p>
+
+<p>``` ruby
+Vagrant.configure(2) do |config|
+  config.vm.box = &ldquo;chef/centos-6.5&rdquo;
+  config.vm.box_check_update = false</p>
+
+<p>  config.vm.network &ldquo;private_network&rdquo;, ip: &ldquo;192.168.33.10&rdquo;</p>
+
+<p>  config.vm.provider &ldquo;virtualbox&rdquo; do |vb|</p>
+
+<pre><code># Don't boot with headless mode
+vb.gui = false
+
+# Use VBoxManage to customize the VM. For example to change memory:
+vb.customize ["modifyvm", :id, "--memory", "2048"]
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>boxイメージはChef社のCentOS 6.5<br/>
+<a href="https://vagrantcloud.com/chef/centos-6.5">https://vagrantcloud.com/chef/centos-6.5</a></p>
+
+<p>カーネルのアップデートによってVirtualBoxのGuest Additionsが動作しなくなり、
+共有フォルダのマウントに失敗して上記のエラーが出るようになっていました。</p>
+
+<a name="L.............................."></a>
+<h1>エラー発生までの手順</h1>
+
+<p>一回目の <code>vagrant up</code> は成功します。</p>
+
+<p>``` console
+$ vagrant up
+Bringing machine &lsquo;default&rsquo; up with &lsquo;virtualbox&rsquo; provider&hellip;
+==> default: Importing base box &lsquo;chef/centos-6.5&rsquo;&hellip;
+==> default: Matching MAC address for NAT networking&hellip;
+==> default: Setting the name of the VM: vagrant-test_default_1410100159081_14315
+==> default: Clearing any previously set network interfaces&hellip;
+==> default: Preparing network interfaces based on configuration&hellip;</p>
+
+<p>(snip)</p>
+
+<p>==> default: Checking for guest additions in VM&hellip;
+==> default: Configuring and enabling network interfaces&hellip;
+==> default: Mounting shared folders&hellip;</p>
+
+<pre><code>default: /vagrant =&gt; /Users/kawahara_taisuke/Documents/program/ruby/vagrant-test
+</code></pre>
+
+<p>(snip)</p>
+
+<p>==> default: * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+==> default: [2014-09-07T14:31:47+00:00] INFO: <strong><em> Chef 11.14.6 </em></strong>
+==> default: [2014-09-07T14:31:47+00:00] INFO: Chef-client pid: 3272
+==> default: [2014-09-07T14:31:49+00:00] INFO: Run List is []
+==> default: [2014-09-07T14:31:49+00:00] INFO: Run List expands to []
+==> default: [2014-09-07T14:31:49+00:00] INFO: Starting Chef Run for localhost
+==> default: [2014-09-07T14:31:49+00:00] INFO: Running start handlers
+==> default: [2014-09-07T14:31:49+00:00] INFO: Start handlers complete.
+==> default: [2014-09-07T14:31:49+00:00] INFO: Chef Run complete in 0.050052809 seconds
+==> default: [2014-09-07T14:31:49+00:00] INFO: Running report handlers
+==> default: [2014-09-07T14:31:49+00:00] INFO: Report handlers complete
+```</p>
+
+<p>ゲストOSにログインして、<code>yum update</code>を実行します。</p>
+
+<p>``` console
+$ vagrant ssh
+Last login: Fri Mar  7 16:57:20 2014 from 10.0.2.2
+[vagrant@localhost ~]$ sudo yum update -y
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: ftp.iij.ad.jp
+ * extras: ftp.iij.ad.jp
+ * updates: ftp.iij.ad.jp
+Setting up Update Process
+Resolving Dependencies
+&mdash;> Running transaction check
+&mdash;&ndash;> Package audit.x86_64 0:2.2-2.el6 will be updated</p>
+
+<p>(snip)</p>
+
+<p>  Verifying  : libcurl-7.19.7-37.el6_4.x86_64                                                                                                                                                                                         121/121</p>
+
+<p>Installed:
+  kernel.x86_64 0:2.6.32-431.23.3.el6</p>
+
+<p>Updated:
+  audit.x86_64 0:2.2-4.el6_5                                   audit-libs.x86_64 0:2.2-4.el6_5                             ca-certificates.noarch 0:2014.1.98-65.0.el6_5             centos-release.x86_64 0:6-5.el6.centos.11.2
+  coreutils.x86_64 0:8.4-31.el6_5.2                            coreutils-libs.x86_64 0:8.4-31.el6_5.2                      cpio.x86_64 0:2.10-12.el6_5                               curl.x86_64 0:7.19.7-37.el6_5.3
+  device-mapper-persistent-data.x86_64 0:0.2.8-4.el6_5         dracut.noarch 0:004-336.el6_5.2                             dracut-kernel.noarch 0:004-336.el6_5.2                    e2fsprogs.x86_64 0:1.41.12-18.el6_5.1
+  e2fsprogs-libs.x86_64 0:1.41.12-18.el6_5.1                   ethtool.x86_64 2:3.5-1.4.el6_5                              glib2.x86_64 0:2.26.1-7.el6_5                             glibc.x86_64 0:2.12-1.132.el6_5.4
+  glibc-common.x86_64 0:2.12-1.132.el6_5.4                     grep.x86_64 0:2.6.3-4.el6_5.1                               grub.x86_64 1:0.97-84.el6_5                               initscripts.x86_64 0:9.03.40-2.el6.centos.4
+  iproute.x86_64 0:2.6.32-32.el6_5                             kernel-firmware.noarch 0:2.6.32-431.23.3.el6                krb5-libs.x86_64 0:1.10.3-15.el6_5.1                      libblkid.x86_64 0:2.17.2-12.14.el6_5
+  libcom_err.x86_64 0:1.41.12-18.el6_5.1                       libcurl.x86_64 0:7.19.7-37.el6_5.3                          libss.x86_64 0:1.41.12-18.el6_5.1                         libtasn1.x86_64 0:2.3-6.el6_5
+  libtirpc.x86_64 0:0.2.1-6.el6_5.2                            libuuid.x86_64 0:2.17.2-12.14.el6_5                         libxml2.x86_64 0:2.7.6-14.el6_5.2                         mysql-libs.x86_64 0:5.1.73-3.el6_5
+  nfs-utils.x86_64 1:1.2.3-39.el6_5.3                          nfs-utils-lib.x86_64 0:1.1.5-6.el6_5                        nspr.x86_64 0:4.10.6-1.el6_5                              nss.x86_64 0:3.16.1-4.el6_5
+  nss-softokn.x86_64 0:3.14.3-10.el6_5                         nss-softokn-freebl.x86_64 0:3.14.3-10.el6_5                 nss-sysinit.x86_64 0:3.16.1-4.el6_5                       nss-tools.x86_64 0:3.16.1-4.el6_5
+  nss-util.x86_64 0:3.16.1-1.el6_5                             openldap.x86_64 0:2.4.23-34.el6_5.1                         openssl.x86_64 0:1.0.1e-16.el6_5.15                       p11-kit.x86_64 0:0.18.5-2.el6_5.2
+  p11-kit-trust.x86_64 0:0.18.5-2.el6_5.2                      plymouth.x86_64 0:0.8.3-27.el6.centos.1                     plymouth-core-libs.x86_64 0:0.8.3-27.el6.centos.1         plymouth-scripts.x86_64 0:0.8.3-27.el6.centos.1
+  postfix.x86_64 2:2.6.6-6.el6_5                               psmisc.x86_64 0:22.6-19.el6_5                               python.x86_64 0:2.6.6-52.el6                              python-libs.x86_64 0:2.6.6-52.el6
+  selinux-policy.noarch 0:3.7.19-231.el6_5.3                   selinux-policy-targeted.noarch 0:3.7.19-231.el6_5.3         tzdata.noarch 0:2014e-1.el6                               upstart.x86_64 0:0.6.5-13.el6_5.3
+  util-linux-ng.x86_64 0:2.17.2-12.14.el6_5                    wget.x86_64 0:1.12-1.11.el6_5                               yum.noarch 0:3.2.29-43.el6.centos                         yum-plugin-fastestmirror.noarch 0:1.1.30-17.el6_5</p>
+
+<p>Complete!
+```</p>
+
+<p>次に<code>vagrant halt</code>して<code>vagrant up</code>すると、下記のように失敗します。</p>
+
+<p>``` console
+$ vagrant halt
+==> default: Attempting graceful shutdown of VM&hellip;
+$ vagrant up
+Bringing machine &lsquo;default&rsquo; up with &lsquo;virtualbox&rsquo; provider&hellip;
+==> default: Clearing any previously set forwarded ports&hellip;
+==> default: Clearing any previously set network interfaces&hellip;
+==> default: Preparing network interfaces based on configuration&hellip;</p>
+
+<pre><code>default: Adapter 1: nat
+default: Adapter 2: hostonly
+</code></pre>
+
+<p>==> default: Forwarding ports&hellip;</p>
+
+<pre><code>default: 22 =&gt; 2222 (adapter 1)
+</code></pre>
+
+<p>==> default: Running &lsquo;pre-boot&rsquo; VM customizations&hellip;
+==> default: Booting VM&hellip;
+==> default: Waiting for machine to boot. This may take a few minutes&hellip;</p>
+
+<pre><code>default: SSH address: 127.0.0.1:2222
+default: SSH username: vagrant
+default: SSH auth method: private key
+default: Warning: Connection timeout. Retrying...
+</code></pre>
+
+<p>==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM&hellip;
+==> default: Configuring and enabling network interfaces&hellip;
+==> default: Mounting shared folders&hellip;</p>
+
+<pre><code>default: /vagrant =&gt; /Users/kawahara_taisuke/Documents/program/ruby/vagrant-test
+</code></pre>
+
+<p>Failed to mount folders in Linux guest. This is usually because
+the &ldquo;vboxsf&rdquo; file system is not available. Please verify that
+the guest additions are properly installed in the guest and
+can work properly. The command attempted was:</p>
+
+<p>mount -t vboxsf -o uid=<code>id -u vagrant</code>,gid=<code>getent group vagrant | cut -d: -f3</code> vagrant /vagrant
+mount -t vboxsf -o uid=<code>id -u vagrant</code>,gid=<code>id -g vagrant</code> vagrant /vagrant
+```</p>
+
+<p><code>yum update</code>でカーネルが更新されたことでVirtualBoxのGuest Additionsが動作しなくなり、
+<code>vagrant up</code> の途中で共有フォルダのマウントに失敗していた、というのがこのエラーの原因だったようです。</p>
+
+<p>もう一度ゲストOSにログインして、Guest Additionsを再ビルドします。</p>
+
+<p>``` console</p>
+
+<a name="L........................................................."></a>
+<h1>ビルドに必要なパッケージをインストール</h1>
+
+<p>$ sudo yum install -y gcc perl kernel-devel</p>
+
+<a name="L.................."></a>
+<h1>ビルドを実行</h1>
+
+<p>sudo /etc/init.d/vboxadd setup
+Removing existing VirtualBox non-DKMS kernel modules       [  OK  ]
+Building the VirtualBox Guest Additions kernel modules
+Building the main Guest Additions module                   [  OK  ]
+Building the shared folder support module                  [  OK  ]
+Building the OpenGL support module                         [  OK  ]
+Doing non-kernel setup of the Guest Additions              [  OK  ]
+```</p>
+
+<p>新しいVMを立ち上げた時に<code>yum update</code>を一回実行しておきたい、というのはよくあると思うので、できれば自動化したいところ。
+/etc/init.d/vboxadd setupはカーネルをアップデートして再起動した後でなければ意味が無いため、手順は少し複雑になります。</p>
+
+<p>chefで書いてみたらこんな感じです。/etc/rc.localにスクリプトを追加した後、実行後に自己消去します。</p>
+
+<p>``` ruby
+execute &lsquo;yum-update&rsquo; do
+  command &lt;&lt;-SCRIPT</p>
+
+<pre><code>yum update -y                        &amp;&amp; \
+yum install -y gcc perl kernel-devel &amp;&amp; \
+cat &lt;&lt;EOF &gt;&gt; /etc/rc.local
+</code></pre>
+
+<p>/etc/init.d/vboxadd setup; touch /root/.yum-updated
+mv /etc/rc.local /etc/rc.local.off; sed -e &lsquo;\$d&rsquo; /etc/rc.local.off | sed -e &lsquo;\$d&rsquo; > /etc/rc.local; rm -f /etc/rc.local.off
+EOF</p>
+
+<pre><code>shutdown -r now
+</code></pre>
+
+<p>  SCRIPT
+  creates &lsquo;/root/.yum-updated&rsquo;
+end
+```</p>
+
+<p>もっとスマートな書き方がある気がする。
+なお共有フォルダを有効にするには、このレシピの適用後に最低でも<code>vagrant reload</code>を一回実行する必要があります。</p>
+
+<p>だいぶ無理筋な感じがするので素直に<code>yum update</code>後のboxを作ったほうが良いかもしれません。</p>
+]]></content>
+  </entry>
+  
+</feed>
