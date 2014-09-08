@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: chef | 割り箸ポテチ]]></title>
+  <link href="http://blog.chopschips.net/blog/categories/chef/atom.xml" rel="self"/>
+  <link href="http://blog.chopschips.net/"/>
+  <updated>2014-09-09T01:01:24+09:00</updated>
+  <id>http://blog.chopschips.net/</id>
+  <author>
+    <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[knife solo prepareでエラー]]></title>
+    <link href="http://blog.chopschips.net/blog/2014/09/09/chef-alpha/"/>
+    <updated>2014-09-09T00:32:43+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2014/09/09/chef-alpha</id>
+    <content type="html"><![CDATA[<p>knife-soloをインストールしたら何故かchef 12.0.0.alphaがインストールされてしまいました。</p>
+
+<p>```
+$ gem install knife-solo
+Fetching: chef-zero-2.2.gem (100%)
+Successfully installed chef-zero-2.2
+Fetching: chef-12.0.0.alpha.1.gem (100%)
+Successfully installed chef-12.0.0.alpha.1
+Thanks for installing knife-solo!</p>
+
+<p>If you run into any issues please let us know at:
+  <a href="https://github.com/matschaffer/knife-solo/issues">https://github.com/matschaffer/knife-solo/issues</a></p>
+
+<p>If you are upgrading knife-solo please uninstall any old versions by
+running <code>gem clean knife-solo</code> to avoid any errors.</p>
+
+<p>See <a href="http://bit.ly/CHEF-3255">http://bit.ly/CHEF-3255</a> for more information on the knife bug
+that causes this.
+Successfully installed knife-solo-0.4.2
+Parsing documentation for chef-12.0.0.alpha.1
+Installing ri documentation for chef-12.0.0.alpha.1
+Parsing documentation for chef-zero-2.2
+Installing ri documentation for chef-zero-2.2
+Parsing documentation for knife-solo-0.4.2
+Done installing documentation for chef, chef-zero, knife-solo after 20 seconds
+3 gems installed
+```</p>
+
+<p>opscodeのchefのインストーラはまだ未対応なのか、<code>knife solo prepare</code>が失敗するようになってしまいました。</p>
+
+<p>```
+$ knife solo prepare centos65
+Bootstrapping Chef&hellip;
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+
+<pre><code>                             Dload  Upload   Total   Spent    Left  Speed
+</code></pre>
+
+<p>100 16519  100 16519    0     0  13977      0  0:00:01  0:00:01 &mdash;:&mdash;:&mdash; 30761
+Downloading Chef 12.0.0.alpha.1 for el&hellip;
+downloading <a href="https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&amp;prerelease=false&amp;nightlies=false&amp;p=el&amp;pv=6&amp;m=x86_64">https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&amp;prerelease=false&amp;nightlies=false&amp;p=el&amp;pv=6&amp;m=x86_64</a>
+  to file /tmp/install.sh.5840/metadata.txt
+trying wget&hellip;
+ERROR 404
+Unable to retrieve a valid package!
+Please file a bug report at <a href="http://tickets.opscode.com">http://tickets.opscode.com</a>
+Project: Chef
+Component: Packages
+Label: Omnibus
+Version: 12.0.0.alpha.1</p>
+
+<p>Please detail your operating system type, version and any other relevant details
+Metadata URL: <a href="https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&amp;prerelease=false&amp;nightlies=false&amp;p=el&amp;pv=6&amp;m=x86_64">https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&amp;prerelease=false&amp;nightlies=false&amp;p=el&amp;pv=6&amp;m=x86_64</a>
+```</p>
+
+<p>chefがインストールされていない状態で<code>gem install knife-solo</code>した場合だけ、chefの12.0.0.alphaがインストールされるようです。</p>
+
+<p>Gemfileを書いて<code>bundle install</code>した場合と、<code>gem install chef</code>した場合は11.16.0がインストールされることを確認。変なdependencyのがslip outしたんだろうか。</p>
+]]></content>
+  </entry>
+  
+</feed>

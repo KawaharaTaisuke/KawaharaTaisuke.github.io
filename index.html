@@ -9,14 +9,30 @@
   <meta name="author" content="Kawahara Taisuke / 河原太介">
 
   
-  <meta name="description" content="Contents 1 概要
-2 環境の詳細
-3 エラー発生までの手順 概要 Vagrant + VirtualBoxで動かしているCentOS 6.5のVMでyum updateしたら、
-その後のvagrant up実行時にエラーが出るようになったので原因を調べてみました。 1
+  <meta name="description" content="knife-soloをインストールしたら何故かchef 12.0.0.alphaがインストールされてしまいました。 1
 2
 3
 4
-5 &hellip;">
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+$ gem install knife-solo &hellip;">
   
   <meta name="keywords" content="割り箸ポテチ,河原太介,ruby,rails">
   
@@ -85,6 +101,164 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-09T00:32:43+09:00" pubdate data-updated="true">Sep 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/09/09/chef-alpha/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/09/09/chef-alpha/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/09/09/chef-alpha/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/09/09/chef-alpha/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+  <div class="entry-content"><p>knife-soloをインストールしたら何故かchef 12.0.0.alphaがインストールされてしまいました。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install knife-solo
+</span><span class='line'>Fetching: chef-zero-2.2.gem (100%)
+</span><span class='line'>Successfully installed chef-zero-2.2
+</span><span class='line'>Fetching: chef-12.0.0.alpha.1.gem (100%)
+</span><span class='line'>Successfully installed chef-12.0.0.alpha.1
+</span><span class='line'>Thanks for installing knife-solo!
+</span><span class='line'>
+</span><span class='line'>If you run into any issues please let us know at:
+</span><span class='line'>  https://github.com/matschaffer/knife-solo/issues
+</span><span class='line'>
+</span><span class='line'>If you are upgrading knife-solo please uninstall any old versions by
+</span><span class='line'>running `gem clean knife-solo` to avoid any errors.
+</span><span class='line'>
+</span><span class='line'>See http://bit.ly/CHEF-3255 for more information on the knife bug
+</span><span class='line'>that causes this.
+</span><span class='line'>Successfully installed knife-solo-0.4.2
+</span><span class='line'>Parsing documentation for chef-12.0.0.alpha.1
+</span><span class='line'>Installing ri documentation for chef-12.0.0.alpha.1
+</span><span class='line'>Parsing documentation for chef-zero-2.2
+</span><span class='line'>Installing ri documentation for chef-zero-2.2
+</span><span class='line'>Parsing documentation for knife-solo-0.4.2
+</span><span class='line'>Done installing documentation for chef, chef-zero, knife-solo after 20 seconds
+</span><span class='line'>3 gems installed</span></code></pre></td></tr></table></div></figure>
+
+
+<p>opscodeのchefのインストーラはまだ未対応なのか、<code>knife solo prepare</code>が失敗するようになってしまいました。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo prepare centos65
+</span><span class='line'>Bootstrapping Chef...
+</span><span class='line'>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span><span class='line'>                                 Dload  Upload   Total   Spent    Left  Speed
+</span><span class='line'>100 16519  100 16519    0     0  13977      0  0:00:01  0:00:01 --:--:-- 30761
+</span><span class='line'>Downloading Chef 12.0.0.alpha.1 for el...
+</span><span class='line'>downloading https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64
+</span><span class='line'>  to file /tmp/install.sh.5840/metadata.txt
+</span><span class='line'>trying wget...
+</span><span class='line'>ERROR 404
+</span><span class='line'>Unable to retrieve a valid package!
+</span><span class='line'>Please file a bug report at http://tickets.opscode.com
+</span><span class='line'>Project: Chef
+</span><span class='line'>Component: Packages
+</span><span class='line'>Label: Omnibus
+</span><span class='line'>Version: 12.0.0.alpha.1
+</span><span class='line'>
+</span><span class='line'>Please detail your operating system type, version and any other relevant details
+</span><span class='line'>Metadata URL: https://www.opscode.com/chef/metadata?v=12.0.0.alpha.1&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64</span></code></pre></td></tr></table></div></figure>
+
+
+<p>chefがインストールされていない状態で<code>gem install knife-solo</code>した場合だけ、chefの12.0.0.alphaがインストールされるようです。</p>
+
+<p>Gemfileを書いて<code>bundle install</code>した場合と、<code>gem install chef</code>した場合は11.16.0がインストールされることを確認。変なdependencyのがslip outしたんだろうか。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -806,6 +980,10 @@ SBTのビルド定義にバージョンを書けば、プロジェクトごと�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/08/vagrant-problem-with-yum-update/">Vagrantの上のCentOS 6.5でyum updateした後、vagrant upで発生したエラーの原因と対処</a>
       </li>
     
@@ -819,10 +997,6 @@ SBTのビルド定義にバージョンを書けば、プロジェクトごと�
     
       <li class="post">
         <a href="/blog/2014/06/18/perfect-ruby-on-rails/">書評:パーフェクトRuby on Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/17/wovn/">JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました</a>
       </li>
     
   </ul>
