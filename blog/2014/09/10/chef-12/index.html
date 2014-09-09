@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Octopressで見出しの目次を作る方法 改 - 割り箸ポテチ</title>
+  <title>Chef 12のオープンソース版と25ノード制限について - 割り箸ポテチ</title>
   <meta name="author" content="Kawahara Taisuke / 河原太介">
 
   
-  <meta name="description" content="以前このような記事を書きました。 Octopressで見出しの目次を作る方法 &ndash; 割り箸ポテチ この記事を読まれた方から、より良い方法を教えて頂きました。 Octopressで見出しタグを目次にする方法 &ndash; Qiita jekyll-toc- &hellip;">
+  <meta name="description" content="Chef バージョン12がリリースされました。 ところで下記のニュースで気になる記述がありました。 ビジネスモデル面でも変更があり、オープンソース版（「Chef Essentials」）と商用版（「Chef Enterprise」）を単一のコードベースに統一し、 &hellip;">
   
-  <meta name="keywords" content="割り箸ポテチ,河原太介,octopress,目次,見出し">
+  <meta name="keywords" content="割り箸ポテチ,河原太介,chef,chef 12,オープンソース,オープンソース版,essential,使用制限,ライセンス,台数制限">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/">
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2014/09/10/chef-12/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Octopressで見出しの目次を作る方法 改</h1>
+      <h1 class="entry-title">Chef 12のオープンソース版と25ノード制限について</h1>
     
     
       <p class="meta">
@@ -97,7 +97,7 @@
   
 
 
-<time datetime="2014-07-08T01:30:43+09:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+<time datetime="2014-09-10T00:10:00+09:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
         
       </p>
     
@@ -107,21 +107,21 @@
         <li class="hatena">
           <!-- hatebu-start -->
           
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/09/10/chef-12/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
           
           <!-- hatebu-end -->
         </li>
         
         <li class="twitter">
           
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" >Tweet</a>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/09/10/chef-12/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/09/10/chef-12/" >Tweet</a>
           
         </li>
         
         
         <li class="facebook">
           
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/"></div>
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/09/10/chef-12/"></div>
           
         </li>
         
@@ -132,36 +132,39 @@
   </header>
 
 
-<div class="entry-content"><p>以前このような記事を書きました。</p>
+<div class="entry-content"><p>Chef バージョン12がリリースされました。</p>
 
-<p><a href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法 &ndash; 割り箸ポテチ</a></p>
+<p>ところで下記のニュースで気になる記述がありました。</p>
 
-<p>この記事を読まれた方から、より良い方法を教えて頂きました。</p>
-
-<p><a href="http://qiita.com/syui/items/564d1517fb1511c7069e">Octopressで見出しタグを目次にする方法 &ndash; Qiita</a></p>
-
-<p><a href="https://github.com/dafi/jekyll-toc-generator">jekyll-toc-generator</a>というjekyllのプラグインを修正して使う方法です。
-修正する理由は下記で解説されています。
-<a href="http://syui.github.io/blog/2014/07/07/github-content-plugin/">jekyll-toc-generatorを個別ページで表示する場合の問題点 &ndash; MBA-HACK2</a></p>
-
-<p>rdiscountの見出し作成機能を使わず、フィルタで本文をパースして見出しを構成してしまうというアプローチでした。
-勉強になりました。その手があったか。</p>
-
-<p>で、試してみたところ概ね自分の望むとおりに動いていました。素晴らしいです。</p>
-
-<p>ただ一点だけ、<code>&lt;!-- more --&gt;</code>と<code>excerpt</code>で後半を省略する場合に、
-カレントページへのアンカーのままだとリンク先が省略されて意図した動作をしなくなるので、
-オプションで絶対パスを指定できるようにして使うことにしました。(あとatomに載った場合も困る)</p>
-
-<p>修正した後のコードは下記です。</p>
-
-<!-- more -->
+<blockquote><p>ビジネスモデル面でも変更があり、<br/>オープンソース版（「Chef Essentials」）と商用版（「Chef Enterprise」）を単一のコードベースに統一し、<br/>新たにフリーミアムサブスクリプションモデルを導入した。<br/>新たに導入された無料の「Chef Essentials」プランでは、25ノードまで（ホステッド版では5ノードまで）の設定管理が可能となっている。</p><footer><strong>Source Forge.JP Magazine</strong> <cite><a href='http://sourceforge.jp/magazine/14/09/10/064900'>ITインフラ自動化ツール「Chef 12」がリリース、オープンソース版と商用版でコードを統一化</a></cite></footer></blockquote>
 
 
-<p><a href="https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a">https://github.com/KawaharaTaisuke/jekyll-toc-generator/commit/18fbd3be566304a566bb2209b3189262a2bf892a</a></p>
+<p><strong>オープンソース版のライセンスが変わって、25ノードまでの台数制限が入った</strong>
+ようにも読めます。</p>
 
-<p><code>page_url</code>オプションでページの絶対パスを指定できます。
-<code>source/_includes/article.html</code>の修正例は下記の通り。</p>
+<p><strong>マジか。</strong></p>
+
+<p>さすがにそれは無いだろうと思ったけど念の為に本家の情報を確認。</p>
+
+<p><a href="http://www.getchef.com/chef/#plans-and-pricing">Chef | IT automation for speed and awesomeness | Chef</a></p>
+
+<p>上記のページより、ライセンスと価格についての表示を引用します。</p>
+
+<p><img src="/images/post_20140910_chef_12/ss_01.png"></p>
+
+<p>CHEF Essentialsというのがオープンソース版ですね。ここに下記のような記述があります。</p>
+
+<blockquote><p>Premium Features</p><p>・Access to premium features for up to 25 nodes<br/>・Hosting available for up to 5 nodes</p><footer><strong>Chef</strong> <cite><a href='http://www.getchef.com/chef/#plans-and-pricing'>Plans and Pricing</a></cite></footer></blockquote>
+
+
+<p>つまり25ノードに制限されるのは、Essentials版そのものではなく、
+SubscriptionとEnterprise Subscriptionの欄に書かれている
+<strong>Premium Features</strong>だけです。</p>
+
+<blockquote><p>Premium Features</p><p>・Management console with reporting and role-based access control<br/>・Analytics platform<br/>・High availability<br/>・Replication<br/>・Available as hosted service</p></blockquote>
+
+
+<p>以下の機能はEssentials版でも無制限に利用できます。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -180,23 +183,36 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># source/_includes/article.html
+</pre></td><td class='code'><pre><code class=''><span class='line'>✔ Chef server
 </span><span class='line'>
-</span><span class='line'># (snip)
+</span><span class='line'>    ✔ Manage 10,000+ Nodes with a single Chef server
+</span><span class='line'>    ✔ Maintain a searchable blueprint of your infrastructure
+</span><span class='line'>    ✔ Easy Installation with Omnibus installer
 </span><span class='line'>
+</span><span class='line'>✔ Chef client
 </span><span class='line'>
-</span><span class='line'>{% if index %}
-</span><span class='line'>  &lt;div class="entry-content"&gt;{{ content | toc_generate page_url: post.url | excerpt }}&lt;/div&gt;
-</span><span class='line'>  {% capture excerpted %}{{ content | has_excerpt }}{% endcapture %}
-</span><span class='line'>  {% if excerpted == 'true' %}
-</span><span class='line'>    &lt;footer&gt;
-</span><span class='line'>      &lt;a rel="full-article" href="{{ root_url }}{{ post.url }}"&gt;{{ site.excerpt_link }}&lt;/a&gt;
-</span><span class='line'>    &lt;/footer&gt;
-</span><span class='line'>  {% endif %}
-</span><span class='line'>{% else %}
-</span><span class='line'>&lt;div class="entry-content"&gt;{{ content | toc_generate page_url: post.url }}&lt;/div&gt;
-</span><span class='line'>{% endif %}
-</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    ✔ Easily manage Linux, Windows, Mac OS, Solaris, and FreeBSD
+</span><span class='line'>
+</span><span class='line'>✔ Chef development kit
+</span><span class='line'>
+</span><span class='line'>    ✔ Everything you need to start managing applications and infrastructure with Chef
+</span><span class='line'>    ✔ Download and install in just a few clicks
+</span><span class='line'>
+</span><span class='line'>✔ Integration with all major cloud providers
+</span><span class='line'>✔ Easily manage containers in a versionable, testable and repeatable way. </span></code></pre></td></tr></table></div></figure>
+
+
+<p>ありえないと思ったんだけどドキドキした。</p>
+
+<p>何か勘違いがあれば <a href="https://twitter.com/KawaharaTaisuke">@KawaharaTaisuke</a> 宛までご指摘いただけましたら幸いです。</p>
+
+<a name="L........."></a>
+<h2>リンク</h2>
+
+<ul>
+<li><a href="http://sourceforge.jp/magazine/14/09/10/064900">ITインフラ自動化ツール「Chef 12」がリリース、オープンソース版と商用版でコードを統一化 | SourceForge.JP Magazine</a></li>
+<li><a href="http://www.getchef.com/chef/#plans-and-pricing">Chef | IT automation for speed and awesomeness | Chef</a></li>
+</ul>
 
 </div>
 
@@ -220,14 +236,8 @@
   
 
 
-<time datetime="2014-07-08T01:30:43+09:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+<time datetime="2014-09-10T00:10:00+09:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
-  
-</span>
 
 
     </p>
@@ -237,21 +247,21 @@
         <li class="hatena">
           <!-- hatebu-start -->
           
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/09/10/chef-12/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
           
           <!-- hatebu-end -->
         </li>
         
         <li class="twitter">
           
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/" >Tweet</a>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/09/10/chef-12/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/09/10/chef-12/" >Tweet</a>
           
         </li>
         
         
         <li class="facebook">
           
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/07/08/octopress-toc-improved/"></div>
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/09/10/chef-12/"></div>
           
         </li>
         
@@ -261,10 +271,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/06/18/perfect-ruby-on-rails/" title="Previous Post: 書評:パーフェクトRuby on Rails">&laquo; 書評:パーフェクトRuby on Rails</a>
+        <a class="basic-alignment left" href="/blog/2014/09/09/chef-alpha/" title="Previous Post: knife solo prepareでエラー">&laquo; knife solo prepareでエラー</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/07/scala-get-started/" title="Next Post: Scala 開発環境構築(IntelliJ IDEA, SBT, scalaenv)">Scala 開発環境構築(IntelliJ IDEA, SBT, scalaenv) &raquo;</a>
       
     </p>
   </footer>
