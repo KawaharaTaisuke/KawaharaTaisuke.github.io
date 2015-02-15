@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T22:40:52+09:00</updated>
+  <updated>2015-02-15T23:51:59+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -14,11 +14,18 @@
 
   
   <entry>
-    <title type="html"><![CDATA[MacPortsのMySQL5.6でmysql2 gemをインストールする方法]]></title>
+    <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>
     <link href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"/>
     <updated>2015-02-15T22:27:30+09:00</updated>
     <id>http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem</id>
-    <content type="html"><![CDATA[<p>Mac(Yosemite)にMacPortsインストールしたMySQL 5.6を使ってmysql2 gemをインストールする方法</p>
+    <content type="html"><![CDATA[<p>Mac(OSX 10.10: Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法のメモです。<br/>
+MacPortsを使う方法と、Oracleが配布しているコミュニティ版を使う方法について述べます。</p>
+
+<!-- more -->
+
+
+<a name="MacPorts..............."></a>
+<h1>MacPortsを使う場合</h1>
 
 <a name="MySQL.5.6.server......................"></a>
 <h2>MySQL 5.6(server)のインストール</h2>
@@ -30,23 +37,102 @@
 <a name="mysql2.gem......................"></a>
 <h2>mysql2(gem)のインストール</h2>
 
+<p>```</p>
+
+<a name="bundle............................"></a>
+<h1>bundle コマンドを使う場合</h1>
+
+<p>% bundle config build.mysql2 &mdash;with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config
+% bundle install</p>
+
+<a name="gem............................"></a>
+<h1>gem コマンドを使う場合</h1>
+
+<p>% gem install mysql2 &mdash; &mdash;with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config
+```</p>
+
+<a name="MySQL.Community.Server..............."></a>
+<h1>MySQL Community Serverを使う場合</h1>
+
+<p><a href="http://dev.mysql.com/downloads/mysql/">http://dev.mysql.com/downloads/mysql/</a></p>
+
+<p>ここからOSX 10.9用のdmgをダウンロードしてインストール。</p>
+
+<p>システム環境設定パネルでMySQL Serverを起動します。
+(MySQLのインストール後にOSXの再起動が必要な場合があるようです)</p>
+
+<p><img src="/images/post_20150215_mysql/ss_01.png">
+<img src="/images/post_20150215_mysql/ss_02.png"></p>
+
+<p>gemをインストールする前にシンボリックリンクを貼る必要があります。</p>
+
+<p><code>
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+</code></p>
+
+<p>これを行わないと、gemのインストールは成功しますが、実行時に下記のようなエラーが発生します。</p>
+
+<p>```ruby</p>
+
+<a name="test.rb"></a>
+<h1>test.rb</h1>
+
+<p>require &lsquo;mysql2&rsquo;</p>
+
+<p>client = Mysql2::Client.new(:host => &ldquo;localhost&rdquo;, :username => &ldquo;root&rdquo;)
+puts client.query(&ldquo;show databases&rdquo;)
+```</p>
+
+<p><code>``
+% ruby test.rb
+/Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in</code>require': dlopen(/Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/gems/2.2.0/extensions/x86_64-darwin-14/2.2.0-static/mysql2-0.3.17/mysql2/mysql2.bundle, 9): Library not loaded: libmysqlclient.18.dylib (LoadError)
+  Referenced from: /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/gems/2.2.0/extensions/x86_64-darwin-14/2.2.0-static/mysql2-0.3.17/mysql2/mysql2.bundle
+  Reason: image not found &ndash; /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/gems/2.2.0/extensions/x86_64-darwin-14/2.2.0-static/mysql2-0.3.17/mysql2/mysql2.bundle</p>
+
+<pre><code>    from /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+    from /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/gems/2.2.0/gems/mysql2-0.3.17/lib/mysql2.rb:8:in `&lt;top (required)&gt;'
+    from /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:128:in `require'
+    from /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:128:in `rescue in require'
+    from /Users/kawahara_taisuke/.rbenv/versions/2.2.0/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:39:in `require'
+    from test.rb:1:in `&lt;main&gt;'
+</code></pre>
+
+<p>```</p>
+
+<p>MySQLのディストリビューションパッケージの古いバグの名残のようです。</p>
+
+<p>参考:</p>
+
 <ul>
-<li>bundle コマンドを使う場合</li>
+<li><a href="http://bugs.mysql.com/bug.php?id=61243">http://bugs.mysql.com/bug.php?id=61243</a></li>
+<li><a href="http://stackoverflow.com/questions/5446747/ruby-mysql2-gem-not-working-mac-os-x-snow-leopard-ruby-1-9-2">http://stackoverflow.com/questions/5446747/ruby-mysql2-gem-not-working-mac-os-x-snow-leopard-ruby-1-9-2</a></li>
 </ul>
 
 
-<p><code>
-% bundle config build.mysql2 --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config
-</code></p>
+<p>gemのインストールでは特別なことをする必要はありません。</p>
 
-<ul>
-<li>gem コマンドを使う場合</li>
-</ul>
+<p>```</p>
 
+<a name="bundle............................"></a>
+<h1>bundle コマンドを使う場合</h1>
 
-<p><code>
-% gem install mysql2 -- --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config
-</code></p>
+<p>% bundle install</p>
+
+<a name="gem............................"></a>
+<h1>gem コマンドを使う場合</h1>
+
+<p>% gem install mysql2
+```</p>
+
+<p>bundleを使う場合、前述のMacPorts用の設定を行っていると~/.bundle/configに下記の行が追加されているので、 削除しておく必要があります。</p>
+
+<p>```</p>
+
+<a name="L...bundle.config"></a>
+<h1>~/.bundle/config</h1>
+
+<p>BUNDLE_BUILD__MYSQL2: &ldquo;&mdash;with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config&rdquo;
+```</p>
 ]]></content>
   </entry>
   

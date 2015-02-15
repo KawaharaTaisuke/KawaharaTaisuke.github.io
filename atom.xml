@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T22:40:52+09:00</updated>
+  <updated>2015-02-15T23:51:59+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -14,42 +14,30 @@
 
   
   <entry>
-    <title type="html"><![CDATA[MacPortsのMySQL5.6でmysql2 gemをインストールする方法]]></title>
+    <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>
     <link href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"/>
     <updated>2015-02-15T22:27:30+09:00</updated>
     <id>http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem</id>
     <content type="html"><![CDATA[
-      <p>Mac(Yosemite)にMacPortsインストールしたMySQL 5.6を使ってmysql2 gemをインストールする方法</p>
-
-<a name="MySQL.5.6.server......................"></a>
-<h2>MySQL 5.6(server)のインストール</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>% sudo port install mysql56-server</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="mysql2.gem......................"></a>
-<h2>mysql2(gem)のインストール</h2>
-
+      <div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li>bundle コマンドを使う場合</li>
+<li class="toc_level-1 toc_section-1">
+<a href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">MacPortsを使う場合</span></a><ul>
+<li class="toc_level-2 toc_section-2"><a href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/#tocAnchor-1-1-1"><span class="tocnumber">1.1</span> <span class="toctext">MySQL 5.6(server)のインストール</span></a></li>
+<li class="toc_level-2 toc_section-3"><a href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/#tocAnchor-1-1-2"><span class="tocnumber">1.2</span> <span class="toctext">mysql2(gem)のインストール</span></a></li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>% bundle config build.mysql2 --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>gem コマンドを使う場合</li>
+</li>
+<li class="toc_level-1 toc_section-4"><a href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/#tocAnchor-1-4"><span class="tocnumber">2</span> <span class="toctext">MySQL Community Serverを使う場合</span></a></li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>% gem install mysql2 -- --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
+</td></tr></tbody></table></div>
+<p>Mac(OSX 10.10: Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法のメモです。<br>
+MacPortsを使う方法と、Oracleが配布しているコミュニティ版を使う方法について述べます。</p>
 
 
       
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/">続きを読む &rarr;</a>
       
     ]]></content>
   </entry>
