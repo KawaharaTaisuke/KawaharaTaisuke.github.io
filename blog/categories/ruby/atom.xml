@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T23:51:59+09:00</updated>
+  <updated>2015-02-15T23:52:41+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>
     <link href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"/>
-    <updated>2015-02-15T22:27:30+09:00</updated>
+    <updated>2015-02-15T23:50:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem</id>
     <content type="html"><![CDATA[<p>Mac(OSX 10.10: Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法のメモです。<br/>
 MacPortsを使う方法と、Oracleが配布しているコミュニティ版を使う方法について述べます。</p>
