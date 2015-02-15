@@ -5,13 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました - 割り箸ポテチ</title>
+  <title>MacPortsのMySQL5.6でmysql2 gemをインストールする方法 - 割り箸ポテチ</title>
   <meta name="author" content="Kawahara Taisuke / 河原太介">
 
   
-  <meta name="description" content="以下の記事でWOVN.ioというサイトの多言語化(翻訳支援)サービスが紹介されているのを見ました。 JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan さっそく試してみました。簡単に使用感など紹介してみたいと思います &hellip;">
+  <meta name="description" content="Mac(Yosemite)にMacPortsインストールしたMySQL 5.6を使ってmysql2 gemをインストールする方法 MySQL 5.6(server)のインストール 1
+% sudo port install mysql56-server mysql2(gem)のインストール &hellip;">
   
-  <meta name="keywords" content="割り箸ポテチ,河原太介,JavaScript,多言語化,国際化,I18n,M17n,英語,サイト,Web,英語化,翻訳,WOVN,WOVN.io">
+  <meta name="keywords" content="割り箸ポテチ,河原太介,ruby,rubygems,mysql2,gem,mysql,mysql56,mac,macports,yosemite">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.chopschips.net/blog/2014/06/17/wovn/">
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -81,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">JavaScript一行でサイトを多言語化するサービスWOVN.ioを試してみました</h1>
+      <h1 class="entry-title">MacPortsのMySQL5.6でmysql2 gemをインストールする方法</h1>
     
     
       <p class="meta">
@@ -97,7 +98,7 @@
   
 
 
-<time datetime="2014-06-17T14:45:00+09:00" pubdate data-updated="true">Jun 17<span>th</span>, 2014</time>
+<time datetime="2015-02-15T22:27:30+09:00" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
         
       </p>
     
@@ -107,21 +108,21 @@
         <li class="hatena">
           <!-- hatebu-start -->
           
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/17/wovn/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
           
           <!-- hatebu-end -->
         </li>
         
         <li class="twitter">
           
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/17/wovn/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/17/wovn/" >Tweet</a>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" >Tweet</a>
           
         </li>
         
         
         <li class="facebook">
           
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/17/wovn/"></div>
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"></div>
           
         </li>
         
@@ -132,88 +133,34 @@
   </header>
 
 
-<div class="entry-content"><p>以下の記事でWOVN.ioというサイトの多言語化(翻訳支援)サービスが紹介されているのを見ました。</p>
+<div class="entry-content"><p>Mac(Yosemite)にMacPortsインストールしたMySQL 5.6を使ってmysql2 gemをインストールする方法</p>
 
-<p><a href="http://jp.techcrunch.com/2014/06/16/wovnio/">JavaScript 1行でサイトを多言語化、ボタン一発翻訳の「WOVN.io」が良さそう | TechCrunch Japan</a></p>
+<a name="MySQL.5.6.server......................"></a>
+<h2>MySQL 5.6(server)のインストール</h2>
 
-<p>さっそく試してみました。簡単に使用感など紹介してみたいと思います。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% sudo port install mysql56-server</span></code></pre></td></tr></table></div></figure>
 
-<!-- more -->
 
-
-<p>※本文中の画像ではメールアドレスやアカウントキーと思われる部分は塗りつぶしています。</p>
+<a name="mysql2.gem......................"></a>
+<h2>mysql2(gem)のインストール</h2>
 
 <ul>
-<li>サイトトップ</li>
+<li>bundle コマンドを使う場合</li>
 </ul>
 
 
-<p><a href="http://wovn.io/">WOVN.io</a></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% bundle config build.mysql2 --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
 
-<p><img src="/images/post_20140617_wovn/ss1.png"></p>
 
 <ul>
-<li>サインアップ</li>
+<li>gem コマンドを使う場合</li>
 </ul>
 
 
-<p><img src="/images/post_20140617_wovn/ss2.png"></p>
-
-<ul>
-<li>サイトに追加するコード</li>
-</ul>
-
-
-<p>サイト側に修正が必要なのはこれだけです。
-body終端の直前に追加しました。</p>
-
-<p><img src="/images/post_20140617_wovn/ss3.png"></p>
-
-<ul>
-<li>メイン画面</li>
-</ul>
-
-
-<p>New Pageをクリック。</p>
-
-<p><img src="/images/post_20140617_wovn/ss4.png"></p>
-
-<ul>
-<li>ページ登録</li>
-</ul>
-
-
-<p>翻訳したいページのURLを入力すると、自動的にタイトルと現在の言語が表示されます。</p>
-
-<p><img src="/images/post_20140617_wovn/ss5.png"></p>
-
-<p>Begin!</p>
-
-<ul>
-<li>翻訳画面</li>
-</ul>
-
-
-<p>Machine Translateを実行した画面です。<br/>
-Microsoftの機械翻訳サービスで翻訳された結果が表示されます。<br/>
-これをベースに手動で修正したい部分だけを修正するということも可能です。</p>
-
-<p><img src="/images/post_20140617_wovn/ss6.png"></p>
-
-<p>Publish &amp; Saveをクリックして終了。</p>
-
-<ul>
-<li>サイト側の動作を確認</li>
-</ul>
-
-
-<p>翻訳したページはこのページのように、右下にウィジェットが表示されるようになります。</p>
-
-<p><img src="/images/post_20140617_wovn/ss7.png"></p>
-
-<script src="//j.wovn.io/0" data-wovnio="key=-hlBZ"></script>
-
-
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% gem install mysql2 -- --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -237,12 +184,12 @@ Microsoftの機械翻訳サービスで翻訳された結果が表示されま�
   
 
 
-<time datetime="2014-06-17T14:45:00+09:00" pubdate data-updated="true">Jun 17<span>th</span>, 2014</time>
+<time datetime="2015-02-15T22:27:30+09:00" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/wovn-dot-io/'>WOVN.io</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -254,21 +201,21 @@ Microsoftの機械翻訳サービスで翻訳された結果が表示されま�
         <li class="hatena">
           <!-- hatebu-start -->
           
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/17/wovn/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
           
           <!-- hatebu-end -->
         </li>
         
         <li class="twitter">
           
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/17/wovn/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/17/wovn/" >Tweet</a>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/" >Tweet</a>
           
         </li>
         
         
         <li class="facebook">
           
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/17/wovn/"></div>
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"></div>
           
         </li>
         
@@ -278,10 +225,8 @@ Microsoftの機械翻訳サービスで翻訳された結果が表示されま�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/06/16/octopress-toc/" title="Previous Post: Octopressで見出しの目次を作る方法">&laquo; Octopressで見出しの目次を作る方法</a>
+        <a class="basic-alignment left" href="/blog/2014/09/10/chef-12/" title="Previous Post: Chef 12のオープンソース版と25ノード制限について">&laquo; Chef 12のオープンソース版と25ノード制限について</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/06/18/perfect-ruby-on-rails/" title="Next Post: 書評:パーフェクトRuby on Rails">書評:パーフェクトRuby on Rails &raquo;</a>
       
     </p>
   </footer>

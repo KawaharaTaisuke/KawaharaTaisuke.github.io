@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2014-09-10T00:44:12+09:00</updated>
+  <updated>2015-02-15T22:40:52+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MacPortsのMySQL5.6でmysql2 gemをインストールする方法]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"/>
+    <updated>2015-02-15T22:27:30+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem</id>
+    <content type="html"><![CDATA[
+      <p>Mac(Yosemite)にMacPortsインストールしたMySQL 5.6を使ってmysql2 gemをインストールする方法</p>
+
+<a name="MySQL.5.6.server......................"></a>
+<h2>MySQL 5.6(server)のインストール</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% sudo port install mysql56-server</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="mysql2.gem......................"></a>
+<h2>mysql2(gem)のインストール</h2>
+
+<ul>
+<li>bundle コマンドを使う場合</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% bundle config build.mysql2 --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>gem コマンドを使う場合</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% gem install mysql2 -- --with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config</span></code></pre></td></tr></table></div></figure>
+
+
+      
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Chef 12のオープンソース版と25ノード制限について]]></title>
