@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T23:52:41+09:00</updated>
+  <updated>2015-02-15T23:56:43+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>
     <link href="http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem/"/>
-    <updated>2015-02-15T23:50:00+09:00</updated>
+    <updated>2015-02-15T23:55:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2015/02/15/macports-mysql2-gem</id>
     <content type="html"><![CDATA[<p>Mac(OSX 10.10: Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法のメモです。<br/>
 MacPortsを使う方法と、Oracleが配布しているコミュニティ版を使う方法について述べます。</p>
@@ -133,6 +133,14 @@ puts client.query(&ldquo;show databases&rdquo;)
 
 <p>BUNDLE_BUILD__MYSQL2: &ldquo;&mdash;with-mysql-config=/opt/local/lib/mysql56/bin/mysql_config&rdquo;
 ```</p>
+
+<a name="MySQL.Server.............................."></a>
+<h3>MySQL Serverのメモリ使用量が多い</h3>
+
+<p>素のまま使っていると起動直後から400MBくらい割り当てられます。<br/>
+下記のページを参考にして、 <code>table_definition_cache</code> というパラメータを適切に設定すれば抑えることができます。</p>
+
+<p><a href="http://d.hatena.ne.jp/mabots/20140526/1401101070">Macbook Air にいれた開発用 MySQL 5.6.xx の メモリ使用量が異様に多い &ndash; 知のレバレッジを最大化せよ</a></p>
 ]]></content>
   </entry>
   
