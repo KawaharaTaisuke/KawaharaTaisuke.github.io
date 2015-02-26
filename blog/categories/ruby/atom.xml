@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T23:56:43+09:00</updated>
+  <updated>2015-02-27T01:04:49+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,288 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/02/26/active-job/"/>
+    <updated>2015-02-26T22:00:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/02/26/active-job</id>
+    <content type="html"><![CDATA[<a name="ActiveJob................................................Redis....................."></a>
+<h1>ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由</h1>
+
+<p>Rails 4.2で、ActiveJobというクラスが導入されました。</p>
+
+<p>これ以前より、Railsで非同期処理を行う際にはResqueやSidekiq、Delayed Jobなどが広く使われていましたが、
+ActiveJobはジョブを記述するためのインタフェースを抽象化して、
+ジョブの実装を変えること無くジョブランナーを切り替えることを可能にするものです。
+なおActiveJobにおいては、バックエンドを指定しなければジョブは非同期実行しようとしても即座に実行されます。</p>
+
+<p>Rails 4.2.0時点では、ActiveJobのバックエンドとして以下のページにある9つのいずれかを使用できます。</p>
+
+<p><a href="http://api.rubyonrails.org/classes/ActiveJob/QueueAdapters.html">ActiveJob::QueueAdapters</a></p>
+
+<ul>
+<li>Backburner</li>
+<li>Delayed Job</li>
+<li>Qu</li>
+<li>Que</li>
+<li>queue_classic</li>
+<li>Resque 1.x</li>
+<li>Sidekiq</li>
+<li>Sneakers</li>
+<li>Sucker Punch</li>
+</ul>
+
+
+<p>ちなみにRuby ToolboxのBackground Jobsというカテゴリの上位3つは、Resque、Sidekiq、Delayed Jobでした。この3つがよく使われている印象です。</p>
+
+<p><a href="https://www.ruby-toolbox.com/categories/Background_Jobs">The Ruby Toolbox &ndash; Background Jobs: Save jobs in a queue and process them later wihout blocking your current thread</a></p>
+
+<p>特にResque、Sidekiqは、ジョブの情報を永続化する先としてRedisを必須としています。</p>
+
+<p>情報の保存先ならActiveRecord(RDBMS)でも良さそうなものですが、あえてRedisを必須としている理由は何だろうか考えてみました。</p>
+
+<p>ぱっと思いつくのは、「キューにジョブが積まれた」というイベントをワーカーへ伝えるための手段として、
+Redisの<a href="http://redis.io/topics/pubsub">Pub/Sub</a>や<a href="http://redis.io/commands/BLPOP">BLPOP</a>/<a href="http://redis.io/commands/brpop">BRPOP</a>のようなメッセージング機構を使うのが簡単で都合が良かったのではないか？ということです。</p>
+
+<p>バックエンドにMySQLのようなRDBMSを使う場合、普通に考えるとワーカー側はジョブを保存したテーブルをロックしつつポーリングしないといけないのでスケールしなさそうだし、
+RabbitMQのようなメッセージングサービスを用いるのと比べて、RedisであればRailsエンジニアは元々better memcachedとして使用しているケースが多いので導入のハードルが低いです。</p>
+
+<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っていかどうかを確認しつつ、
+ActiveJobのページに挙げられている9つのプロダクトについてジョブ情報の保存先を調べてまとめてみようと思います。</p>
+
+<p>9つの中で特にSucker Punchはジョブの保存先もワーカープロセスの起動も必要とせずに非同期処理を行えるので、簡単に作りたいならおすすめです。詳細は後述。</p>
+
+<!-- more -->
+
+
+<a name="Resque"></a>
+<h1>Resque</h1>
+
+<p>Rails 4.2.0時点においてActiveJobが対応しているのはRedisのバージョン1系列です。</p>
+
+<p><a href="https://github.com/resque/resque/tree/1-x-stable">resque/resque at 1-x-stable</a></p>
+
+<p>ワーカーを起動する場合はrakeタスクを実行するので、そのあたりからコードを読んでいきます。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/tasks/resque.rake">lib/tasks/resque.task</a>
+これはresque/tasksを読み込んでいるだけ。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/resque/tasks.rb#L42">resque/tasks.rb</a>
+<code>Resque::Worker#work</code>がメインループのようです。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/resque/worker.rb#L205">resque/worker.rb</a>
+ジョブが無い場合はインターバル分だけスリープする実装になっていました。
+ジョブの取得はさらに読んでいくとRedisの<code>LPOP</code>を使っていて、キューが空でもブロックせずにnilが帰ってきます。</p>
+
+<p>```
+Resque::Worker#work
+  Resque#reserve</p>
+
+<pre><code>Resque::Job.reserve
+  Resque.pop
+    Redis#lpop(redis-3.2.1)
+</code></pre>
+
+<p>```</p>
+
+<a name="L......"></a>
+<h2>結論</h2>
+
+<p>Resqueのバージョン1系はRedisのメッセージング機構は使わずにポーリングしてました。</p>
+
+<p>ただ、2015-02-26時点のmasterブランチのHEADでは、インターバルに1以下の値を設定すると<code>BLPOP</code>を使う実装になっていました。</p>
+
+<a name="Sidekiq"></a>
+<h1>Sidekiq</h1>
+
+<p>現時点で最新の3.3.2を読んでいきます。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/tree/v3.3.2">mperham/sidekiq at v3.3.2</a></p>
+
+<p>Sidekiqのエントリポイントはbin/sidekiqです。
+中身はSidekiq::CLI#runなのでそこを見てみます。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/cli.rb#L76">sidekiq/cli.rb</a></p>
+
+<p>Sidekiq::Launcher#runがメインループのようです。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/launcher.rb#L39">sidekiq/launcher.rb</a></p>
+
+<p>Celluloidを使ったアクターモデルでFetcherとManagerとPollerという3つのインスタンスが強調しつつ並列処理を行っているように見えます。
+Pollerがスケジュールされたジョブをワークキューに載せ替える、ということをやっていました。
+Managerの方では同時実行数の数だけProcessorのインスタンスを作って、
+ProcessorごとにFetcher#fetchしています。
+Fetcherの中身をざっくり追いかけると、
+<a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/fetch.rb#L102">sidekiq/fetch.rb</a>
+```
+Fetcher#fetch
+  Fetcher.strategy</p>
+
+<pre><code>Fetcher::BasicFetch#retrive_work
+  Redis#brpop
+</code></pre>
+
+<p><code>``
+という流れで最終的にRedisの</code>BRPOP`でジョブ情報を読みだしていました。</p>
+
+<a name="L......"></a>
+<h2>結論</h2>
+
+<p>Sidekiqはポーリングせずに、Redisの<code>BRPOP</code>を使ってジョブが積まれたイベントをワーカーに通知していました。</p>
+
+<a name="L.............................."></a>
+<h1>その他のバックエンド</h1>
+
+<a name="Backburner"></a>
+<h2>Backburner</h2>
+
+<p><a href="https://github.com/nesquena/backburner">nesquena/backburner</a></p>
+
+<p><a href="http://kr.github.io/beanstalkd/">beanstalkd</a> というジョブキューサーバをバックエンドに使うようです。</p>
+
+<a name="Delayed.Job"></a>
+<h2>Delayed Job</h2>
+
+<p><a href="https://github.com/collectiveidea/delayed_job">collectiveidea/delayed_job</a></p>
+
+<p>バックエンドとして複数のプロダクトを指定できます。(DJはDelayed Jobのこと)</p>
+
+<ul>
+<li>ActiveRecord (DJ 3.0+)</li>
+<li>DataMapper</li>
+<li>IronMQ</li>
+<li>Mongoid</li>
+<li>MongoMapper</li>
+<li>MongoMapper (DJ 3.0+, MongoMapper 0.11.0+)</li>
+<li>Redis (DJ 3.0+, experimental)
+<a href="https://github.com/collectiveidea/delayed_job/wiki/Backends">Backends · collectiveidea/delayed_job Wiki</a></li>
+</ul>
+
+
+<a name="Qu"></a>
+<h2>Qu</h2>
+
+<p><a href="https://github.com/bkeepers/qu">bkeepers/qu</a></p>
+
+<p>RedisかMongo。</p>
+
+<a name="Que"></a>
+<h2>Que</h2>
+
+<p><a href="https://github.com/chanks/que">chanks/que</a></p>
+
+<p>PostgreSQLの<a href="http://www.postgresql.org/docs/current/static/explicit-locking.html#ADVISORY-LOCKS">Advisory Lock</a>を使います。</p>
+
+<p>Advisory Lockを用いてMessage Queueを実現する方法については下記のサイトが詳しいです。</p>
+
+<p><a href="http://d.hatena.ne.jp/n_shuyo/20090415/mq">PostgreSQL で簡易に MQ &ndash; Mi manca qualche giovedi`?</a></p>
+
+<p>ちなみにMySQLでMessage Queueやる場合はQ4MというストレージエンジンがありますがActiveJobで使う方法は見つかりませんでした。</p>
+
+<a name="queue_classic"></a>
+<h2>queue_classic</h2>
+
+<p><a href="https://github.com/QueueClassic/queue_classic">QueueClassic/queue_classic</a></p>
+
+<p>PostgreSQL。listen / notify &amp; row lockingで実装。PostgreSQLはPub/Sub機能があるんですね。</p>
+
+<a name="Sneakers"></a>
+<h2>Sneakers</h2>
+
+<p><a href="https://github.com/jondot/sneakers">jondot/sneakers</a></p>
+
+<p>RabbitMQ。サンプルコードでRedisを使っていますが、デモのためのカウントアップをRedisでやっているだけです。</p>
+
+<a name="Sucker.Punch"></a>
+<h2>Sucker Punch</h2>
+
+<p>ジョブ情報の保存先やワーカープロセスの立ち上げが必要ありません。
+Celluloidで即座に非同期処理を開始するモデルのようですね。
+RailsやSinatraのようなアプリケーションプロセス一つでジョブの実行が(非同期に)完結するというのがウリみたいです。</p>
+
+<p>そのため、RedisやRabbitMQを用意する必要はないし、ワーカープロセスを起動する必要すらありません。</p>
+
+<p>Herokuで安価にサービス運用したいのでRedisやRabbitMQは使いたくないけどビューのレスポンスは高速化したいような場合に使うと良さそうです。
+個人的にはこれがActiveJobのデフォルトのバックエンドでも良いくらいだと思いました。</p>
+
+<p>development環境のWebrickで試してみましたが、コントローラのアクションメソッドで<code>TestJob.perform_later</code>しても、アクションそのものはすぐにレスポンスが返ってきました。
+また、ジョブが完了していなくても次のリクエストを処理することができていました。
+Celluloid使っているらしいのでジョブはThreadで実行されていると思われます。</p>
+
+<p>以下動作を確認したサンプルコードです。</p>
+
+<p>```ruby</p>
+
+<a name="config.routes.rb"></a>
+<h1>config/routes.rb</h1>
+
+<p>Rails.application.routes.draw do
+  get &lsquo;top/welcome&rsquo;
+  get &lsquo;top/job&rsquo;
+  root &lsquo;top#welcome&rsquo;
+end</p>
+
+<a name="config.initializers.sucker_punch.rb"></a>
+<h1>config/initializers/sucker_punch.rb</h1>
+
+<p>Rails.application.configure do
+  config.active_job.queue_adapter = :sucker_punch
+end</p>
+
+<a name="app.jobs.test_job.rb"></a>
+<h1>app/jobs/test_job.rb</h1>
+
+<p>class TestJob &lt; ActiveJob::Base
+  queue_as :default</p>
+
+<p>  def perform(*args)</p>
+
+<pre><code>logger.info "job started"
+sleep 5
+logger.info "job finished"
+</code></pre>
+
+<p>  end
+end</p>
+
+<a name="app.controllers.top_controller.rb"></a>
+<h1>app/controllers/top_controller.rb</h1>
+
+<p>class TopController &lt; ApplicationController
+  def welcome
+  end</p>
+
+<p>  def job</p>
+
+<pre><code>TestJob.perform_later
+flash[:notice] = "done!"
+redirect_to top_welcome_path
+</code></pre>
+
+<p>  end
+end</p>
+
+<a name="app.views.welcome.view.erb"></a>
+<h1>app/views/welcome.view.erb</h1>
+
+<p>&lt;% if flash[:notice] %>
+  &lt;%= flash[:notice] %>
+&lt;% end %>
+&lt;%= link_to &ldquo;Do job&rdquo;, top_job_path %>
+```</p>
+
+<a name="L......"></a>
+<h1>感想</h1>
+
+<ul>
+<li>resque 1系がRedisを使いつつ実はポーリングしていたのが意外でした。</li>
+<li>PostgreSQLはほとんど使ったこと無いんだけど、RDBMSでPub/Subできたら楽できそう。</li>
+<li>Sucker Punchはワーカープロセスの起動無しで非同期処理できる点が便利。これでOKという場面は結構ありそうなので良い発見でした。</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>

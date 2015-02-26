@@ -1,0 +1,636 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた - 割り箸ポテチ</title>
+  <meta name="author" content="Kawahara Taisuke / 河原太介">
+
+  
+  <meta name="description" content="Contents 1 ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由 2 Resque2.1 結論 3 Sidekiq3.1 結論 4 その他のバックエンド
+4.1 Backburner
+4.2 Delayed Job
+4.3 Qu
+4.4 Que
+4.5 &hellip;">
+  
+  <meta name="keywords" content="割り箸ポテチ,河原太介,rails,activejob,resque,sidekiq,sucker_punch">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2015/02/26/active-job/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="割り箸ポテチ" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-51728803-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">割り箸ポテチ</a></h1>
+  
+    <h2>ソフトウェアエンジニアリング一般についてのメモです。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.chopschips.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-26T22:00:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/02/26/active-job/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/02/26/active-job/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/02/26/active-job/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/02/26/active-job/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+<div class="entry-content"><div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由</span></a></li>
+<li class="toc_level-1 toc_section-2">
+<a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Resque</span></a><ul><li class="toc_level-2 toc_section-3"><a href="#tocAnchor-1-2-1"><span class="tocnumber">2.1</span> <span class="toctext">結論</span></a></li></ul>
+</li>
+<li class="toc_level-1 toc_section-4">
+<a href="#tocAnchor-1-4"><span class="tocnumber">3</span> <span class="toctext">Sidekiq</span></a><ul><li class="toc_level-2 toc_section-5"><a href="#tocAnchor-1-4-1"><span class="tocnumber">3.1</span> <span class="toctext">結論</span></a></li></ul>
+</li>
+<li class="toc_level-1 toc_section-6">
+<a href="#tocAnchor-1-6"><span class="tocnumber">4</span> <span class="toctext">その他のバックエンド</span></a><ul>
+<li class="toc_level-2 toc_section-7"><a href="#tocAnchor-1-6-1"><span class="tocnumber">4.1</span> <span class="toctext">Backburner</span></a></li>
+<li class="toc_level-2 toc_section-8"><a href="#tocAnchor-1-6-2"><span class="tocnumber">4.2</span> <span class="toctext">Delayed Job</span></a></li>
+<li class="toc_level-2 toc_section-9"><a href="#tocAnchor-1-6-3"><span class="tocnumber">4.3</span> <span class="toctext">Qu</span></a></li>
+<li class="toc_level-2 toc_section-10"><a href="#tocAnchor-1-6-4"><span class="tocnumber">4.4</span> <span class="toctext">Que</span></a></li>
+<li class="toc_level-2 toc_section-11"><a href="#tocAnchor-1-6-5"><span class="tocnumber">4.5</span> <span class="toctext">queue_classic</span></a></li>
+<li class="toc_level-2 toc_section-12"><a href="#tocAnchor-1-6-6"><span class="tocnumber">4.6</span> <span class="toctext">Sneakers</span></a></li>
+<li class="toc_level-2 toc_section-13"><a href="#tocAnchor-1-6-7"><span class="tocnumber">4.7</span> <span class="toctext">Sucker Punch</span></a></li>
+</ul>
+</li>
+<li class="toc_level-1 toc_section-14"><a href="#tocAnchor-1-14"><span class="tocnumber">5</span> <span class="toctext">感想</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<a name="ActiveJob................................................Redis....................."></a>
+<h1 id="tocAnchor-1-1">ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由</h1>
+
+<p>Rails 4.2で、ActiveJobというクラスが導入されました。</p>
+
+<p>これ以前より、Railsで非同期処理を行う際にはResqueやSidekiq、Delayed Jobなどが広く使われていましたが、
+ActiveJobはジョブを記述するためのインタフェースを抽象化して、
+ジョブの実装を変えること無くジョブランナーを切り替えることを可能にするものです。
+なおActiveJobにおいては、バックエンドを指定しなければジョブは非同期実行しようとしても即座に実行されます。</p>
+
+<p>Rails 4.2.0時点では、ActiveJobのバックエンドとして以下のページにある9つのいずれかを使用できます。</p>
+
+<p><a href="http://api.rubyonrails.org/classes/ActiveJob/QueueAdapters.html">ActiveJob::QueueAdapters</a></p>
+
+<ul>
+<li>Backburner</li>
+<li>Delayed Job</li>
+<li>Qu</li>
+<li>Que</li>
+<li>queue_classic</li>
+<li>Resque 1.x</li>
+<li>Sidekiq</li>
+<li>Sneakers</li>
+<li>Sucker Punch</li>
+</ul>
+
+
+<p>ちなみにRuby ToolboxのBackground Jobsというカテゴリの上位3つは、Resque、Sidekiq、Delayed Jobでした。この3つがよく使われている印象です。</p>
+
+<p><a href="https://www.ruby-toolbox.com/categories/Background_Jobs">The Ruby Toolbox – Background Jobs: Save jobs in a queue and process them later wihout blocking your current thread</a></p>
+
+<p>特にResque、Sidekiqは、ジョブの情報を永続化する先としてRedisを必須としています。</p>
+
+<p>情報の保存先ならActiveRecord(RDBMS)でも良さそうなものですが、あえてRedisを必須としている理由は何だろうか考えてみました。</p>
+
+<p>ぱっと思いつくのは、「キューにジョブが積まれた」というイベントをワーカーへ伝えるための手段として、
+Redisの<a href="http://redis.io/topics/pubsub">Pub/Sub</a>や<a href="http://redis.io/commands/BLPOP">BLPOP</a>/<a href="http://redis.io/commands/brpop">BRPOP</a>のようなメッセージング機構を使うのが簡単で都合が良かったのではないか？ということです。</p>
+
+<p>バックエンドにMySQLのようなRDBMSを使う場合、普通に考えるとワーカー側はジョブを保存したテーブルをロックしつつポーリングしないといけないのでスケールしなさそうだし、
+RabbitMQのようなメッセージングサービスを用いるのと比べて、RedisであればRailsエンジニアは元々better memcachedとして使用しているケースが多いので導入のハードルが低いです。</p>
+
+<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っていかどうかを確認しつつ、
+ActiveJobのページに挙げられている9つのプロダクトについてジョブ情報の保存先を調べてまとめてみようと思います。</p>
+
+<p>9つの中で特にSucker Punchはジョブの保存先もワーカープロセスの起動も必要とせずに非同期処理を行えるので、簡単に作りたいならおすすめです。詳細は後述。</p>
+
+<!-- more -->
+
+
+<a name="Resque"></a>
+<h1 id="tocAnchor-1-2">Resque</h1>
+
+<p>Rails 4.2.0時点においてActiveJobが対応しているのはRedisのバージョン1系列です。</p>
+
+<p><a href="https://github.com/resque/resque/tree/1-x-stable">resque/resque at 1-x-stable</a></p>
+
+<p>ワーカーを起動する場合はrakeタスクを実行するので、そのあたりからコードを読んでいきます。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/tasks/resque.rake">lib/tasks/resque.task</a>
+これはresque/tasksを読み込んでいるだけ。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/resque/tasks.rb#L42">resque/tasks.rb</a>
+<code>Resque::Worker#work</code>がメインループのようです。</p>
+
+<p><a href="https://github.com/resque/resque/blob/1-x-stable/lib/resque/worker.rb#L205">resque/worker.rb</a>
+ジョブが無い場合はインターバル分だけスリープする実装になっていました。
+ジョブの取得はさらに読んでいくとRedisの<code>LPOP</code>を使っていて、キューが空でもブロックせずにnilが帰ってきます。</p>
+
+<figure class="code"><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td>
+<td class="code"><pre><code class=""><span class="line">Resque::Worker#work
+</span><span class="line">  Resque#reserve
+</span><span class="line">    Resque::Job.reserve
+</span><span class="line">      Resque.pop
+</span><span class="line">        Redis#lpop(redis-3.2.1)</span></code></pre></td>
+</tr></table></div></figure>
+
+
+<a name="L......"></a>
+<h2 id="tocAnchor-1-2-1">結論</h2>
+
+<p>Resqueのバージョン1系はRedisのメッセージング機構は使わずにポーリングしてました。</p>
+
+<p>ただ、2015-02-26時点のmasterブランチのHEADでは、インターバルに1以下の値を設定すると<code>BLPOP</code>を使う実装になっていました。</p>
+
+<a name="Sidekiq"></a>
+<h1 id="tocAnchor-1-4">Sidekiq</h1>
+
+<p>現時点で最新の3.3.2を読んでいきます。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/tree/v3.3.2">mperham/sidekiq at v3.3.2</a></p>
+
+<p>Sidekiqのエントリポイントはbin/sidekiqです。
+中身はSidekiq::CLI#runなのでそこを見てみます。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/cli.rb#L76">sidekiq/cli.rb</a></p>
+
+<p>Sidekiq::Launcher#runがメインループのようです。</p>
+
+<p><a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/launcher.rb#L39">sidekiq/launcher.rb</a></p>
+
+<p>Celluloidを使ったアクターモデルでFetcherとManagerとPollerという3つのインスタンスが強調しつつ並列処理を行っているように見えます。
+Pollerがスケジュールされたジョブをワークキューに載せ替える、ということをやっていました。
+Managerの方では同時実行数の数だけProcessorのインスタンスを作って、
+ProcessorごとにFetcher#fetchしています。
+Fetcherの中身をざっくり追いかけると、
+<a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/fetch.rb#L102">sidekiq/fetch.rb</a></p>
+
+<figure class="code"><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td>
+<td class="code"><pre><code class=""><span class="line">Fetcher#fetch
+</span><span class="line">  Fetcher.strategy
+</span><span class="line">    Fetcher::BasicFetch#retrive_work
+</span><span class="line">      Redis#brpop</span></code></pre></td>
+</tr></table></div></figure>
+
+
+<p>という流れで最終的にRedisの<code>BRPOP</code>でジョブ情報を読みだしていました。</p>
+
+<a name="L......"></a>
+<h2 id="tocAnchor-1-4-1">結論</h2>
+
+<p>Sidekiqはポーリングせずに、Redisの<code>BRPOP</code>を使ってジョブが積まれたイベントをワーカーに通知していました。</p>
+
+<a name="L.............................."></a>
+<h1 id="tocAnchor-1-6">その他のバックエンド</h1>
+
+<a name="Backburner"></a>
+<h2 id="tocAnchor-1-6-1">Backburner</h2>
+
+<p><a href="https://github.com/nesquena/backburner">nesquena/backburner</a></p>
+
+<p><a href="http://kr.github.io/beanstalkd/">beanstalkd</a> というジョブキューサーバをバックエンドに使うようです。</p>
+
+<a name="Delayed.Job"></a>
+<h2 id="tocAnchor-1-6-2">Delayed Job</h2>
+
+<p><a href="https://github.com/collectiveidea/delayed_job">collectiveidea/delayed_job</a></p>
+
+<p>バックエンドとして複数のプロダクトを指定できます。(DJはDelayed Jobのこと)</p>
+
+<ul>
+<li>ActiveRecord (DJ 3.0+)</li>
+<li>DataMapper</li>
+<li>IronMQ</li>
+<li>Mongoid</li>
+<li>MongoMapper</li>
+<li>MongoMapper (DJ 3.0+, MongoMapper 0.11.0+)</li>
+<li>Redis (DJ 3.0+, experimental)
+<a href="https://github.com/collectiveidea/delayed_job/wiki/Backends">Backends · collectiveidea/delayed_job Wiki</a>
+</li>
+</ul>
+
+
+<a name="Qu"></a>
+<h2 id="tocAnchor-1-6-3">Qu</h2>
+
+<p><a href="https://github.com/bkeepers/qu">bkeepers/qu</a></p>
+
+<p>RedisかMongo。</p>
+
+<a name="Que"></a>
+<h2 id="tocAnchor-1-6-4">Que</h2>
+
+<p><a href="https://github.com/chanks/que">chanks/que</a></p>
+
+<p>PostgreSQLの<a href="http://www.postgresql.org/docs/current/static/explicit-locking.html#ADVISORY-LOCKS">Advisory Lock</a>を使います。</p>
+
+<p>Advisory Lockを用いてMessage Queueを実現する方法については下記のサイトが詳しいです。</p>
+
+<p><a href="http://d.hatena.ne.jp/n_shuyo/20090415/mq">PostgreSQL で簡易に MQ – Mi manca qualche giovedi`?</a></p>
+
+<p>ちなみにMySQLでMessage Queueやる場合はQ4MというストレージエンジンがありますがActiveJobで使う方法は見つかりませんでした。</p>
+
+<a name="queue_classic"></a>
+<h2 id="tocAnchor-1-6-5">queue_classic</h2>
+
+<p><a href="https://github.com/QueueClassic/queue_classic">QueueClassic/queue_classic</a></p>
+
+<p>PostgreSQL。listen / notify &amp; row lockingで実装。PostgreSQLはPub/Sub機能があるんですね。</p>
+
+<a name="Sneakers"></a>
+<h2 id="tocAnchor-1-6-6">Sneakers</h2>
+
+<p><a href="https://github.com/jondot/sneakers">jondot/sneakers</a></p>
+
+<p>RabbitMQ。サンプルコードでRedisを使っていますが、デモのためのカウントアップをRedisでやっているだけです。</p>
+
+<a name="Sucker.Punch"></a>
+<h2 id="tocAnchor-1-6-7">Sucker Punch</h2>
+
+<p>ジョブ情報の保存先やワーカープロセスの立ち上げが必要ありません。
+Celluloidで即座に非同期処理を開始するモデルのようですね。
+RailsやSinatraのようなアプリケーションプロセス一つでジョブの実行が(非同期に)完結するというのがウリみたいです。</p>
+
+<p>そのため、RedisやRabbitMQを用意する必要はないし、ワーカープロセスを起動する必要すらありません。</p>
+
+<p>Herokuで安価にサービス運用したいのでRedisやRabbitMQは使いたくないけどビューのレスポンスは高速化したいような場合に使うと良さそうです。
+個人的にはこれがActiveJobのデフォルトのバックエンドでも良いくらいだと思いました。</p>
+
+<p>development環境のWebrickで試してみましたが、コントローラのアクションメソッドで<code>TestJob.perform_later</code>しても、アクションそのものはすぐにレスポンスが返ってきました。
+また、ジョブが完了していなくても次のリクエストを処理することができていました。
+Celluloid使っているらしいのでジョブはThreadで実行されていると思われます。</p>
+
+<p>以下動作を確認したサンプルコードです。</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+</pre></td>
+<td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/routes.rb</span>
+</span><span class="line"><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">get</span> <span class="s1">'top/welcome'</span>
+</span><span class="line">  <span class="n">get</span> <span class="s1">'top/job'</span>
+</span><span class="line">  <span class="n">root</span> <span class="s1">'top#welcome'</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># config/initializers/sucker_punch.rb</span>
+</span><span class="line"><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">active_job</span><span class="o">.</span><span class="n">queue_adapter</span> <span class="o">=</span> <span class="ss">:sucker_punch</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># app/jobs/test_job.rb</span>
+</span><span class="line"><span class="k">class</span> <span class="nc">TestJob</span> <span class="o">&lt;</span> <span class="ss">ActiveJob</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class="line">  <span class="n">queue_as</span> <span class="ss">:default</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span class="line">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span> <span class="s2">"job started"</span>
+</span><span class="line">    <span class="nb">sleep</span> <span class="mi">5</span>
+</span><span class="line">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span> <span class="s2">"job finished"</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># app/controllers/top_controller.rb</span>
+</span><span class="line"><span class="k">class</span> <span class="nc">TopController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class="line">  <span class="k">def</span> <span class="nf">welcome</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">job</span>
+</span><span class="line">    <span class="no">TestJob</span><span class="o">.</span><span class="n">perform_later</span>
+</span><span class="line">    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">"done!"</span>
+</span><span class="line">    <span class="n">redirect_to</span> <span class="n">top_welcome_path</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># app/views/welcome.view.erb</span>
+</span><span class="line"><span class="o">&lt;</span><span class="sx">% if </span><span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="sx">%&gt;</span>
+</span><span class="line"><span class="sx">  &lt;%= flash[:notice] %&gt;</span>
+</span><span class="line"><span class="o">&lt;</span><span class="sx">% end %&gt;</span>
+</span><span class="line"><span class="sx">&lt;%= link_to "Do job", top_job_path %&gt;</span>
+</span></code></pre></td>
+</tr></table></div></figure>
+
+
+<a name="L......"></a>
+<h1 id="tocAnchor-1-14">感想</h1>
+
+<ul>
+<li>resque 1系がRedisを使いつつ実はポーリングしていたのが意外でした。</li>
+<li>PostgreSQLはほとんど使ったこと無いんだけど、RDBMSでPub/Subできたら楽できそう。</li>
+<li>Sucker Punchはワーカープロセスの起動無しで非同期処理できる点が便利。これでOKという場面は結構ありそうなので良い発見でした。</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kawahara Taisuke / 河原太介</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-26T22:00:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/02/26/active-job/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/02/26/active-job/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/02/26/active-job/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/02/26/active-job/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/15/macports-mysql2-gem/" title="Previous Post: Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法">&laquo; Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>
+    <strong>Kawahara Taisuke / 河原太介</strong> 
+    (<a href="http://twitter.com/KawaharaTaisuke">@KawaharaTaisuke</a>)
+  </p>
+  <p>
+    京都でソフトウェアエンジニアをしています。興味の対象はインフラ、サーバアプリケーションからフロントエンドまでWebサービスに関わるエンジニアリング全般。最近は特にRails、HBase、Angular周辺。
+  </p>
+  <p>このブログは筆者の所属する企業およびその業務とは一切関係のない個人の活動です。</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/26/active-job/">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/15/macports-mysql2-gem/">Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/chef-12/">Chef 12のオープンソース版と25ノード制限について</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/08/vagrant-problem-with-yum-update/">Vagrantの上のCentOS 6.5でyum updateした後、vagrant upで発生したエラーの原因と対処</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Kawahara Taisuke / 河原太介 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  - <span class="credit">Theme by <a href="http://www.gehaxelt.in">Gehaxelt</a></span>
+  <span class="credit">and <a href="http://www.it-solutions-neef.de">IT Solutions Neef</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

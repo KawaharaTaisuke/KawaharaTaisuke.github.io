@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-15T23:56:43+09:00</updated>
+  <updated>2015-02-27T01:04:49+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,90 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/02/26/active-job/"/>
+    <updated>2015-02-26T22:00:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/02/26/active-job</id>
+    <content type="html"><![CDATA[
+      <div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由</span></a></li>
+<li class="toc_level-1 toc_section-2">
+<a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Resque</span></a><ul><li class="toc_level-2 toc_section-3"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-2-1"><span class="tocnumber">2.1</span> <span class="toctext">結論</span></a></li></ul>
+</li>
+<li class="toc_level-1 toc_section-4">
+<a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-4"><span class="tocnumber">3</span> <span class="toctext">Sidekiq</span></a><ul><li class="toc_level-2 toc_section-5"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-4-1"><span class="tocnumber">3.1</span> <span class="toctext">結論</span></a></li></ul>
+</li>
+<li class="toc_level-1 toc_section-6">
+<a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6"><span class="tocnumber">4</span> <span class="toctext">その他のバックエンド</span></a><ul>
+<li class="toc_level-2 toc_section-7"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-1"><span class="tocnumber">4.1</span> <span class="toctext">Backburner</span></a></li>
+<li class="toc_level-2 toc_section-8"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-2"><span class="tocnumber">4.2</span> <span class="toctext">Delayed Job</span></a></li>
+<li class="toc_level-2 toc_section-9"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-3"><span class="tocnumber">4.3</span> <span class="toctext">Qu</span></a></li>
+<li class="toc_level-2 toc_section-10"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-4"><span class="tocnumber">4.4</span> <span class="toctext">Que</span></a></li>
+<li class="toc_level-2 toc_section-11"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-5"><span class="tocnumber">4.5</span> <span class="toctext">queue_classic</span></a></li>
+<li class="toc_level-2 toc_section-12"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-6"><span class="tocnumber">4.6</span> <span class="toctext">Sneakers</span></a></li>
+<li class="toc_level-2 toc_section-13"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-6-7"><span class="tocnumber">4.7</span> <span class="toctext">Sucker Punch</span></a></li>
+</ul>
+</li>
+<li class="toc_level-1 toc_section-14"><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/#tocAnchor-1-14"><span class="tocnumber">5</span> <span class="toctext">感想</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<a name="ActiveJob................................................Redis....................."></a>
+<h1 id="tocAnchor-1-1">ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由</h1>
+
+<p>Rails 4.2で、ActiveJobというクラスが導入されました。</p>
+
+<p>これ以前より、Railsで非同期処理を行う際にはResqueやSidekiq、Delayed Jobなどが広く使われていましたが、
+ActiveJobはジョブを記述するためのインタフェースを抽象化して、
+ジョブの実装を変えること無くジョブランナーを切り替えることを可能にするものです。
+なおActiveJobにおいては、バックエンドを指定しなければジョブは非同期実行しようとしても即座に実行されます。</p>
+
+<p>Rails 4.2.0時点では、ActiveJobのバックエンドとして以下のページにある9つのいずれかを使用できます。</p>
+
+<p><a href="http://api.rubyonrails.org/classes/ActiveJob/QueueAdapters.html">ActiveJob::QueueAdapters</a></p>
+
+<ul>
+<li>Backburner</li>
+<li>Delayed Job</li>
+<li>Qu</li>
+<li>Que</li>
+<li>queue_classic</li>
+<li>Resque 1.x</li>
+<li>Sidekiq</li>
+<li>Sneakers</li>
+<li>Sucker Punch</li>
+</ul>
+
+
+<p>ちなみにRuby ToolboxのBackground Jobsというカテゴリの上位3つは、Resque、Sidekiq、Delayed Jobでした。この3つがよく使われている印象です。</p>
+
+<p><a href="https://www.ruby-toolbox.com/categories/Background_Jobs">The Ruby Toolbox – Background Jobs: Save jobs in a queue and process them later wihout blocking your current thread</a></p>
+
+<p>特にResque、Sidekiqは、ジョブの情報を永続化する先としてRedisを必須としています。</p>
+
+<p>情報の保存先ならActiveRecord(RDBMS)でも良さそうなものですが、あえてRedisを必須としている理由は何だろうか考えてみました。</p>
+
+<p>ぱっと思いつくのは、「キューにジョブが積まれた」というイベントをワーカーへ伝えるための手段として、
+Redisの<a href="http://redis.io/topics/pubsub">Pub/Sub</a>や<a href="http://redis.io/commands/BLPOP">BLPOP</a>/<a href="http://redis.io/commands/brpop">BRPOP</a>のようなメッセージング機構を使うのが簡単で都合が良かったのではないか？ということです。</p>
+
+<p>バックエンドにMySQLのようなRDBMSを使う場合、普通に考えるとワーカー側はジョブを保存したテーブルをロックしつつポーリングしないといけないのでスケールしなさそうだし、
+RabbitMQのようなメッセージングサービスを用いるのと比べて、RedisであればRailsエンジニアは元々better memcachedとして使用しているケースが多いので導入のハードルが低いです。</p>
+
+<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っていかどうかを確認しつつ、
+ActiveJobのページに挙げられている9つのプロダクトについてジョブ情報の保存先を調べてまとめてみようと思います。</p>
+
+<p>9つの中で特にSucker Punchはジョブの保存先もワーカープロセスの起動も必要とせずに非同期処理を行えるので、簡単に作りたいならおすすめです。詳細は後述。</p>
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2015/02/26/active-job/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法]]></title>
