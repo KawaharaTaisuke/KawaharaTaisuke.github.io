@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-02-27T01:04:49+09:00</updated>
+  <updated>2015-02-27T01:13:56+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた]]></title>
     <link href="http://blog.chopschips.net/blog/2015/02/26/active-job/"/>
-    <updated>2015-02-26T22:00:00+09:00</updated>
+    <updated>2015-02-26T22:10:00+09:00</updated>
     <id>http://blog.chopschips.net/blog/2015/02/26/active-job</id>
     <content type="html"><![CDATA[
       <div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
@@ -84,7 +84,7 @@ Redisの<a href="http://redis.io/topics/pubsub">Pub/Sub</a>や<a href="http://re
 <p>バックエンドにMySQLのようなRDBMSを使う場合、普通に考えるとワーカー側はジョブを保存したテーブルをロックしつつポーリングしないといけないのでスケールしなさそうだし、
 RabbitMQのようなメッセージングサービスを用いるのと比べて、RedisであればRailsエンジニアは元々better memcachedとして使用しているケースが多いので導入のハードルが低いです。</p>
 
-<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っていかどうかを確認しつつ、
+<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っているかどうかを確認しつつ、
 ActiveJobのページに挙げられている9つのプロダクトについてジョブ情報の保存先を調べてまとめてみようと思います。</p>
 
 <p>9つの中で特にSucker Punchはジョブの保存先もワーカープロセスの起動も必要とせずに非同期処理を行えるので、簡単に作りたいならおすすめです。詳細は後述。</p>

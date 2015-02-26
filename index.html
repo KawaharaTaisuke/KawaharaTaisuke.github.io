@@ -105,7 +105,7 @@
   
 
 
-<time datetime="2015-02-26T22:00:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+<time datetime="2015-02-26T22:10:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
         
       </p>
     
@@ -205,7 +205,7 @@ Redisの<a href="http://redis.io/topics/pubsub">Pub/Sub</a>や<a href="http://re
 <p>バックエンドにMySQLのようなRDBMSを使う場合、普通に考えるとワーカー側はジョブを保存したテーブルをロックしつつポーリングしないといけないのでスケールしなさそうだし、
 RabbitMQのようなメッセージングサービスを用いるのと比べて、RedisであればRailsエンジニアは元々better memcachedとして使用しているケースが多いので導入のハードルが低いです。</p>
 
-<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っていかどうかを確認しつつ、
+<p>というわけで、このエントリではResque、Sidekiqの2つについてはRedisのメッセージング機構を使っているかどうかを確認しつつ、
 ActiveJobのページに挙げられている9つのプロダクトについてジョブ情報の保存先を調べてまとめてみようと思います。</p>
 
 <p>9つの中で特にSucker Punchはジョブの保存先もワーカープロセスの起動も必要とせずに非同期処理を行えるので、簡単に作りたいならおすすめです。詳細は後述。</p>
