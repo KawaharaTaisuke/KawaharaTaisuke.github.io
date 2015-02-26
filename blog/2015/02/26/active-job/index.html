@@ -102,7 +102,7 @@
   
 
 
-<time datetime="2015-02-26T22:10:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+<time datetime="2015-02-26T22:11:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
         
       </p>
     
@@ -249,7 +249,8 @@ ActiveJobのページに挙げられている9つのプロダクトについて�
 
 <p>Resqueのバージョン1系はRedisのメッセージング機構は使わずにポーリングしてました。</p>
 
-<p>ただ、2015-02-26時点のmasterブランチのHEADでは、インターバルに1以下の値を設定すると<code>BLPOP</code>を使う実装になっていました。</p>
+<p>ただ、2015-02-26時点のmasterブランチのHEADでは、インターバルに設定した値をタイムアウト値として<code>BLPOP</code>を使う実装になっていました。
+(インターバルが1より小さい場合はnon-blockで実質ポーリング)</p>
 
 <a name="Sidekiq"></a>
 <h1 id="tocAnchor-1-4">Sidekiq</h1>
@@ -493,7 +494,7 @@ Celluloid使っているらしいのでジョブはThreadで実行されてい�
   
 
 
-<time datetime="2015-02-26T22:10:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+<time datetime="2015-02-26T22:11:00+09:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
       
 
 <span class="categories">
