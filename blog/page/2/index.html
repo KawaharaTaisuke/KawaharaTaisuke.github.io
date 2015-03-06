@@ -9,11 +9,14 @@
   <meta name="author" content="Kawahara Taisuke / 河原太介">
 
   
-  <meta name="description" content="Contents 1 rbenvとruby-buildのインストール方法
-1.1 インストール可能なrubyバージョンの一覧表示
-1.2 指定したバージョンのrubyをインストール
-1.3 使用するrubyのバージョンを指定する
-1.4 インストール済みrubyバージョンの一覧表示 2 &hellip;">
+  <meta name="description" content="Contents 1 前提条件
+2 目次のサンプルと見出しの生成に失敗するまで
+3 既知のパッチ
+4 次の一手
+5 問題点は何か
+6 解決案
+7 フィード
+8 課題 調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。 最終的には、 &hellip;">
   
   <meta name="keywords" content="割り箸ポテチ,河原太介,ruby,rails">
   
@@ -82,6 +85,100 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-16T22:00:01+09:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+  <div class="entry-content"><div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">前提条件</span></a></li>
+<li class="toc_level-1 toc_section-2"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">目次のサンプルと見出しの生成に失敗するまで</span></a></li>
+<li class="toc_level-1 toc_section-3"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">既知のパッチ</span></a></li>
+<li class="toc_level-1 toc_section-4"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">次の一手</span></a></li>
+<li class="toc_level-1 toc_section-5"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">問題点は何か</span></a></li>
+<li class="toc_level-1 toc_section-6"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">解決案</span></a></li>
+<li class="toc_level-1 toc_section-7"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">フィード</span></a></li>
+<li class="toc_level-1 toc_section-8"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">課題</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
+
+<p>最終的には、この記事に出ているような見出しの目次を作ることができました。この方法の特徴は下記の通りです。</p>
+
+<ol>
+<li>日本語の見出しでもエラーにならず出力される。</li>
+<li>OctopressデフォルトのMarkdownパーサであるrdiscountを使用している。</li>
+<li>リンクが絶対パスになる(記事一覧画面のような「続きを読む(Read On)」で目次のリンク先が省略されるような状況でも有効なリンクになる)</li>
+<li>リンクが重複しない(後述)</li>
+</ol>
+
+
+<p>前半はアプローチのメモです。実現方法は解決案以降に書いています。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/16/octopress-toc/">続きを読む &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -218,6 +315,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/06/rails-panel/">Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/26/active-job/">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a>
       </li>
     
@@ -231,10 +332,6 @@
     
       <li class="post">
         <a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/08/vagrant-problem-with-yum-update/">Vagrantの上のCentOS 6.5でyum updateした後、vagrant upで発生したエラーの原因と対処</a>
       </li>
     
   </ul>

@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み - 割り箸ポテチ</title>
+  <meta name="author" content="Kawahara Taisuke / 河原太介">
+
+  
+  <meta name="description" content="Contents 1 Rails Panelでできること
+2 使い方
+3 動作の仕組み 7 must have Development Gems to install on every project この記事を読んでいて、Rails PanelというChrome拡張を知りました。 &hellip;">
+  
+  <meta name="keywords" content="割り箸ポテチ,河原太介,rails,railspanel,rails panel,chrome,meta_request,仕組み,_">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="割り箸ポテチ" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-51728803-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">割り箸ポテチ</a></h1>
+  
+    <h2>ソフトウェアエンジニアリング一般についてのメモです。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.chopschips.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-06T23:38:45+09:00" pubdate data-updated="true">Mar 6<span>th</span>, 2015</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/03/06/rails-panel/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+<div class="entry-content"><div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Rails Panelでできること</span></a></li>
+<li class="toc_level-1 toc_section-2"><a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">使い方</span></a></li>
+<li class="toc_level-1 toc_section-3"><a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">動作の仕組み</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<p><a href="http://www.rubyonrails365.com/7-must-have-gems-to-install-on-any-project/">7 must have Development Gems to install on every project</a></p>
+
+<p>この記事を読んでいて、Rails PanelというChrome拡張を知りました。</p>
+
+<ul>
+<li><a href="https://github.com/qqshfox/meta_request">qqshfox/meta_request</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel – Chrome ウェブストア</a></li>
+</ul>
+
+
+<a name="Rails.Panel.................."></a>
+<h1 id="tocAnchor-1-1">Rails Panelでできること</h1>
+
+<p>デベロッパーツールにRailsというパネルが追加されます。
+このパネルでは、ページリクエスト単位で下記のような情報を表示することができます。</p>
+
+<ul>
+<li>Breakdown: 処理時間の内訳(ActiveRecord, Rendering, Other)</li>
+<li>Params: コントローラから参照できるparamsの内容</li>
+<li>ActiveRecord: そのリクエストを処理する際に発行したSQLと処理時間</li>
+<li>Rendering: ビューテンプレートごとの描画時間</li>
+</ul>
+
+
+<p><img src="/images/post_20150306_rails_panel/ss_01.png"></p>
+
+<p>要するに <code>rails server</code> の標準出力(あるいは <code>log/${RAILS_ENV}.log</code>)の情報を見やすく表示してくれます。</p>
+
+<!-- more -->
+
+
+<a name="L........."></a>
+<h1 id="tocAnchor-1-2">使い方</h1>
+
+<ul>
+<li>ChromeにはChrome ウェブストアからインストールします。<br>
+<a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel – Chrome ウェブストア</a>
+</li>
+<li>Railsには <code>meta_request</code> というgemを追加します。</li>
+</ul>
+
+
+<figure class="code"><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td>
+<td class="code"><pre><code class=""><span class="line">group :development do
+</span><span class="line">  gem "meta_request"
+</span><span class="line">end</span></code></pre></td>
+</tr></table></div></figure>
+
+
+<a name="L.................."></a>
+<h1 id="tocAnchor-1-3">動作の仕組み</h1>
+
+<p>meta_requestをbundleすると、いくつかのRackミドルウェアが自動的に組み込まれます。</p>
+
+<p><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares.rb">rails_panel/middlewares.rb at master · dejan/rails_panel</a></p>
+
+<p>この中のMetaRequest::Middlewares::Headersによって <code>X-Meta-Request-Version</code>が、
+MetaRequest::Middlewares::RequestIdによって <code>X-Request-Id</code>が
+Railsアプリケーションが返すすべてのレスポンスのヘッダに追加されます。</p>
+
+<ul>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares/headers.rb">rails_panel/headers.rb at master · dejan/rails_panel</a></li>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares/request_id.rb">rails_panel/request_id.rb at master · dejan/rails_panel</a></li>
+</ul>
+
+
+<p>Rails Panelを有効にしていると、 <code>X-Meta-Request-Version</code> がレスポンスヘッダに存在する際に、
+Chromeは <code>/__meta_request/${X-Request-Id}.json</code> というパスにリクエストを投げます。</p>
+
+<p><a href="https://github.com/dejan/rails_panel/blob/master/rails_panel/assets/javascripts/requests.js#L12">rails_panel/requests.js at master · dejan/rails_panel</a></p>
+
+<p>このリクエストもmeta_requestのRackミドルウェアで処理され、Railsアプリ層の手前の段階で、必要な情報がjsonでレスポンスされます。</p>
+
+<p>ただし、このリクエストのログもRackミドルウェア層によってRails.loggerに出力するため、Railsのログには下記のような痕跡が残ります。</p>
+
+<figure class="code"><div class="highlight"><table><tr>
+<td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td>
+<td class="code"><pre><code class=""><span class="line">Started GET "/__meta_request/abcd92a2-3859-4972-9708-8303fe238e9e.json" for ::1 at 2015-03-06 23:45:37 +0900</span></code></pre></td>
+</tr></table></div></figure>
+
+
+<p>RackミドルウェアとChrome拡張でモニタリング用の機能を実装するというアプローチは他のことにも応用ができそうですね。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kawahara Taisuke / 河原太介</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-06T23:38:45+09:00" pubdate data-updated="true">Mar 6<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/03/06/rails-panel/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/26/active-job/" title="Previous Post: Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた">&laquo; Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>
+    <strong>Kawahara Taisuke / 河原太介</strong> 
+    (<a href="http://twitter.com/KawaharaTaisuke">@KawaharaTaisuke</a>)
+  </p>
+  <p>
+    京都でソフトウェアエンジニアをしています。興味の対象はインフラ、サーバアプリケーションからフロントエンドまでWebサービスに関わるエンジニアリング全般。最近は特にRails、HBase、Angular周辺。
+  </p>
+  <p>このブログは筆者の所属する企業およびその業務とは一切関係のない個人の活動です。</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/06/rails-panel/">Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/26/active-job/">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/15/macports-mysql2-gem/">Mac(Yosemite)にMySQL 5.6とmysql2 gemをインストールする方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/chef-12/">Chef 12のオープンソース版と25ノード制限について</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Kawahara Taisuke / 河原太介 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  - <span class="credit">Theme by <a href="http://www.gehaxelt.in">Gehaxelt</a></span>
+  <span class="credit">and <a href="http://www.it-solutions-neef.de">IT Solutions Neef</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

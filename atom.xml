@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-03-07T00:22:32+09:00</updated>
+  <updated>2015-03-07T00:23:37+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/"/>
+    <updated>2015-03-06T23:38:45+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/03/06/rails-panel</id>
+    <content type="html"><![CDATA[
+      <div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Rails Panelでできること</span></a></li>
+<li class="toc_level-1 toc_section-2"><a href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">使い方</span></a></li>
+<li class="toc_level-1 toc_section-3"><a href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">動作の仕組み</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<p><a href="http://www.rubyonrails365.com/7-must-have-gems-to-install-on-any-project/">7 must have Development Gems to install on every project</a></p>
+
+<p>この記事を読んでいて、Rails PanelというChrome拡張を知りました。</p>
+
+<ul>
+<li><a href="https://github.com/qqshfox/meta_request">qqshfox/meta_request</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel – Chrome ウェブストア</a></li>
+</ul>
+
+
+<a name="Rails.Panel.................."></a>
+<h1 id="tocAnchor-1-1">Rails Panelでできること</h1>
+
+<p>デベロッパーツールにRailsというパネルが追加されます。
+このパネルでは、ページリクエスト単位で下記のような情報を表示することができます。</p>
+
+<ul>
+<li>Breakdown: 処理時間の内訳(ActiveRecord, Rendering, Other)</li>
+<li>Params: コントローラから参照できるparamsの内容</li>
+<li>ActiveRecord: そのリクエストを処理する際に発行したSQLと処理時間</li>
+<li>Rendering: ビューテンプレートごとの描画時間</li>
+</ul>
+
+
+<p><img src="http://blog.chopschips.net/images/post_20150306_rails_panel/ss_01.png"></p>
+
+<p>要するに <code>rails server</code> の標準出力(あるいは <code>log/${RAILS_ENV}.log</code>)の情報を見やすく表示してくれます。</p>
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた]]></title>

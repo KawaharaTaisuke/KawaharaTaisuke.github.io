@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-03-07T00:22:32+09:00</updated>
+  <updated>2015-03-07T00:23:37+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/"/>
+    <updated>2015-03-06T23:38:45+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/03/06/rails-panel</id>
+    <content type="html"><![CDATA[<p><a href="http://www.rubyonrails365.com/7-must-have-gems-to-install-on-any-project/">7 must have Development Gems to install on every project</a></p>
+
+<p>この記事を読んでいて、Rails PanelというChrome拡張を知りました。</p>
+
+<ul>
+<li><a href="https://github.com/qqshfox/meta_request">qqshfox/meta_request</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel &ndash; Chrome ウェブストア</a></li>
+</ul>
+
+
+<a name="Rails.Panel.................."></a>
+<h1>Rails Panelでできること</h1>
+
+<p>デベロッパーツールにRailsというパネルが追加されます。
+このパネルでは、ページリクエスト単位で下記のような情報を表示することができます。</p>
+
+<ul>
+<li>Breakdown: 処理時間の内訳(ActiveRecord, Rendering, Other)</li>
+<li>Params: コントローラから参照できるparamsの内容</li>
+<li>ActiveRecord: そのリクエストを処理する際に発行したSQLと処理時間</li>
+<li>Rendering: ビューテンプレートごとの描画時間</li>
+</ul>
+
+
+<p><img src="/images/post_20150306_rails_panel/ss_01.png"></p>
+
+<p>要するに <code>rails server</code> の標準出力(あるいは <code>log/${RAILS_ENV}.log</code>)の情報を見やすく表示してくれます。</p>
+
+<!-- more -->
+
+
+<a name="L........."></a>
+<h1>使い方</h1>
+
+<ul>
+<li>ChromeにはChrome ウェブストアからインストールします。<br/>
+<a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel &ndash; Chrome ウェブストア</a></li>
+<li>Railsには <code>meta_request</code> というgemを追加します。</li>
+</ul>
+
+
+<p><code>
+group :development do
+  gem "meta_request"
+end
+</code></p>
+
+<a name="L.................."></a>
+<h1>動作の仕組み</h1>
+
+<p>meta_requestをbundleすると、いくつかのRackミドルウェアが自動的に組み込まれます。</p>
+
+<p><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares.rb">rails_panel/middlewares.rb at master · dejan/rails_panel</a></p>
+
+<p>この中のMetaRequest::Middlewares::Headersによって <code>X-Meta-Request-Version</code>が、
+MetaRequest::Middlewares::RequestIdによって <code>X-Request-Id</code>が
+Railsアプリケーションが返すすべてのレスポンスのヘッダに追加されます。</p>
+
+<ul>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares/headers.rb">rails_panel/headers.rb at master · dejan/rails_panel</a></li>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares/request_id.rb">rails_panel/request_id.rb at master · dejan/rails_panel</a></li>
+</ul>
+
+
+<p>Rails Panelを有効にしていると、 <code>X-Meta-Request-Version</code> がレスポンスヘッダに存在する際に、
+Chromeは <code>/__meta_request/${X-Request-Id}.json</code> というパスにリクエストを投げます。</p>
+
+<p><a href="https://github.com/dejan/rails_panel/blob/master/rails_panel/assets/javascripts/requests.js#L12">rails_panel/requests.js at master · dejan/rails_panel</a></p>
+
+<p>このリクエストもmeta_requestのRackミドルウェアで処理され、Railsアプリ層の手前の段階で、必要な情報がjsonでレスポンスされます。</p>
+
+<p>ただし、このリクエストのログもRackミドルウェア層によってRails.loggerに出力するため、Railsのログには下記のような痕跡が残ります。</p>
+
+<p><code>
+Started GET "/__meta_request/abcd92a2-3859-4972-9708-8303fe238e9e.json" for ::1 at 2015-03-06 23:45:37 +0900
+</code></p>
+
+<p>RackミドルウェアとChrome拡張でモニタリング用の機能を実装するというアプローチは他のことにも応用ができそうですね。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた]]></title>

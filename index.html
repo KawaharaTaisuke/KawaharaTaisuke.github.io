@@ -9,12 +9,9 @@
   <meta name="author" content="Kawahara Taisuke / 河原太介">
 
   
-  <meta name="description" content="Contents 1 ActiveJobのバックエンドと、永続化先としてRedisが好まれる理由 2 Resque2.1 結論 3 Sidekiq3.1 結論 4 その他のバックエンド
-4.1 Backburner
-4.2 Delayed Job
-4.3 Qu
-4.4 Que
-4.5 &hellip;">
+  <meta name="description" content="Contents 1 Rails Panelでできること
+2 使い方
+3 動作の仕組み 7 must have Development Gems to install on every project この記事を読んでいて、Rails PanelというChrome拡張を知りました。 &hellip;">
   
   <meta name="keywords" content="割り箸ポテチ,河原太介,ruby,rails">
   
@@ -83,6 +80,109 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/06/rails-panel/">Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-06T23:38:45+09:00" pubdate data-updated="true">Mar 6<span>th</span>, 2015</time>
+        
+      </p>
+    
+    
+      <div class="sharing">
+    <ul class="social">
+        <li class="hatena">
+          <!-- hatebu-start -->
+          
+          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2015/03/06/rails-panel/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          
+          <!-- hatebu-end -->
+        </li>
+        
+        <li class="twitter">
+          
+          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2015/03/06/rails-panel/" >Tweet</a>
+          
+        </li>
+        
+        
+        <li class="facebook">
+          
+          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2015/03/06/rails-panel/"></div>
+          
+        </li>
+        
+    </ul>
+</div>
+
+    
+  </header>
+
+
+  <div class="entry-content"><div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
+<div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toc_level-1 toc_section-1"><a href="/blog/2015/03/06/rails-panel/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Rails Panelでできること</span></a></li>
+<li class="toc_level-1 toc_section-2"><a href="/blog/2015/03/06/rails-panel/#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">使い方</span></a></li>
+<li class="toc_level-1 toc_section-3"><a href="/blog/2015/03/06/rails-panel/#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">動作の仕組み</span></a></li>
+</ul>
+</td></tr></tbody></table></div>
+<p><a href="http://www.rubyonrails365.com/7-must-have-gems-to-install-on-any-project/">7 must have Development Gems to install on every project</a></p>
+
+<p>この記事を読んでいて、Rails PanelというChrome拡張を知りました。</p>
+
+<ul>
+<li><a href="https://github.com/qqshfox/meta_request">qqshfox/meta_request</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/railspanel/gjpfobpafnhjhbajcjgccbbdofdckggg">RailsPanel – Chrome ウェブストア</a></li>
+</ul>
+
+
+<a name="Rails.Panel.................."></a>
+<h1 id="tocAnchor-1-1">Rails Panelでできること</h1>
+
+<p>デベロッパーツールにRailsというパネルが追加されます。
+このパネルでは、ページリクエスト単位で下記のような情報を表示することができます。</p>
+
+<ul>
+<li>Breakdown: 処理時間の内訳(ActiveRecord, Rendering, Other)</li>
+<li>Params: コントローラから参照できるparamsの内容</li>
+<li>ActiveRecord: そのリクエストを処理する際に発行したSQLと処理時間</li>
+<li>Rendering: ビューテンプレートごとの描画時間</li>
+</ul>
+
+
+<p><img src="/images/post_20150306_rails_panel/ss_01.png"></p>
+
+<p>要するに <code>rails server</code> の標準出力(あるいは <code>log/${RAILS_ENV}.log</code>)の情報を見やすく表示してくれます。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/03/06/rails-panel/">続きを読む &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -1060,100 +1160,6 @@ SBTのビルド定義にバージョンを書けば、プロジェクトごと�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/16/octopress-toc/">Octopressで見出しの目次を作る方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-16T22:00:01+09:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
-        
-      </p>
-    
-    
-      <div class="sharing">
-    <ul class="social">
-        <li class="hatena">
-          <!-- hatebu-start -->
-          
-          <a href="http://b.hatena.ne.jp/entry/http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-          
-          <!-- hatebu-end -->
-        </li>
-        
-        <li class="twitter">
-          
-          <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" data-via="KawaharaTaisuke" data-counturl="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/" >Tweet</a>
-          
-        </li>
-        
-        
-        <li class="facebook">
-          
-          <div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="verdana" data-href="http://blog.chopschips.net/blog/2014/06/16/octopress-toc/"></div>
-          
-        </li>
-        
-    </ul>
-</div>
-
-    
-  </header>
-
-
-  <div class="entry-content"><div id="toc-container"><table class="toc" id="toc"><tbody><tr><td>
-<div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toc_level-1 toc_section-1"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">前提条件</span></a></li>
-<li class="toc_level-1 toc_section-2"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">目次のサンプルと見出しの生成に失敗するまで</span></a></li>
-<li class="toc_level-1 toc_section-3"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">既知のパッチ</span></a></li>
-<li class="toc_level-1 toc_section-4"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">次の一手</span></a></li>
-<li class="toc_level-1 toc_section-5"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">問題点は何か</span></a></li>
-<li class="toc_level-1 toc_section-6"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">解決案</span></a></li>
-<li class="toc_level-1 toc_section-7"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">フィード</span></a></li>
-<li class="toc_level-1 toc_section-8"><a href="/blog/2014/06/16/octopress-toc/#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">課題</span></a></li>
-</ul>
-</td></tr></tbody></table></div>
-<p>調べて見つかった方法だとうまく行かなかったので、少し筋の悪い方法ですが自分で考えた方法をメモしておきます。</p>
-
-<p>最終的には、この記事に出ているような見出しの目次を作ることができました。この方法の特徴は下記の通りです。</p>
-
-<ol>
-<li>日本語の見出しでもエラーにならず出力される。</li>
-<li>OctopressデフォルトのMarkdownパーサであるrdiscountを使用している。</li>
-<li>リンクが絶対パスになる(記事一覧画面のような「続きを読む(Read On)」で目次のリンク先が省略されるような状況でも有効なリンクになる)</li>
-<li>リンクが重複しない(後述)</li>
-</ol>
-
-
-<p>前半はアプローチのメモです。実現方法は解決案以降に書いています。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/16/octopress-toc/">続きを読む &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1180,6 +1186,10 @@ SBTのビルド定義にバージョンを書けば、プロジェクトごと�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/06/rails-panel/">Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/26/active-job/">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a>
       </li>
     
@@ -1193,10 +1203,6 @@ SBTのビルド定義にバージョンを書けば、プロジェクトごと�
     
       <li class="post">
         <a href="/blog/2014/09/09/chef-alpha/">knife solo prepareでエラー</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/08/vagrant-problem-with-yum-update/">Vagrantの上のCentOS 6.5でyum updateした後、vagrant upで発生したエラーの原因と対処</a>
       </li>
     
   </ul>
