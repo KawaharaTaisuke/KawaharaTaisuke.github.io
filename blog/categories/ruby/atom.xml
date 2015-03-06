@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-03-07T00:25:13+09:00</updated>
+  <updated>2015-03-07T01:23:55+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -98,6 +98,15 @@ Chromeは <code>/__meta_request/${X-Request-Id}.json</code> というパスに�
 <p><code>
 Started GET "/__meta_request/abcd92a2-3859-4972-9708-8303fe238e9e.json" for ::1 at 2015-03-06 23:45:37 +0900
 </code></p>
+
+<p>なお、 <code>/__meta_request/${X-Request-Id}.json</code> のレスポンスで返されるjsonファイルは、<code>tmp/data/meta_request/</code> 以下に最大10個まで保存されます。<br/>
+該当のコードはこのあたり。</p>
+
+<ul>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares/app_request_handler.rb">rails_panel/app_request_handler.rb at master · dejan/rails_panel</a></li>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/storage.rb#L12">rails_panel/storage.rb at master · dejan/rails_panel</a></li>
+</ul>
+
 
 <p>RackミドルウェアとChrome拡張でモニタリング用の機能を実装するというアプローチは他のことにも応用ができそうですね。</p>
 ]]></content>
