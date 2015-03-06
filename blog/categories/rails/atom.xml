@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-03-07T00:23:37+09:00</updated>
+  <updated>2015-03-07T00:25:13+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -70,7 +70,11 @@ end
 
 <p>meta_requestをbundleすると、いくつかのRackミドルウェアが自動的に組み込まれます。</p>
 
-<p><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares.rb">rails_panel/middlewares.rb at master · dejan/rails_panel</a></p>
+<ul>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/middlewares.rb">rails_panel/middlewares.rb at master · dejan/rails_panel</a></li>
+<li><a href="https://github.com/dejan/rails_panel/blob/master/meta_request/lib/meta_request/railtie.rb">rails_panel/railtie.rb at master · dejan/rails_panel</a></li>
+</ul>
+
 
 <p>この中のMetaRequest::Middlewares::Headersによって <code>X-Meta-Request-Version</code>が、
 MetaRequest::Middlewares::RequestIdによって <code>X-Request-Id</code>が
