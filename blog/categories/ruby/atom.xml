@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | 割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-04-05T00:25:41+09:00</updated>
+  <updated>2015-04-05T00:29:16+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -178,7 +178,7 @@ Sidekiq.❨╯°□°❩╯︵┻━┻
 
 <ul>
 <li>Githubの検索フォームで <code>💣</code> はヒットするけど <code>❤</code>はヒットしない。</li>
-<li>Googleでは <code>💣</code> も <code>❤</code> もヒットしない。</li>
+<li>Google検索では <code>💣</code> も <code>❤</code> もヒットしない。</li>
 <li>似たような文字がいっぱいある。 <code>❤</code> とか <code>♥</code>とか<code>❥</code>とか。</li>
 <li>同じUnicodeの文字でもフォント次第で大幅に見た目が変わり得る。</li>
 <li>当然だけど機種依存文字は端末によっては表示することができないことがある。</li>
