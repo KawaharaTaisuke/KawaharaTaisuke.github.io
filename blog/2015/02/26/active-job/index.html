@@ -268,7 +268,7 @@ ActiveJobのページに挙げられている9つのプロダクトについて�
 
 <p><a href="https://github.com/mperham/sidekiq/blob/v3.3.2/lib/sidekiq/launcher.rb#L39">sidekiq/launcher.rb</a></p>
 
-<p>Celluloidを使ったアクターモデルでFetcherとManagerとPollerという3つのインスタンスが強調しつつ並列処理を行っているように見えます。
+<p>Celluloidを使ったアクターモデルでFetcherとManagerとPollerという3つのインスタンスが強調しつつ並行処理を行っているように見えます。
 Pollerがスケジュールされたジョブをワークキューに載せ替える、ということをやっていました。
 Managerの方では同時実行数の数だけProcessorのインスタンスを作って、
 ProcessorごとにFetcher#fetchしています。
