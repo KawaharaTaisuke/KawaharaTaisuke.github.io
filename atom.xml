@@ -4,7 +4,7 @@
   <title><![CDATA[割り箸ポテチ]]></title>
   <link href="http://blog.chopschips.net/atom.xml" rel="self"/>
   <link href="http://blog.chopschips.net/"/>
-  <updated>2015-04-05T00:20:48+09:00</updated>
+  <updated>2015-04-05T00:21:31+09:00</updated>
   <id>http://blog.chopschips.net/</id>
   <author>
     <name><![CDATA[Kawahara Taisuke / 河原太介]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sidekiqのコードに潜む愉快なメソッドたち]]></title>
+    <link href="http://blog.chopschips.net/blog/2015/04/04/funcy-methods-in-sidekiq/"/>
+    <updated>2015-04-04T22:50:00+09:00</updated>
+    <id>http://blog.chopschips.net/blog/2015/04/04/funcy-methods-in-sidekiq</id>
+    <content type="html"><![CDATA[
+      <p>少し前にRails4.2のActiveJobのバックエンドについて調べました。</p>
+
+<p><a href="http://blog.chopschips.net/blog/2015/02/26/active-job/">Resque、SidekiqからSucker PunchまでActiveJobのバックエンドについてひと通り調べてみた</a></p>
+
+<p>このとき<a href="https://github.com/mperham/sidekiq">Sidekiq</a>のコードを読んで、<a href="https://github.com/celluloid/celluloid">Celluloid</a>によるアクターモデルで並行処理を実装していることを知りました。
+ちょうどScalaやErlangでアクターを使う方法を調べていたところだったので興味がわき、Celluloidを利用したアプリケーションのサンプルとして読んでみることにしました。</p>
+
+<p>その時見つけた愉快なメソッドを紹介します。</p>
+
+<p>今回読んだSidekiqのバージョンは3.3.3です。</p>
+
+<a name="L............"></a>
+<h2>注意事項</h2>
+
+<ul>
+<li>本エントリはSidekiqやアクターの解説記事ではありません。</li>
+<li>記事に機種依存文字が含まれています。
+
+<ul>
+<li>OSXのChromeとFirefox、iOSのSafariとChromeでのみ表示を確認しています。</li>
+<li>iOSのブラウザではGithubから引用しているコードの一部が化けます。</li>
+</ul>
+</li>
+</ul>
+
+
+
+      
+      
+        <a rel="full-article" href="http://blog.chopschips.net/blog/2015/04/04/funcy-methods-in-sidekiq/">続きを読む &rarr;</a>
+      
+    ]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails 開発をサポートするChrome拡張 Rails Panel の機能と仕組み]]></title>
